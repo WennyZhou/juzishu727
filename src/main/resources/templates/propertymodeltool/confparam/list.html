@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Elevator</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-table.min.css">
+
+</head>
+
+<body>
+    <!-- 项目标示语 -->
+    <div class="jumbotron text-center" style="margin-bottom:0">
+        <h3>"互联网+"产品定制设计方法与技术——国家重点研发计划</h3>
+    </div>
+
+    <!-- 引入topbar 顶部导航栏 -->
+    <div th:replace="commons/bar::topbar"></div>
+
+    <!-- 内容 -->
+    <div class="container">
+        <div class="row">
+            <!-- 引入sidebar 左侧工具导航栏 -->
+            <div th:replace="commons/bar::#sidebar(activeUri='propTool_confparam', activeFatherUri='ConfigTool')"></div>
+
+            <!-- 右侧内容面板 -->
+            <div class="col-sm-8">
+                <!-- 导航元素-->
+                <ul class="nav nav-tabs" style="margin-top: 20px;">
+                    <li><a href="/propTool">模块基本信息</a></li>
+                    <li class="active"><a href="/confParam">配置参数设置</a></li>
+                    <li><a href="#">模块约束管理</a></li>
+                    <li><a href="#">模块关系管理</a></li>
+                </ul>
+
+                <!-- 引入Bootstrap Table Local 选择器 -->
+                <div th:replace="commons/bar::#btlocale-selector"></div>
+
+                <!-- 配置参数 面板 -->
+                <div class="panel panel-default">
+                    <div class="panel-body" style="margin-bottom:0;">
+                        <div class="navbar-form" role="search">
+                            <a class="btn btn-sm btn-success" href="/propTool/mconfParam" th:href="@{/propTool/mconfParam}"><i class="glyphicon glyphicon-plus"></i>添加</a>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="请输入查询条件" name="search_mcp" id="search_mcp">
+                            </div>
+                            <button class="btn btn-sm btn-primary" id="searchBtn_mcp" title="查询"><i class="glyphicon glyphicon-search"></i></button>
+                            <!-- 引入模块选择器 -->
+                            <div class="form-group" th:replace="commons/bar::#moduleSeletor"></div>
+                        </div>
+
+                        <div id="toolbar_mcp">
+                            <button id="remove" class="btn btn-danger" disabled>
+                                <i class="glyphicon glyphicon-remove"></i> Delete
+                            </button>
+                        </div>
+                        <table
+                                id="table_mcp"
+                                data-toolbar="#toolbar_mcp"
+                                data-search="true"
+                                data-show-refresh="true"
+                                data-show-toggle="true"
+                                data-show-columns="true"
+                                data-show-columns-toggle-all="true"
+                                data-detail-view="true"
+                                data-show-export="true"
+                                data-click-to-select="true"
+                                data-detail-formatter="detailFormatter"
+                                data-minimum-count-columns="2"
+                                data-show-pagination-switch="true"
+                                data-pagination="true"
+                                data-id-field="id"
+                                data-page-list="[10, 25, 50, 100, all]"
+                                data-side-pagination="server">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑按钮绑定form-->
+    <form method="get" id="editBindForm">
+    </form>
+
+    <!-- 删除按钮绑定form -->
+    <form method="post" id="deleteBindForm">
+        <input type="hidden" name="_method" value="delete">
+    </form>
+
+    <!-- 底部内容 -->
+    <div class="jumbotron text-center" style="margin-bottom:0">
+        <p>底部内容</p>
+    </div>
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/tableExport.min.js"></script>
+<script src="/js/bootstrap-table.min.js"></script>
+<script src="/js/bootstrap-table-locale-all.min.js"></script>
+<script src="/js/bootstrap-table-export.min.js"></script>
+
+    <script>
+        var $table = $('#table_mcp');
+        var $remove = $('#remove');
+        var selections = [];
+
+        $(function () {
+            initTable();
+
+            $('#locale').change(initTable);
+
+            //查询按钮事件
+            $('#searchBtn_mcp').click(function () {
+                $('#table_mcp').bootstrapTable('refresh');
+            });
+
+        });
+
+        function initTable() {
+            $table.bootstrapTable('destroy').bootstrapTable({
+                locale: $('#locale').val(),
+                method: 'post',
+                url: '/propTool/mconfParam_list',
+                contentType: 'application/x-www-form-urlencoded',
+                striped: true, //是否显示行间隔色
+                pageNumber: 1, //初始化加载第一页
+                pagination: true,//是否分页
+                sidePagination: 'server',//server:服务器端分页|client：前端分页
+                pageSize: 5,//单页记录数
+                pageList: [5, 10, 20, 30],//可选择单页记录数
+                queryParams: function (params) {//上传服务器的参数
+                    var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                        offset: params.offset + 0,
+                        pageNumber: params.limit,
+                        confParaName: $('#search_mcp').val(),
+                        moduleLinked: $('#moduleSeletor').val()
+                    };
+                    return temp;
+                },
+                columns: [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        align: 'center',
+                        valign: 'middle'
+                    }, {
+                        title: '序号',
+                        field: 'id',
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: idFormatter
+                    }, {
+                        field: 'confParaName',
+                        title: '参数名称',
+                        sortable: true,
+                        align: 'center'
+                    }, {
+                        field: 'confParaClass',
+                        title: '参数类型',
+                        sortable: true,
+                        align: 'center'
+                    }, {
+                        field: 'confParaLabel',
+                        title: '参数标识',
+                        sortable: true,
+                        align: 'center'
+                    }, {
+                        field: 'confParaUnit',
+                        title: '参数单位',
+                        sortable: false,
+                        align: 'center'
+                    },{
+                        field: 'moduleLinked',
+                        title: '关联模块',
+                        sortable: false,
+                        align: 'center'
+                    },{
+                        field: 'operate',
+                        title: 'Operation',
+                        align: 'center',
+                        clickToSelect: false,
+                        events: window.operateEvents,
+                        formatter: operateFormatter
+                    }
+                ]
+            });
+
+            $table.on('check.bs.table uncheck.bs.table ' +
+                'check-all.bs.table uncheck-all.bs.table',
+                function () {
+                    $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+
+                    // save your data, here just save the current page
+                    selections = getIdSelections()
+                    // push or splice the selections if you want to save all data selections
+                });
+
+            $table.on('all.bs.table', function (e, name, args) {
+                console.log(name, args)
+            });
+
+            $remove.click(function () {
+                var ids = getIdSelections();
+                $table.bootstrapTable('remove', {
+                    field: 'id',
+                    values: ids
+                });
+                $remove.prop('disabled', true)
+            })
+        }
+
+        function getIdSelections() {
+            return $.map($table.bootstrapTable('getSelections'), function (row) {
+                return row.id
+            })
+        }
+
+        function idFormatter(value, row, index) {
+            var pageSize = $('#table_mcp').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
+            var pageNumber = $('#table_mcp').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
+            return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
+        }
+
+        function detailFormatter(index, row) {
+            var html = [];
+            $.each(row, function (key, value) {
+                html.push('<p><b>' + key + ':</b> ' + value + '</p>')
+            });
+            return html.join('')
+        }
+
+        function operateFormatter(value, row, index) {
+            return [
+                '<a class="edit" href="javascript:void(0)" title="Edit" style="margin-right: 10px;">',
+                '<i class="glyphicon glyphicon-pencil"></i>',
+                '</a>',
+                '<a class="remove" href="javascript:void(0)" title="Remove">',
+                '<i class="glyphicon glyphicon-trash"></i>',
+                '</a>'
+            ].join('')
+        }
+
+        window.operateEvents = {
+            'click .edit': function (e, value, row, index) {
+                $("#editBindForm").attr('action', '/propTool/mconfParam/' + row.id).submit();
+            },
+            'click .remove': function (e, value, row, index) {
+                $("#deleteBindForm").attr('action', '/propTool/mconfParam/' + row.id).submit();
+            }
+        };
+
+    </script>
+</body>
+</html>

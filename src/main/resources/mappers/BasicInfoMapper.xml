@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juzishu727.dao.BasicInfoDao">
+
+    <!-- 查询全部/根据condition查询条件 查询-->
+    <select id="selectList" resultType="basicInfo">
+        SELECT id, propertyName, propertyLabel, propertyValue, propertyUnit
+        FROM t_basicinfo
+        WHERE 1=1
+        <if test="propertyName != null and propertyName != ''">
+            AND propertyName like concat('%', #{propertyName}, '%')
+            OR propertyLabel like concat('%', #{propertyName}, '%')
+        </if>
+        LIMIT #{offset}, #{pageNumber}
+    </select>
+
+    <!-- 查询数据库表中数据总条数-->
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_basicinfo
+    </select>
+
+    <!-- 根据id查询-->
+    <select id="selectById" resultType="basicInfo">
+        SELECT id, propertyName, propertyLabel, propertyValue, propertyUnit
+        FROM t_basicinfo
+        WHERE id=#{id}
+    </select>
+
+    <!-- 添加 -->
+    <insert id="addBasicInfo">
+        INSERT INTO t_basicinfo
+        (propertyName, propertyLabel, propertyValue, propertyUnit)
+        VALUES
+        (#{propertyName}, #{propertyLabel}, #{propertyValue}, #{propertyUnit})
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT @@identity
+        </selectKey>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="updateBasicInfo">
+        UPDATE t_basicinfo
+        SET
+        propertyName=#{propertyName},propertyLabel=#{propertyLabel},propertyValue=#{propertyValue},propertyUnit=#{propertyUnit}
+        WHERE id=#{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="deleteBasicInfo">
+        DELETE FROM t_basicinfo
+        WHERE id=#{id}
+    </delete>
+
+</mapper>

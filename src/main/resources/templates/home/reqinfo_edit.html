@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Requirement Info Edit</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-table.min.css">
+</head>
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                <form th:action="@{/reqInfo}" method="post">
+                    <!-- reqInfo 不为空 修改-->
+                    <input type="hidden" name="_method" value="put" th:if="${info!=null}">
+                    <input type="hidden" name="id" th:if="${info!=null}" th:value="${info.id}">
+                    <div class="form-group">
+                        <label for="requirementName">客户需求</label>
+                        <input type="text" name="requirementName" id="requirementName" class="form-control" placeholder="并联控制" th:value="${info!=null}?${info.requirementName}">
+                    </div>
+                    <div class="form-group">
+                        <label for="requirementValue">需求值</label>
+                        <input type="text" name="requirementValue" id="requirementValue" class="form-control" placeholder="是" th:value="${info!=null}?${info.requirementValue}">
+                    </div>
+                    <button class="btn btn-primary" type="submit" th:text="${info!=null}?'修改':'添加'"></button>
+                </form>
+            </main>
+        </div>
+    </div>
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/tableExport.min.js"></script>
+<script src="/js/bootstrap-table.min.js"></script>
+<script src="/js/bootstrap-table-locale-all.min.js"></script>
+<script src="/js/bootstrap-table-export.min.js"></script>
+</body>
+</html>

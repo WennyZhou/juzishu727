@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juzishu727.dao.ModuleBasicInfoDao">
+
+    <!-- 查询全部/根据condition查询条件 查询-->
+    <select id="selectList" resultType="moduleBasicInfo">
+        SELECT id, moduleName, moduleLabel, moduleFather, sortProperty, funcDesc
+        FROM t_mbasicinfo
+        WHERE 1=1
+        <if test="moduleName != null and moduleName != ''">
+            AND moduleName like concat('%', #{moduleName}, '%')
+            OR moduleLabel like concat('%', #{moduleName}, '%')
+            OR sortProperty like concat('%', #{moduleName}, '%')
+            OR funcDesc like concat('%', #{moduleName}, '%')
+        </if>
+        LIMIT #{offset}, #{pageNumber}
+    </select>
+
+    <!-- 查询数据库表中数据总条数-->
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_mbasicinfo
+    </select>
+
+    <!-- 根据id查询-->
+    <select id="selectById" resultType="moduleBasicInfo">
+        SELECT id, moduleName, moduleLabel, moduleFather, sortProperty, funcDesc
+        FROM t_mbasicinfo
+        WHERE id=#{id}
+    </select>
+
+    <!-- 添加 -->
+    <insert id="addModuleBasicInfo">
+        INSERT INTO t_mbasicinfo
+        (moduleName, moduleLabel, moduleFather, sortProperty, funcDesc)
+        VALUES
+        (#{moduleName}, #{moduleLabel}, #{moduleFather}, #{sortProperty}, #{funcDesc})
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT @@identity
+        </selectKey>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="updateModuleBasicInfo">
+        UPDATE t_mbasicinfo
+        SET
+        moduleName=#{moduleName},moduleLabel=#{moduleLabel},moduleFather=#{moduleFather},sortProperty=#{sortProperty},funcDesc=#{funcDesc}
+        WHERE id=#{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="deleteModuleBasicInfo">
+        DELETE FROM t_mbasicinfo
+        WHERE id=#{id}
+    </delete>
+
+</mapper>

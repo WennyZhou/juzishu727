@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Basic Info Edit</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-table.min.css">
+</head>
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                <form th:action="@{/mbasicInfo}" method="post">
+                    <!-- moduleBasicInfo 不为空 修改-->
+                    <input type="hidden" name="_method" value="put" th:if="${info!=null}">
+                    <input type="hidden" name="id" th:if="${info!=null}" th:value="${info.id}">
+                    <div class="form-group">
+                        <label for="moduleName">模块名称</label>
+                        <input type="text" name="moduleName" id="moduleName" class="form-control" placeholder="曳引机" th:value="${info!=null}?${info.moduleName}">
+                    </div>
+                    <div class="form-group">
+                        <label for="moduleLabel">模块标识</label>
+                        <input type="text" name="moduleLabel" id="moduleLabel" class="form-control" placeholder="MYYJ01" th:value="${info!=null}?${info.moduleLabel}">
+                    </div>
+                    <div class="form-group">
+                        <label for="moduleFather">模块父级</label>
+                        <input type="text" name="moduleFather" id="moduleFather" class="form-control" placeholder="曳引机系统" th:value="${info!=null}?${info.moduleFather}">
+                    </div>
+                    <div class="form-group">
+                        <label for="sortProperty">分类属性</label>
+                        <input type="text" name="sortProperty" id="sortProperty" class="form-control" placeholder="必选" th:value="${info!=null}?${info.sortProperty}">
+                    </div>
+                    <div class="form-group">
+                        <label for="funcDesc">功能描述</label>
+                        <input type="text" name="funcDesc" id="funcDesc" class="form-control" placeholder="驱动" th:value="${info!=null}?${info.funcDesc}">
+                    </div>
+                    <button class="btn btn-primary" type="submit" th:text="${info!=null}?'修改':'添加'"></button>
+                </form>
+            </main>
+        </div>
+    </div>
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/tableExport.min.js"></script>
+<script src="/js/bootstrap-table.min.js"></script>
+<script src="/js/bootstrap-table-locale-all.min.js"></script>
+<script src="/js/bootstrap-table-export.min.js"></script>
+</body>
+</html>

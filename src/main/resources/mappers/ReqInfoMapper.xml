@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juzishu727.dao.ReqInfoDao">
+
+    <!-- 查询全部/根据condition查询条件 查询 -->
+    <select id="selectList" resultType="reqInfo">
+        SELECT id, requirementName, requirementValue
+        FROM t_requirementinfo
+        WHERE 1=1
+        <if test="requirementName != null and requirementName != ''">
+            AND requirementName like concat('%', #{requirementName}, '%')
+        </if>
+        LIMIT #{offset}, #{pageNumber}
+    </select>
+
+    <!-- 查询数据库表中数据总条数 -->
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_requirementinfo
+    </select>
+
+    <!-- 根据id查询-->
+    <select id="selectById" resultType="reqInfo">
+        SELECT id, requirementName, requirementValue
+        FROM t_requirementinfo
+        WHERE id=#{id}
+    </select>
+
+    <!-- 添加 -->
+    <insert id="addReqInfo">
+        INSERT INTO t_requirementinfo
+        (requirementName, requirementValue)
+        VALUES
+        (#{requirementName}, #{requirementValue})
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT @@identity
+        </selectKey>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="updateReqInfo">
+        UPDATE t_requirementinfo
+        SET
+        requirementName=#{requirementName},requirementValue=#{requirementValue}
+        WHERE id=#{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="deleteReqInfo">
+        DELETE FROM t_requirementinfo
+        WHERE id=#{id}
+    </delete>
+</mapper>
