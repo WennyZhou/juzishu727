@@ -1,7 +1,7 @@
-package com.juzishu727.controller;
+package com.juzishu727.controller.elevsyshome;
 
-import com.juzishu727.bean.ReqInfo;
-import com.juzishu727.service.ReqInfoService;
+import com.juzishu727.bean.BasicInfo;
+import com.juzishu727.service.BasicInfoService;
 import com.juzishu727.util.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,20 +11,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-public class RIController {
+public class BIController {
 
     @Autowired
-    private ReqInfoService reqInfoService;
+    private BasicInfoService basicInfoService;
 
-    @PostMapping("/reqInfo_list")
+    @PostMapping("/basicInfo_list")
     @ResponseBody
-    public PageHelper<ReqInfo> findReqInfoList(ReqInfo info){
-        PageHelper<ReqInfo> pageHelper = new PageHelper<>();
+    public PageHelper<BasicInfo> findBasicInfoList(BasicInfo info){
+        PageHelper<BasicInfo> pageHelper = new PageHelper<>();
 
-        List<ReqInfo> infos = reqInfoService.selectList(info);
+        List<BasicInfo> infos = basicInfoService.selectList(info);
         pageHelper.setRows(infos);
 
-        Integer total = reqInfoService.getTotal();
+        Integer total = basicInfoService.getTotal();
         pageHelper.setTotal(total);
 
         return pageHelper;
@@ -34,9 +34,9 @@ public class RIController {
      * 去添加
      * Get请求 <a></a>链接
      */
-    @GetMapping("/reqInfo")
+    @GetMapping("/basicInfo")
     public String toAdd() {
-        return "home/reqinfo_edit";
+        return "elevatorsystem/home/basicinfo_edit";
     }
 
     /**
@@ -44,9 +44,9 @@ public class RIController {
      * post请求
      * <form></form>表单提交post请求
      */
-    @PostMapping("/reqInfo")
-    public String addReqInfo(ReqInfo info) {
-        reqInfoService.addReqInfo(info);
+    @PostMapping("/basicInfo")
+    public String addBasicInfo(BasicInfo info) {
+        basicInfoService.addBasicInfo(info);
         //重定向,发送请求实现查询所有用户
         return "redirect:/elevSys";
     }
@@ -56,11 +56,11 @@ public class RIController {
      * Get请求
      * <a></a>链接
      */
-    @GetMapping("/reqInfo/{id}")
+    @GetMapping("/basicInfo/{id}")
     public String toUpdate(@PathVariable Integer id, Model model) {
-        ReqInfo info = reqInfoService.selectById(id);
+        BasicInfo info = basicInfoService.selectById(id);
         model.addAttribute("info", info);
-        return "home/reqinfo_edit";
+        return "elevatorsystem/home/basicinfo_edit";
     }
 
     /**
@@ -68,9 +68,9 @@ public class RIController {
      * Put请求
      * <form></form>表单提交请求
      */
-    @PutMapping("/reqInfo")
-    public String updateReqInfo(ReqInfo info) {
-        reqInfoService.updateReqInfo(info);
+    @PutMapping("/basicInfo")
+    public String updateBasicInfo(BasicInfo info) {
+        basicInfoService.updateBasicInfo(info);
         //重定向，发送请求实现查询所有用户
         return "redirect:/elevSys";
     }
@@ -80,10 +80,11 @@ public class RIController {
      * Delete请求
      * <form></form>表单提交请求
      */
-    @DeleteMapping("/reqInfo/{id}")
-    public String deleteReqInfo(@PathVariable Integer id) {
-        reqInfoService.deleteReqInfo(id);
+    @DeleteMapping("/basicInfo/{id}")
+    public String deleteBasicInfo(@PathVariable Integer id) {
+        basicInfoService.deleteBasicInfo(id);
         //重定向
         return "redirect:/elevSys";
     }
+
 }

@@ -18,7 +18,7 @@
     </div>
 
     <!-- 引入topbar 顶部导航栏 -->
-    <div th:replace="commons/bar::topbar"></div>
+    <div th:replace="commons/bar::topbar(menuActiveUri='Sys')"></div>
 
     <!-- 内容 -->
     <div class="container">
@@ -28,18 +28,17 @@
 
             <!-- 右侧内容面板 -->
             <div class="col-sm-8">
-                <!-- 导航元素-->
-                <ul class="nav nav-tabs" style="margin-top: 20px;">
-                    <li class="active"><a href="/propTool">模块基本信息</a></li>
-                    <li><a href="/propTool/confParam">配置参数设置</a></li>
-                    <li><a href="#">模块约束管理</a></li>
-                    <li><a href="#">模块关系管理</a></li>
-                </ul>
+                <!-- 引入面板导航元素-->
+                <div th:replace="commons/proptool::#pt-nav-tab(elementUri='basicinfo')"></div>
 
                 <!-- 引入Bootstrap Table Local 选择器 -->
-                <div th:replace="commons/bar::#btlocale-selector"></div>
+                <div th:replace="commons/selector::#btlocale-selector"></div>
 
-                <!-- 模块基本信息 面板 -->
+                <!-- 引入table 模块基本信息面板 -->
+                <div th:replace="commons/table::#tableFragement(ifHavingHeading='no',
+                tablePlaneUri='ptBasicInfo',tableNumber='single',ifModuleSelected='No')"></div>
+
+                <!-- 模块基本信息 面板
                 <div class="panel panel-default">
                     <div class="panel-body" style="margin-bottom:0;">
                         <div class="navbar-form" role="search">
@@ -76,6 +75,8 @@
                         </table>
                     </div>
                 </div>
+                -->
+
             </div>
         </div>
     </div>
@@ -102,8 +103,8 @@
 <script src="/js/bootstrap-table-export.min.js"></script>
 
     <script>
-        var $table = $('#table_mbi');
-        var $remove = $('#remove');
+        var $table = $('#table_s');
+        var $remove = $('#remove_s');
         var selections = [];
 
         $(function () {
@@ -112,8 +113,8 @@
             $('#locale').change(initTable);
 
             //查询按钮事件
-            $('#searchBtn_mc').click(function () {
-                $('#table_mbi').bootstrapTable('refresh');
+            $('#searchBtn_s').click(function () {
+                $('#table_s').bootstrapTable('refresh');
             });
 
         });
@@ -134,7 +135,7 @@
                     var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
                         offset: params.offset + 0,
                         pageNumber: params.limit,
-                        moduleName: $('#search_mc').val()
+                        moduleName: $('#search_sc').val()
                     };
                     return temp;
                 },
@@ -218,8 +219,8 @@
         }
 
         function idFormatter(value, row, index) {
-            var pageSize = $('#table_mbi').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
-            var pageNumber = $('#table_mbi').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
+            var pageSize = $('#table_s').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
+            var pageNumber = $('#table_s').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
             return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
         }
 

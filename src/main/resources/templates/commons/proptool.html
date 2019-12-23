@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <!-- Property Model Tool -->
+    <!-- 右侧内容面板 导航元素-->
+    <ul class="nav nav-tabs" style="margin-top: 20px;" id="pt-nav-tab">
+        <li th:class="${elementUri}=='basicinfo'?'active':''"><a href="/propTool"><h5><strong>模块基本信息</strong></h5></a></li>
+        <li th:class="${elementUri}=='feaparam'?'active':''"><a href="/propTool/feaParam"><h5><strong>模块特征参数</strong></h5></a></li>
+        <li th:class="${elementUri}=='confparam'?'active':''"><a href="/propTool/confParam"><h5><strong>配置参数设置</strong></h5></a></li>
+        <li th:class="${elementUri}=='constraints'?'active':''"><a href="/propTool/constParam"><h5><strong>模块约束管理</strong></h5></a></li>
+        <li th:class="${elementUri}=='relations'?'active':''"><a href="/propTool/correParam"><h5><strong>模块关系管理</strong></h5></a></li>
+    </ul>
+
+</body>
+</html>

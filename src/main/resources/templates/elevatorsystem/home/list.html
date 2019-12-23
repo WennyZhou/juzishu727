@@ -14,7 +14,7 @@
     </div>
 
     <!-- topbar 顶部导航栏 -->
-    <div th:replace="commons/bar::topbar"></div>
+    <div th:replace="commons/bar::topbar(menuActiveUri='Sys')"></div>
 
     <!-- 内容 -->
     <div class="container">
@@ -26,33 +26,45 @@
             <div class="col-sm-9">
                 <!-- 图片元素-->
                 <h2>电梯型号:<strong>KLK2"金豹"超高速电梯</strong></h2>
-                <img src="/images/elevator.jpg" th:src="@{/images/elevator.jpg}" class="img-responsive" alt="Elevator" width="100%" height="300px">
+                <img src="images/elevator.jpg" th:src="@{/images/elevator.jpg}" class="img-responsive" alt="Elevator" width="100%" height="300px">
                 <br>
                 <!-- 引入Bootstrap Table Local 选择器 -->
-                <div th:replace="commons/bar::#btlocale-selector"></div>
+                <div th:replace="commons/selector::#btlocale-selector"></div>
 
-                <!-- 基本信息 面板 -->
+                <!-- 引入 table 基本信息面板 -->
+                <div th:replace="commons/table::#tableFragement(ifHavingHeading='yes',panelHeadingMsg='基本配置信息',
+                tablePlaneUri='elevSysHomeBI',tableNumber='multiple-first',ifModuleSelected='No')">
+                </div>
+
+
+                <!-- 引入 table 需求信息面板 -->
+                <div th:replace="commons/table::#tableFragement(ifHavingHeading='yes',panelHeadingMsg='客户需求信息',
+                tablePlaneUri='elevSysHomeRI',tableNumber='multiple-second',ifModuleSelected='No')">
+                </div>
+
+
+                <!-- 基本信息 面板
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3>基本配置信息</h3>
                     </div>
                     <div class="panel-body" style="margin-bottom:0;">
                         <div class="navbar-form" role="search">
-                            <a class="btn btn-sm btn-success" href="/reqInfo" th:href="@{/basicInfo}"><i class="glyphicon glyphicon-plus"></i>添加</a>
+                            <a class="btn btn-sm btn-success" href="/basicInfo" th:href="@{/basicInfo}"><i class="glyphicon glyphicon-plus"></i>添加</a>
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="请输入查询条件" name="search_bc" id="search_bc">
+                                <input type="text" class="form-control" placeholder="请输入查询条件" name="search_mfc" id="search_mfc">
                             </div>
-                            <button class="btn btn-sm btn-primary" id="searchBtn_bi" title="查询"><i class="glyphicon glyphicon-search"></i></button>
+                            <button class="btn btn-sm btn-primary" id="searchBtn_mf" title="查询"><i class="glyphicon glyphicon-search"></i></button>
                         </div>
 
-                        <div id="toolbar_bi">
-                            <button id="remove_bi" class="btn btn-danger" disabled>
+                        <div id="toolbar_mf">
+                            <button id="remove_mf" class="btn btn-danger" disabled>
                                 <i class="glyphicon glyphicon-remove"></i> Delete
                             </button>
                         </div>
                         <table
-                                id="table_bi"
-                                data-toolbar="#toolbar_bi"
+                                id="table_mf"
+                                data-toolbar="#toolbar_mf"
                                 data-search="true"
                                 data-show-refresh="true"
                                 data-show-toggle="true"
@@ -71,9 +83,9 @@
                         </table>
                     </div>
                 </div>
+                -->
 
-
-                <!-- 需求信息 面板 -->
+                <!-- 需求信息 面板
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3>客户需求信息</h3>
@@ -82,19 +94,19 @@
                         <div class="navbar-form" role="search">
                             <a class="btn btn-sm btn-success" href="/reqInfo" th:href="@{/reqInfo}"><i class="glyphicon glyphicon-plus"></i>添加</a>
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="请输入查询条件" name="search_bc" id="search_rc">
+                                <input type="text" class="form-control" placeholder="请输入查询条件" name="search_msc" id="search_msc">
                             </div>
-                            <button class="btn btn-sm btn-primary" id="searchBtn_ri" title="查询"><i class="glyphicon glyphicon-search"></i></button>
+                            <button class="btn btn-sm btn-primary" id="searchBtn_ms" title="查询"><i class="glyphicon glyphicon-search"></i></button>
                         </div>
 
-                        <div id="toolbar_ri">
-                            <button id="remove_ri" class="btn btn-danger" disabled>
+                        <div id="toolbar_ms">
+                            <button id="remove_ms" class="btn btn-danger" disabled>
                                 <i class="glyphicon glyphicon-remove"></i> Delete
                             </button>
                         </div>
                         <table
-                                id="table_ri"
-                                data-toolbar="#toolbar_ri"
+                                id="table_ms"
+                                data-toolbar="#toolbar_ms"
                                 data-search="true"
                                 data-show-refresh="true"
                                 data-show-toggle="true"
@@ -113,6 +125,8 @@
                         </table>
                     </div>
                 </div>
+                -->
+
             </div>
         </div>
     </div>
@@ -140,10 +154,10 @@
 <script src="/js/bootstrap-table-export.min.js"></script>
 
 <script>
-    var $table_bi = $('#table_bi');
-    var $table_ri = $('#table_ri');
-    var $remove_bi = $('#remove_bi');
-    var $remove_ri = $('#remove_ri');
+    var $table_bi = $('#table_mf');
+    var $table_ri = $('#table_ms');
+    var $remove_bi = $('#remove_mf');
+    var $remove_ri = $('#remove_ms');
     var selections = [];
 
     $(function () {
@@ -154,13 +168,13 @@
         $('#locale').change(initTable_ri);
 
         //查询按钮事件
-        $('#searchBtn_bi').click(function () {
-            $('#table_bi').bootstrapTable('refresh');
+        $('#searchBtn_mf').click(function () {
+            $('#table_mf').bootstrapTable('refresh');
         });
 
         //查询按钮事件
-        $('#searchBtn_ri').click(function () {
-            $('#table_ri').bootstrapTable('refresh');
+        $('#searchBtn_ms').click(function () {
+            $('#table_ms').bootstrapTable('refresh');
         });
     });
 
@@ -180,7 +194,7 @@
                 var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
                     offset: params.offset + 0,
                     pageNumber: params.limit,
-                    propertyName: $('#search_bc').val()
+                    propertyName: $('#search_mfc').val()
                 };
                 return temp;
             },
@@ -268,7 +282,7 @@
                 var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
                     offset: params.offset + 0,
                     pageNumber: params.limit,
-                    requirementName: $('#search_rc').val()
+                    requirementName: $('#search_msc').val()
                 };
                 return temp;
             },
@@ -343,14 +357,14 @@
     }
 
     function idFormatter_bi(value, row, index) {
-        var pageSize = $('#table_bi').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
-        var pageNumber = $('#table_bi').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
+        var pageSize = $('#table_mf').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
+        var pageNumber = $('#table_mf').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
         return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
     }
 
     function idFormatter_ri(value, row, index) {
-        var pageSize = $('#table_ri').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
-        var pageNumber = $('#table_ri').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
+        var pageSize = $('#table_ms').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
+        var pageNumber = $('#table_ms').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
         return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
     }
 

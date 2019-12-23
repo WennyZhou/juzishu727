@@ -1,4 +1,4 @@
-package com.juzishu727.controller;
+package com.juzishu727.controller.funconfig.proptool;
 
 import com.juzishu727.bean.ModuleBasicInfo;
 import com.juzishu727.service.ModuleBasicInfoService;
@@ -38,7 +38,7 @@ public class ModuleBasicInfoController {
      */
     @GetMapping("/mbasicInfo")
     public String toAdd() {
-        return "propertymodeltool/mbasicinfo_edit";
+        return "/elevatorsystem/functionconfiguration/propertymodeltool/mbasicinfo_edit";
     }
 
     /**
@@ -62,7 +62,7 @@ public class ModuleBasicInfoController {
     public String toUpdate(@PathVariable Integer id, Model model) {
         ModuleBasicInfo info = mService.selectById(id);
         model.addAttribute("info", info);
-        return "propertymodeltool/mbasicinfo_edit";
+        return "/elevatorsystem/functionconfiguration/propertymodeltool/mbasicinfo_edit";
     }
 
     /**

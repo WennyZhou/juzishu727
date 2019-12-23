@@ -18,48 +18,47 @@
     </div>
 
     <!-- 引入topbar 顶部导航栏 -->
-    <div th:replace="commons/bar::topbar"></div>
+    <div th:replace="commons/bar::topbar(menuActiveUri='Sys')"></div>
 
     <!-- 内容 -->
     <div class="container">
         <div class="row">
             <!-- 引入sidebar 左侧工具导航栏 -->
-            <div th:replace="commons/bar::#sidebar(activeUri='propTool_confparam', activeFatherUri='ConfigTool')"></div>
+            <div th:replace="commons/bar::#sidebar(activeUri='propTool', activeFatherUri='ConfigTool')"></div>
 
             <!-- 右侧内容面板 -->
             <div class="col-sm-8">
-                <!-- 导航元素-->
-                <ul class="nav nav-tabs" style="margin-top: 20px;">
-                    <li><a href="/propTool">模块基本信息</a></li>
-                    <li class="active"><a href="/confParam">配置参数设置</a></li>
-                    <li><a href="#">模块约束管理</a></li>
-                    <li><a href="#">模块关系管理</a></li>
-                </ul>
+                <!-- 引入面板导航元素-->
+                <div th:replace="commons/proptool::#pt-nav-tab(elementUri='feaparam')"></div>
 
                 <!-- 引入Bootstrap Table Local 选择器 -->
-                <div th:replace="commons/bar::#btlocale-selector"></div>
+                <div th:replace="commons/selector::#btlocale-selector"></div>
 
-                <!-- 配置参数 面板 -->
+                <!-- 引入table 特征参数面板-->
+                <div th:replace="commons/table::#tableFragement(ifHavingHeading='no',
+                tablePlaneUri='ptFeatureParam',tableNumber='single',ifModuleSelected='yes')"></div>
+
+                <!-- 特征参数 面板
                 <div class="panel panel-default">
                     <div class="panel-body" style="margin-bottom:0;">
                         <div class="navbar-form" role="search">
-                            <a class="btn btn-sm btn-success" href="/propTool/mconfParam" th:href="@{/propTool/mconfParam}"><i class="glyphicon glyphicon-plus"></i>添加</a>
+                            <a class="btn btn-sm btn-success" href="/propTool/mfeaParam" th:href="@{/propTool/mfeaParam}"><i class="glyphicon glyphicon-plus"></i>添加</a>
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="请输入查询条件" name="search_mcp" id="search_mcp">
+                                <input type="text" class="form-control" placeholder="请输入查询条件" name="search_mfp" id="search_mfp">
                             </div>
-                            <button class="btn btn-sm btn-primary" id="searchBtn_mcp" title="查询"><i class="glyphicon glyphicon-search"></i></button>
-                            <!-- 引入模块选择器 -->
-                            <div class="form-group" th:replace="commons/bar::#moduleSeletor"></div>
+                            <button class="btn btn-sm btn-primary" id="searchBtn_mfp" title="查询"><i class="glyphicon glyphicon-search"></i></button>
+
+                            <div class="form-group" th:replace="commons/selector::#moduleSeletor"></div>
                         </div>
 
-                        <div id="toolbar_mcp">
+                        <div id="toolbar_mfp">
                             <button id="remove" class="btn btn-danger" disabled>
                                 <i class="glyphicon glyphicon-remove"></i> Delete
                             </button>
                         </div>
                         <table
-                                id="table_mcp"
-                                data-toolbar="#toolbar_mcp"
+                                id="table_mfp"
+                                data-toolbar="#toolbar_mfp"
                                 data-search="true"
                                 data-show-refresh="true"
                                 data-show-toggle="true"
@@ -78,6 +77,8 @@
                         </table>
                     </div>
                 </div>
+                -->
+
             </div>
         </div>
     </div>
@@ -104,8 +105,8 @@
 <script src="/js/bootstrap-table-export.min.js"></script>
 
     <script>
-        var $table = $('#table_mcp');
-        var $remove = $('#remove');
+        var $table = $('#table_s');
+        var $remove = $('#remove_s');
         var selections = [];
 
         $(function () {
@@ -114,8 +115,8 @@
             $('#locale').change(initTable);
 
             //查询按钮事件
-            $('#searchBtn_mcp').click(function () {
-                $('#table_mcp').bootstrapTable('refresh');
+            $('#searchBtn_s').click(function () {
+                $('#table_s').bootstrapTable('refresh');
             });
 
         });
@@ -124,7 +125,7 @@
             $table.bootstrapTable('destroy').bootstrapTable({
                 locale: $('#locale').val(),
                 method: 'post',
-                url: '/propTool/mconfParam_list',
+                url: '/propTool/mfeaParam_list',
                 contentType: 'application/x-www-form-urlencoded',
                 striped: true, //是否显示行间隔色
                 pageNumber: 1, //初始化加载第一页
@@ -136,7 +137,7 @@
                     var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
                         offset: params.offset + 0,
                         pageNumber: params.limit,
-                        confParaName: $('#search_mcp').val(),
+                        feaParaName: $('#search_sc').val(),
                         moduleLinked: $('#moduleSeletor').val()
                     };
                     return temp;
@@ -155,22 +156,37 @@
                         sortable: true,
                         formatter: idFormatter
                     }, {
-                        field: 'confParaName',
+                        field: 'feaParaName',
                         title: '参数名称',
                         sortable: true,
                         align: 'center'
                     }, {
-                        field: 'confParaClass',
+                        field: 'feaParaClass',
                         title: '参数类型',
                         sortable: true,
                         align: 'center'
                     }, {
-                        field: 'confParaLabel',
+                        field: 'feaParaLabel',
                         title: '参数标识',
                         sortable: true,
                         align: 'center'
                     }, {
-                        field: 'confParaUnit',
+                        field: 'feaParaDataClass',
+                        title: '参数数据类型',
+                        sortable: true,
+                        align: 'center'
+                    }, {
+                        field: 'feaParaValueClass',
+                        title: '参数值类型',
+                        sortable: true,
+                        align: 'center'
+                    }, {
+                        field: 'feaParaRange',
+                        title: '参数取值范围',
+                        sortable: true,
+                        align: 'center'
+                    },{
+                        field: 'feaParaUnit',
                         title: '参数单位',
                         sortable: false,
                         align: 'center'
@@ -221,8 +237,8 @@
         }
 
         function idFormatter(value, row, index) {
-            var pageSize = $('#table_mcp').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
-            var pageNumber = $('#table_mcp').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
+            var pageSize = $('#table_s').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
+            var pageNumber = $('#table_s').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
             return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
         }
 
@@ -247,10 +263,10 @@
 
         window.operateEvents = {
             'click .edit': function (e, value, row, index) {
-                $("#editBindForm").attr('action', '/propTool/mconfParam/' + row.id).submit();
+                $("#editBindForm").attr('action', '/propTool/mfeaParam/' + row.id).submit();
             },
             'click .remove': function (e, value, row, index) {
-                $("#deleteBindForm").attr('action', '/propTool/mconfParam/' + row.id).submit();
+                $("#deleteBindForm").attr('action', '/propTool/mfeaParam/' + row.id).submit();
             }
         };
 

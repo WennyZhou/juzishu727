@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<!-- 表格面板 -->
+<div class="panel panel-default" id="tableFragement">
+    <div th:if="${ifHavingHeading} eq 'yes'">
+        <div class="panel-heading">
+            <h3>[[${panelHeadingMsg}]]</h3>
+        </div>
+    </div>
+    <div class="panel-body" style="margin-bottom:0;">
+        <div class="navbar-form" role="search">
+            <span th:switch="${tablePlaneUri}">
+                <span th:case="'elevSysHomeBI'">
+                    <a class="btn btn-sm btn-success" href="/basicInfo" th:href="@{/basicInfo}"><i class="glyphicon glyphicon-plus"></i>添加</a>
+                </span>
+                <span th:case="'elevSysHomeRI'">
+                    <a class="btn btn-sm btn-success" href="/reqInfo" th:href="@{/reqInfo}"><i class="glyphicon glyphicon-plus"></i>添加</a>
+                </span>
+                <span th:case="'ptBasicInfo'">
+                    <a class="btn btn-sm btn-success" href="#" th:href="@{/mbasicInfo}"><i class="glyphicon glyphicon-plus"></i>添加</a>
+                </span>
+                <span th:case="'ptFeatureParam'">
+                    <a class="btn btn-sm btn-success" href="#" th:href="@{/propTool/mfeaParam}"><i class="glyphicon glyphicon-plus"></i>添加</a>
+                </span>
+            </span>
+
+            <div class="form-group" th:switch="${tableNumber}">
+                <input th:case="'single'" type="text" class="form-control" placeholder="请输入查询条件" name="search_sc" id="search_sc">
+
+                <input th:case="'multiple-first'" type="text" class="form-control" placeholder="请输入查询条件" name="search_mfc" id="search_mfc">
+
+                <input th:case="'multiple-second'" type="text" class="form-control" placeholder="请输入查询条件" name="search_msc" id="search_msc">
+            </div>
+
+            <span th:switch="${tableNumber}">
+                <span th:case="'single'">
+                    <button class="btn btn-sm btn-primary" id="searchBtn_s" title="查询"><i class="glyphicon glyphicon-search"></i></button>
+                </span>
+                <span th:case="'multiple-first'">
+                    <button class="btn btn-sm btn-primary" id="searchBtn_mf" title="查询"><i class="glyphicon glyphicon-search"></i></button>
+                </span>
+                <span th:case="'multiple-second'">
+                    <button class="btn btn-sm btn-primary" id="searchBtn_ms" title="查询"><i class="glyphicon glyphicon-search"></i></button>
+                </span>
+            </span>
+
+
+            <!-- 引入模块选择器 -->
+            <span th:if="${ifModuleSelected} eq 'yes'">
+                <div class="form-group" th:replace="commons/selector::#moduleSeletor"></div>
+            </span>
+
+        </div>
+
+        <div th:switch="${tableNumber}">
+            <div th:case="'single'">
+                <div id="toolbar_s">
+                    <button id="remove_s" class="btn btn-danger" disabled>
+                        <i class="glyphicon glyphicon-remove"></i> Delete
+                    </button>
+                </div>
+                <table
+                        id="table_s"
+                        data-toolbar="#toolbar_s"
+                        data-search="true"
+                        data-show-refresh="true"
+                        data-show-toggle="true"
+                        data-show-columns="true"
+                        data-show-columns-toggle-all="true"
+                        data-detail-view="true"
+                        data-show-export="true"
+                        data-click-to-select="true"
+                        data-detail-formatter="detailFormatter"
+                        data-minimum-count-columns="2"
+                        data-show-pagination-switch="true"
+                        data-pagination="true"
+                        data-id-field="id"
+                        data-page-list="[10, 25, 50, 100, all]"
+                        data-side-pagination="server">
+                </table>
+            </div>
+            <div th:case="'multiple-first'">
+                <div id="toolbar_mf">
+                    <button id="remove_mf" class="btn btn-danger" disabled>
+                        <i class="glyphicon glyphicon-remove"></i> Delete
+                    </button>
+                </div>
+                <table
+                        id="table_mf"
+                        data-toolbar="#toolbar_mf"
+                        data-search="true"
+                        data-show-refresh="true"
+                        data-show-toggle="true"
+                        data-show-columns="true"
+                        data-show-columns-toggle-all="true"
+                        data-detail-view="true"
+                        data-show-export="true"
+                        data-click-to-select="true"
+                        data-detail-formatter="detailFormatter"
+                        data-minimum-count-columns="2"
+                        data-show-pagination-switch="true"
+                        data-pagination="true"
+                        data-id-field="id"
+                        data-page-list="[10, 25, 50, 100, all]"
+                        data-side-pagination="server">
+                </table>
+            </div>
+            <div th:case="'multiple-second'">
+                <div id="toolbar_ms">
+                    <button id="remove_ms" class="btn btn-danger" disabled>
+                        <i class="glyphicon glyphicon-remove"></i> Delete
+                    </button>
+                </div>
+                <table
+                        id="table_ms"
+                        data-toolbar="#toolbar_ms"
+                        data-search="true"
+                        data-show-refresh="true"
+                        data-show-toggle="true"
+                        data-show-columns="true"
+                        data-show-columns-toggle-all="true"
+                        data-detail-view="true"
+                        data-show-export="true"
+                        data-click-to-select="true"
+                        data-detail-formatter="detailFormatter"
+                        data-minimum-count-columns="2"
+                        data-show-pagination-switch="true"
+                        data-pagination="true"
+                        data-id-field="id"
+                        data-page-list="[10, 25, 50, 100, all]"
+                        data-side-pagination="server">
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

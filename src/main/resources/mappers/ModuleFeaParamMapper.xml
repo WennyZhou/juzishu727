@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juzishu727.dao.ModuleFeaParamDao">
+
+    <!-- 查询全部/根据condition查询条件 查询-->
+    <select id="selectList" resultType="moduleFeatureParam">
+        SELECT id, feaParaName, feaParaClass, feaParaLabel, feaParaDataClass, feaParaValueClass, feaParaRange, feaParaUnit, moduleLinked
+        FROM t_mFeatureParam
+        WHERE 1=1
+        <if test="moduleLinked != null and moduleLinked != ''">
+            AND moduleLinked=#{moduleLinked}
+        </if>
+        <if test="feaParaName != null and feaParaName != ''">
+            AND feaParaName like concat('%', #{feaParaName}, '%')
+            OR feaParaClass like concat('%', #{feaParaName}, '%')
+            OR feaParaLabel like concat('%', #{feaParaName}, '%')
+            OR feaParaDataClass like concat('%', #{feaParaName}, '%')
+            OR feaParaValueClass like concat('%', #{feaParaName}, '%')
+        </if>
+        LIMIT #{offset}, #{pageNumber}
+    </select>
+
+    <!-- 查询数据库表中数据总条数-->
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_mFeatureParam
+    </select>
+
+    <!-- 根据id查询-->
+    <select id="selectById" resultType="moduleFeatureParam">
+        SELECT id, feaParaName, feaParaClass, feaParaLabel, feaParaDataClass, feaParaValueClass, feaParaRange, feaParaUnit, moduleLinked
+        FROM t_mFeatureParam
+        WHERE id=#{id}
+    </select>
+
+    <!-- 添加 -->
+    <insert id="addModuleFeaParam">
+        INSERT INTO t_mFeatureParam
+        (feaParaName, feaParaClass, feaParaLabel, feaParaDataClass, feaParaValueClass, feaParaRange, feaParaUnit, moduleLinked)
+        VALUES
+        (#{feaParaName}, #{feaParaClass}, #{feaParaLabel}, #{feaParaDataClass}, #{feaParaValueClass}, #{feaParaRange}, #{feaParaUnit}, #{moduleLinked})
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT @@identity
+        </selectKey>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="updateModuleFeaParam">
+        UPDATE t_mFeatureParam
+        SET
+        feaParaName=#{feaParaName}, feaParaClass=#{feaParaClass}, feaParaLabel=#{feaParaLabel}, feaParaDataClass=#{feaParaDataClass}, feaParaValueClass=#{feaParaValueClass}, feaParaRange=#{feaParaRange}, feaParaUnit=#{feaParaUnit}, moduleLinked=#{moduleLinked}
+        WHERE id=#{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="deleteModuleFeaParam">
+        DELETE FROM t_mFeatureParam
+        WHERE id=#{id}
+    </delete>
+
+</mapper>

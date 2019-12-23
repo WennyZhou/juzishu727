@@ -18,8 +18,8 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="../index.html">首页</a></li>
-                    <li class="dropdown">
+                    <li class="active" th:class="${menuActiveUri}=='Home'? 'active':''"><a href="../index.html" th:href="@{/home}">首页</a></li>
+                    <li class="dropdown" th:class="${menuActiveUri}=='Sys'? 'active':''">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             定制系统<b class="caret"></b>
                         </a>
@@ -29,7 +29,7 @@
                             <li><a href="#">盾构定制系统</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <li class="dropdown" th:class="${menuActiveUri}=='Resource'? 'active':''">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             资源案例<b class="caret"></b>
                         </a>
@@ -41,12 +41,12 @@
                             <li><a href="#">资源审核</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">个人中心</a></li>
-                    <li><a href="#">帮助</a></li>
+                    <li th:class="${menuActiveUri}=='Mine'? 'active':''"><a href="#">个人中心</a></li>
+                    <li th:class="${menuActiveUri}=='Help'? 'active':''"><a href="#">帮助</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="../login.html"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
-                    <li><a href="../register.html"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
+                    <li th:class="${menuActiveUri}=='Login'? 'active':''"><a href="../login.html"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
+                    <li th:class="${menuActiveUri}=='Regist'? 'active':''"><a href="../register.html"><span class="glyphicon glyphicon-user"></span> 注册</a></li>
                 </ul>
             </div>
         </div>
@@ -163,70 +163,6 @@
             </div>
         </div>
     </nav>
-    <!--
-    <div class="col-sm-3 d-sm-block bg-light" id="sidebar"></div>
-    -->
-    <!-- Bootstrap Table Locale 选择器 -->
-    <div class="select"  id="btlocale-selector">
-        <select class="form-control" id="locale" style="background-color: #95999c;color: #721c24">
-            <option value="af-ZA">af-ZA</option>
-            <option value="ar-SA">ar-SA</option>
-            <option value="ca-ES">ca-ES</option>
-            <option value="cs-CZ">cs-CZ</option>
-            <option value="da-DK">da-DK</option>
-            <option value="de-DE">de-DE</option>
-            <option value="el-GR">el-GR</option>
-            <option value="en-US">en-US</option>
-            <option value="es-AR">es-AR</option>
-            <option value="es-CL">es-CL</option>
-            <option value="es-CR">es-CR</option>
-            <option value="es-ES">es-ES</option>
-            <option value="es-MX">es-MX</option>
-            <option value="es-NI">es-NI</option>
-            <option value="es-SP">es-SP</option>
-            <option value="et-EE">et-EE</option>
-            <option value="eu-EU">eu-EU</option>
-            <option value="fa-IR">fa-IR</option>
-            <option value="fi-FI">fi-FI</option>
-            <option value="fr-BE">fr-BE</option>
-            <option value="fr-FR">fr-FR</option>
-            <option value="he-IL">he-IL</option>
-            <option value="hr-HR">hr-HR</option>
-            <option value="hu-HU">hu-HU</option>
-            <option value="id-ID">id-ID</option>
-            <option value="it-IT">it-IT</option>
-            <option value="ja-JP">ja-JP</option>
-            <option value="ka-GE">ka-GE</option>
-            <option value="ko-KR">ko-KR</option>
-            <option value="ms-MY">ms-MY</option>
-            <option value="nb-NO">nb-NO</option>
-            <option value="nl-NL">nl-NL</option>
-            <option value="pl-PL">pl-PL</option>
-            <option value="pt-BR">pt-BR</option>
-            <option value="pt-PT">pt-PT</option>
-            <option value="ro-RO">ro-RO</option>
-            <option value="ru-RU">ru-RU</option>
-            <option value="sk-SK">sk-SK</option>
-            <option value="sv-SE">sv-SE</option>
-            <option value="th-TH">th-TH</option>
-            <option value="tr-TR">tr-TR</option>
-            <option value="uk-UA">uk-UA</option>
-            <option value="ur-PK">ur-PK</option>
-            <option value="uz-Latn-UZ">uz-Latn-UZ</option>
-            <option value="vi-VN">vi-VN</option>
-            <option value="zh-CN" selected>zh-CN</option>
-            <option value="zh-TW">zh-TW</option>
-        </select>
-    </div>
 
-    <!-- 模块选择器 -->
-    <select id="moduleSeletor" class="form-control" style="background-color: #95999c; color: #721c24">
-        <option value="">选择模块</option>
-        <option value="曳引机">曳引机</option>
-        <option value="对重">对重</option>
-        <option value="导向轮">导向轮</option>
-        <option value="安全钳">安全钳</option>
-        <option value="轿厢">轿厢</option>
-    </select>
 </body>
 </html>
