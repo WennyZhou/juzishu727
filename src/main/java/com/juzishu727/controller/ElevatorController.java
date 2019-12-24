@@ -1,6 +1,11 @@
 package com.juzishu727.controller;
+import com.juzishu727.service.TreeService;
+import com.juzishu727.util.TreeNode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 public class ElevatorController {
@@ -85,5 +90,35 @@ public class ElevatorController {
     @RequestMapping("/propTool/constraint_mself")
     public String toMSelfConstraintPageOfPropTool(){
         return "/elevatorsystem/functionconfiguration/propertymodeltool/modconst/mself_list.html";
+    }
+
+    /**
+     * 去模块属性建模工具下的模块关系页面
+     * @return
+     */
+    @RequestMapping("/propTool/correlation")
+    public String toCorrelationPageOfPropTool(){
+        return "/elevatorsystem/functionconfiguration/propertymodeltool/modcorre/list.html";
+    }
+
+    /**
+     * 测试TreeView控件
+     */
+
+    @Autowired
+    private TreeService treeService;
+
+    @RequestMapping("/testTreeView")
+    public String testTreeView(){
+
+        List<TreeNode> tree = treeService.getTree();
+        System.out.println(tree);
+
+//        //构建 Data Structure json对象
+//        JSONArray jsonArray = JSONArray.fromObject(demos);
+//        String jsonString = jsonArray.toString().replace(",\"nodes\":[]", "");
+//        return jsonString;
+
+        return "/TreeViewTest.html";
     }
 }

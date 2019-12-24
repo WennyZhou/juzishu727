@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bootstrap Tree View</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="./css/bootstrap-treeview.css" rel="stylesheet"> -->
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <hr>
+        <h2>Searchable Tree</h2>
+        <div class="col-sm-3">
+            <h2>Tree</h2>
+            <div id="treeview-searchable" class=""></div>
+            <br>
+            <h2>Input</h2>
+            <!-- <form> -->
+            <div class="form-group">
+                <label for="input-search" class="sr-only">Search Tree:</label>
+                <input type="text" class="form-control" id="input-search" placeholder="Type to search..." value="">
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox" id="chk-ignore-case" value="false">
+                    Ignore Case
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox" id="chk-exact-match" value="false">
+                    Exact Match
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="checkbox" id="chk-reveal-results" value="false">
+                    Reveal Results
+                </label>
+            </div>
+            <button type="button" class="btn btn-success" id="btn-search">Search</button>
+            <button type="button" class="btn btn-default" id="btn-clear-search">Clear</button>
+            <!-- </form> -->
+            <br>
+            <h2>Results</h2>
+            <div id="search-output"></div>
+        </div>
+    </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<script src="/js/bootstrap-treeview.min.js"></script>
+
+<script>
+    $(function() {
+
+        var defaultData = [
+            {
+                text: 'Parent 1',
+                nodes: [
+                    {
+                        text: 'Child 1',
+                        nodes: [
+                            {
+                                text: 'Grandchild 1',
+                            },
+                            {
+                                text: 'Grandchild 2',
+                            }
+                        ]
+                    },
+                    {
+                        text: 'Child 2',
+                    }
+                ]
+            },
+            {
+                text: 'Parent 2',
+            },
+            {
+                text: 'Parent 3',
+            },
+            {
+                text: 'Parent 4',
+            },
+            {
+                text: 'Parent 5',
+            }
+        ];
+
+        var $searchableTree = $('#treeview-searchable').treeview({
+            color: "#428bca",
+            expandIcon: 'glyphicon glyphicon-chevron-right',
+            collapseIcon: 'glyphicon glyphicon-chevron-down',
+            nodeIcon: 'glyphicon glyphicon-bookmark',
+            data: defaultData
+        });
+
+        var search = function(e) {
+            var pattern = $('#input-search').val();
+            var options = {
+                ignoreCase: $('#chk-ignore-case').is(':checked'),
+                exactMatch: $('#chk-exact-match').is(':checked'),
+                revealResults: $('#chk-reveal-results').is(':checked')
+            };
+            var results = $searchableTree.treeview('search', [ pattern, options ]);
+
+            var output = '<p>' + results.length + ' matches found</p>';
+            $.each(results, function (index, result) {
+                output += '<p>- ' + result.text + '</p>';
+            });
+            $('#search-output').html(output);
+        }
+
+        $('#btn-search').on('click', search);
+        $('#input-search').on('keyup', search);
+
+        $('#btn-clear-search').on('click', function (e) {
+                $searchableTree.treeview('clearSearch');
+                $('#input-search').val('');
+                $('#search-output').html('');
+        });
+
+    });
+
+    function refreshTree() {
+
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            url: "/testTree.do",
+            success:function(defaultData){
+                //  defaultData = JSON.parse(defaultData);
+
+                $('#treeview-searchable').treeview({
+                    data: defaultData,//数据源参数
+                    color: "#428bca",
+                    expandIcon: 'glyphicon glyphicon-chevron-right',
+                    collapseIcon: 'glyphicon glyphicon-chevron-down',
+                    nodeIcon: 'glyphicon glyphicon-bookmark'
+                    /*// levels:2,
+                    onNodeSelected: function(event, node) {
+                        alert(node.id+"前面是id，后面是名字"+node.text);//这里拿到id和name，就可以通过函数跳转触发点击事件
+                    },
+                    onNodeUnselected: function (event, node) {
+                    }*/
+                });
+
+            },error:function(){
+                alert("加载树异常！");
+            }
+        })
+
+    }
+</script>
+</body>
+</html>

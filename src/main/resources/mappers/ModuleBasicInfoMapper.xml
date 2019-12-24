@@ -6,21 +6,21 @@
 
     <!-- 查询全部/根据condition查询条件 查询-->
     <select id="selectList" resultType="moduleBasicInfo">
-        SELECT id, moduleName, moduleLabel, moduleFather, sortProperty, funcDesc
+        SELECT id, moduleName, moduleLabel, sortProperty, funcDesc
         FROM t_mbasicinfo
         WHERE 1=1
         <if test="moduleName != null and moduleName != ''">
-            AND moduleName like concat('%', #{moduleName}, '%')
+            AND (moduleName like concat('%', #{moduleName}, '%')
             OR moduleLabel like concat('%', #{moduleName}, '%')
             OR sortProperty like concat('%', #{moduleName}, '%')
-            OR funcDesc like concat('%', #{moduleName}, '%')
+            OR funcDesc like concat('%', #{moduleName}, '%'))
         </if>
         LIMIT #{offset}, #{pageNumber}
     </select>
 
     <!-- 查询全部-->
     <select id="selectAll" resultType="moduleBasicInfo">
-        SELECT id, moduleName, moduleLabel, moduleFather, sortProperty, funcDesc
+        SELECT id, moduleName, moduleLabel, sortProperty, funcDesc
         FROM t_mbasicinfo
     </select>
 
@@ -32,7 +32,7 @@
 
     <!-- 根据id查询-->
     <select id="selectById" resultType="moduleBasicInfo">
-        SELECT id, moduleName, moduleLabel, moduleFather, sortProperty, funcDesc
+        SELECT id, moduleName, moduleLabel, sortProperty, funcDesc
         FROM t_mbasicinfo
         WHERE id=#{id}
     </select>
@@ -40,9 +40,9 @@
     <!-- 添加 -->
     <insert id="addModuleBasicInfo">
         INSERT INTO t_mbasicinfo
-        (moduleName, moduleLabel, moduleFather, sortProperty, funcDesc)
+        (moduleName, moduleLabel, sortProperty, funcDesc)
         VALUES
-        (#{moduleName}, #{moduleLabel}, #{moduleFather}, #{sortProperty}, #{funcDesc})
+        (#{moduleName}, #{moduleLabel},#{sortProperty}, #{funcDesc})
         <selectKey resultType="int" keyProperty="id" order="AFTER">
             SELECT @@identity
         </selectKey>
@@ -52,7 +52,7 @@
     <update id="updateModuleBasicInfo">
         UPDATE t_mbasicinfo
         SET
-        moduleName=#{moduleName},moduleLabel=#{moduleLabel},moduleFather=#{moduleFather},sortProperty=#{sortProperty},funcDesc=#{funcDesc}
+        moduleName=#{moduleName},moduleLabel=#{moduleLabel},sortProperty=#{sortProperty},funcDesc=#{funcDesc}
         WHERE id=#{id}
     </update>
 

@@ -13,11 +13,11 @@
             AND moduleLinked=#{moduleLinked}
         </if>
         <if test="feaParaName != null and feaParaName != ''">
-            AND feaParaName like concat('%', #{feaParaName}, '%')
+            AND (feaParaName like concat('%', #{feaParaName}, '%')
             OR feaParaClass like concat('%', #{feaParaName}, '%')
             OR feaParaLabel like concat('%', #{feaParaName}, '%')
             OR feaParaDataClass like concat('%', #{feaParaName}, '%')
-            OR feaParaValueClass like concat('%', #{feaParaName}, '%')
+            OR feaParaValueClass like concat('%', #{feaParaName}, '%'))
         </if>
         LIMIT #{offset}, #{pageNumber}
     </select>

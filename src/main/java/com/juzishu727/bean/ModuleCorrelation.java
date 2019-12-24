@@ -4,17 +4,16 @@ import com.juzishu727.util.Page;
 import lombok.Data;
 
 @Data
-public class ModuleBasicInfo extends Page{
+public class ModuleCorrelation extends Page {
 
     private Integer id;
 
     private String moduleName;
 
-    private String moduleLabel;
+    private String father;
 
-    private String sortProperty;
+    private String corrClass;
 
-    private String  funcDesc;
-
+    private String corrForm;
 
 }
