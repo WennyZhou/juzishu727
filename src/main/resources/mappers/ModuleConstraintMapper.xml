@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juzishu727.dao.ModuleConstraintDao">
+
+    <!-- 查询全部/根据condition查询条件 查询-->
+    <select id="selectList" resultType="moduleConstraint">
+        SELECT id, constPair, constMaster, pairClass, constClass, constForm
+        FROM t_mconstraints
+        WHERE 1=1
+        <if test="pairClass != null and pairClass != ''">
+            AND pairClass=#{pairClass}
+        </if>
+        <if test="constMaster != null and constMaster != ''">
+            AND constMaster=#{constMaster}
+        </if>
+        <if test="constPair!= null and constPair != ''">
+            AND (constPair like concat('%', #{constPair}, '%')
+            OR constClass like concat('%', #{constPair}, '%')
+            OR constForm  like concat('%', #{constPair}, '%'))
+        </if>
+        LIMIT #{offset}, #{pageNumber}
+    </select>
+
+    <!-- 查询全部-->
+    <select id="selectAll" resultType="moduleConstraint">
+        SELECT id, constPair, constMaster, pairClass, constClass, constForm
+        FROM t_mconstraints
+    </select>
+
+
+    <!-- 查询数据库表中数据总条数-->
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_mconstraints
+    </select>
+
+    <!-- 根据id查询-->
+    <select id="selectById" resultType="moduleConstraint">
+        SELECT id, constPair, constMaster, pairClass, constClass, constForm
+        FROM t_mconstraints
+        WHERE id=#{id}
+    </select>
+
+    <!-- 添加 -->
+    <insert id="addModuleConstraint">
+        INSERT INTO t_mconstraints
+        (constPair, constMaster, pairClass, constClass, constForm)
+        VALUES
+        (#{constPair}, #{constMaster}, #{pairClass}, #{constClass}, #{constForm})
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT @@identity
+        </selectKey>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="updateModuleConstraint">
+        UPDATE t_mconstraints
+        SET
+        constPair=#{constPair}, constMaster=#{constMaster}, pairClass=#{pairClass}, constClass=#{constClass}, constForm=#{constForm}
+        WHERE id=#{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="deleteModuleConstraint">
+        DELETE FROM t_mconstraints
+        WHERE id=#{id}
+    </delete>
+
+</mapper>

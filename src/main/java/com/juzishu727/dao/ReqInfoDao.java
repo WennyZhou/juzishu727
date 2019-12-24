@@ -10,6 +10,8 @@ public interface ReqInfoDao {
 
     List<ReqInfo> selectList(ReqInfo info);
 
+    List<ReqInfo> selectAll();
+
     Integer getTotal();
 
     ReqInfo selectById(Integer id);

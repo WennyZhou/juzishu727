@@ -9,6 +9,8 @@ public interface ModuleFeaParamService {
 
     List<ModuleFeatureParam> selectList(ModuleFeatureParam param);
 
+    List<ModuleFeatureParam> selectAll();
+
     Integer getTotal();
 
     ModuleFeatureParam selectById(Integer id);

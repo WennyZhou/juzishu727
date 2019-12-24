@@ -22,6 +22,12 @@
         LIMIT #{offset}, #{pageNumber}
     </select>
 
+    <!-- 查询全部-->
+    <select id="selectAll" resultType="moduleFeatureParam">
+        SELECT id, feaParaName, feaParaClass, feaParaLabel, feaParaDataClass, feaParaValueClass, feaParaRange, feaParaUnit, moduleLinked
+        FROM t_mFeatureParam
+    </select>
+
     <!-- 查询数据库表中数据总条数-->
     <select id="getTotal" resultType="java.lang.Integer">
         SELECT count(1)

@@ -15,6 +15,12 @@
         LIMIT #{offset}, #{pageNumber}
     </select>
 
+    <!-- 查询全部 -->
+    <select id="selectAll" resultType="reqInfo">
+        SELECT id, requirementName, requirementValue
+        FROM t_requirementinfo
+    </select>
+
     <!-- 查询数据库表中数据总条数 -->
     <select id="getTotal" resultType="java.lang.Integer">
         SELECT count(1)

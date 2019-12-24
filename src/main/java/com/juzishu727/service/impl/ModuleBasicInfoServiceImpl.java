@@ -22,6 +22,11 @@ public class ModuleBasicInfoServiceImpl implements ModuleBasicInfoService {
     }
 
     @Override
+    public List<ModuleBasicInfo> selectAll() {
+        return moduleBasicInfoDao.selectAll();
+    }
+
+    @Override
     public Integer getTotal() {
         return moduleBasicInfoDao.getTotal();
     }

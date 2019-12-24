@@ -8,6 +8,8 @@ public interface ModuleBasicInfoService {
 
     List<ModuleBasicInfo> selectList(ModuleBasicInfo info);
 
+    List<ModuleBasicInfo> selectAll();
+
     Integer getTotal();
 
     ModuleBasicInfo selectById(Integer id);

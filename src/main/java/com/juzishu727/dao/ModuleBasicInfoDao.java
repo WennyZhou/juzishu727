@@ -10,6 +10,8 @@ public interface ModuleBasicInfoDao {
 
     List<ModuleBasicInfo> selectList(ModuleBasicInfo info);
 
+    List<ModuleBasicInfo> selectAll();
+
     Integer getTotal();
 
     ModuleBasicInfo selectById(Integer id);

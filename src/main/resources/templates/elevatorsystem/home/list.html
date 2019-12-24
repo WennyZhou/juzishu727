@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <title>Elevator System</title>
 
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/bootstrap-table.min.css">
+    <!--<link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-table.min.css">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css" rel="stylesheet">
+
 </head>
 <body>
     <!-- 项目标示语 -->
@@ -152,8 +155,15 @@
 <script src="/js/bootstrap-table.min.js"></script>
 <script src="/js/bootstrap-table-locale-all.min.js"></script>
 <script src="/js/bootstrap-table-export.min.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table-locale-all.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>-->
 
-<script>
+
+    <script>
     var $table_bi = $('#table_mf');
     var $table_ri = $('#table_ms');
     var $remove_bi = $('#remove_mf');
@@ -233,7 +243,7 @@
                     align: 'center'
                 }, {
                     field: 'operate',
-                    title: 'Operation',
+                    title: 'operation',
                     align: 'center',
                     clickToSelect: false,
                     events: window.operateEvents,

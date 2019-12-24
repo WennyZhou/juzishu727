@@ -22,6 +22,11 @@ public class ModuleFeaParamServiceImpl implements ModuleFeaParamService {
     }
 
     @Override
+    public List<ModuleFeatureParam> selectAll() {
+        return moduleFeaParamDao.selectAll();
+    }
+
+    @Override
     public Integer getTotal() {
         return moduleFeaParamDao.getTotal();
     }

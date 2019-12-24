@@ -10,6 +10,8 @@ public interface BasicInfoDao {
 
     List<BasicInfo> selectList(BasicInfo info);
 
+    List<BasicInfo> selectAll();
+
     Integer getTotal();
 
     BasicInfo selectById(Integer id);

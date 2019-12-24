@@ -38,8 +38,52 @@ public class ElevatorController {
      * @return
      */
     @RequestMapping("/propTool/feaParam")
-    public String toConfParamPageOfPropTool(){
+    public String toFeaParamPageOfPropTool(){
         return "/elevatorsystem/functionconfiguration/propertymodeltool/feaparam/list.html";
     }
 
+    /**
+     * 去模块属性建模工具下的模块约束页面 全部约束
+     * @return
+     */
+    @RequestMapping("/propTool/constraint")
+    public String toConstraintPageOfPropTool(){
+        return "/elevatorsystem/functionconfiguration/propertymodeltool/modconst/all_list.html";
+    }
+
+    /**
+     * 去模块属性建模工具下的模块约束页面 模块-模块约束
+     * @return
+     */
+    @RequestMapping("/propTool/constraint_mm")
+    public String toMMConstraintPageOfPropTool(){
+        return "/elevatorsystem/functionconfiguration/propertymodeltool/modconst/mm_list.html";
+    }
+
+    /**
+     * 去模块属性建模工具下的模块约束页面 模块-模块特征参数约束
+     * @return
+     */
+    @RequestMapping("/propTool/constraint_mf")
+    public String toMFConstraintPageOfPropTool(){
+        return "/elevatorsystem/functionconfiguration/propertymodeltool/modconst/mf_list.html";
+    }
+
+    /**
+     * 去模块属性建模工具下的模块约束页面 模块特征参数-模块特征参数约束
+     * @return
+     */
+    @RequestMapping("/propTool/constraint_ff")
+    public String toFFConstraintPageOfPropTool(){
+        return "/elevatorsystem/functionconfiguration/propertymodeltool/modconst/ff_list.html";
+    }
+
+    /**
+     * 去模块属性建模工具下的模块约束页面 模块内部约束
+     * @return
+     */
+    @RequestMapping("/propTool/constraint_mself")
+    public String toMSelfConstraintPageOfPropTool(){
+        return "/elevatorsystem/functionconfiguration/propertymodeltool/modconst/mself_list.html";
+    }
 }

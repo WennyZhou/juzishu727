@@ -8,6 +8,8 @@ public interface ReqInfoService {
 
     List<ReqInfo> selectList(ReqInfo info);
 
+    List<ReqInfo> selectAll();
+
     Integer getTotal();
 
     ReqInfo selectById(Integer id);

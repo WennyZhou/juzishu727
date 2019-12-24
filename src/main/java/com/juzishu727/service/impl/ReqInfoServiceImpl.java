@@ -22,6 +22,11 @@ public class ReqInfoServiceImpl implements ReqInfoService {
     }
 
     @Override
+    public List<ReqInfo> selectAll() {
+        return reqInfoDao.selectAll();
+    }
+
+    @Override
     public Integer getTotal() {
         return reqInfoDao.getTotal();
     }

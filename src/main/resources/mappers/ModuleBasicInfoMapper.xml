@@ -18,6 +18,12 @@
         LIMIT #{offset}, #{pageNumber}
     </select>
 
+    <!-- 查询全部-->
+    <select id="selectAll" resultType="moduleBasicInfo">
+        SELECT id, moduleName, moduleLabel, moduleFather, sortProperty, funcDesc
+        FROM t_mbasicinfo
+    </select>
+
     <!-- 查询数据库表中数据总条数-->
     <select id="getTotal" resultType="java.lang.Integer">
         SELECT count(1)
