@@ -71,7 +71,7 @@
 
             <div class="col-sm-6">
                 <!-- 引入面板导航元素-->
-                <div th:replace="commons/proptool::#pt-nav-tab(elementUri='relations')"></div>
+                <div th:replace="commons/proptool::#pt-nav-tab(textSize='small', elementUri='relations')"></div>
 
                 <!-- 引入Bootstrap Table Local 选择器 -->
                 <div th:replace="commons/selector::#btlocale-selector"></div>
@@ -147,6 +147,7 @@
                     var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
                         offset: params.offset + 0,
                         pageNumber: params.limit,
+                        elevType: $('#elevatorSeletor').val(),
                         moduleName: $('#moduleSeletor').val(),
                         father: $('#search_sc').val()
                     };
@@ -183,6 +184,11 @@
                     }, {
                         field: 'corrForm',
                         title: '关系表达式',
+                        sortable: false,
+                        align: 'center'
+                    },{
+                        field: 'elevType',
+                        title: '电梯型号',
                         sortable: false,
                         align: 'center'
                     },{
@@ -339,6 +345,39 @@
                 $('#input-tree-search').val('');
                 $('#tree-search-output').html('');
             });
+        }
+
+        //根据电梯型号选择器，实现树形控件更新
+        function SelectOnChangeWithElevatorType(){
+
+            //刷新表
+            $('#table_s').bootstrapTable('refresh');
+
+            var jsonData = {};
+
+            jsonData["elevType"] = $("#elevatorSeletor").val();
+
+            //将JSON类型对象转换为json字符串
+            var params = JSON.stringify(jsonData);
+
+            $.ajax({
+                url: "/propTool/correlation/eleTree",
+                type: "post",
+                data: params,
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success:function(defaultData){
+                    $('#treeview-searchable').treeview({
+                        data: defaultData,//数据源参数
+                        color: "#428bca",
+                        expandIcon: 'glyphicon glyphicon-chevron-right',
+                        collapseIcon: 'glyphicon glyphicon-chevron-down',
+                        nodeIcon: 'glyphicon glyphicon-bookmark'
+                    });
+                },error:function(){
+                    alert("加载树异常！");
+                }
+            })
         }
 
     </script>

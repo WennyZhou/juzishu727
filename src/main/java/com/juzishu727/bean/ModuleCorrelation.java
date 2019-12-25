@@ -16,4 +16,6 @@ public class ModuleCorrelation extends Page {
 
     private String corrForm;
 
+    private String elevType;
+
 }

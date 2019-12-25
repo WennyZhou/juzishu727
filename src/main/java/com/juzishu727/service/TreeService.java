@@ -1,12 +1,13 @@
 package com.juzishu727.service;
 
+import com.juzishu727.bean.ModuleCorrelation;
 import com.juzishu727.util.TreeNode;
 
 import java.util.List;
 
 public interface TreeService {
 
-    List<TreeNode> getTree();
+    List<TreeNode> getTree(ModuleCorrelation corr);
 
-    List<TreeNode> getSubTree(String parent);
+    List<TreeNode> getSubTree(ModuleCorrelation corr);
 }

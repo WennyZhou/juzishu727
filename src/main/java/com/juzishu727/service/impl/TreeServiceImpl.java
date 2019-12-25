@@ -18,24 +18,25 @@ public class TreeServiceImpl implements TreeService {
     private ModuleCorrelationDao moduleCorrelationDao;
 
     @Override
-    public List<TreeNode> getTree() {
-
+    public List<TreeNode> getTree(ModuleCorrelation corr) {
+        //查询根节点
         ModuleCorrelation correlation = moduleCorrelationDao.selectByFatherEqNull();
         String rootText = correlation.getModuleName();
 
         List<TreeNode> tree = new ArrayList<>();
         TreeNode root = new TreeNode();
         root.setText(rootText);
-        root.setNodes(getSubTree(rootText));
+
+        corr.setFather(rootText);
+        root.setNodes(getSubTree(corr));
         tree.add(root);
 
         return tree;
     }
 
     @Override
-    public List<TreeNode> getSubTree(String parent) {
-        ModuleCorrelation corr = new ModuleCorrelation();
-        corr.setFather(parent);
+    public List<TreeNode> getSubTree(ModuleCorrelation corr) {
+
         List<ModuleCorrelation> corrs = moduleCorrelationDao.selectByFather(corr);
 
         List<TreeNode> subTree = new ArrayList<>();
@@ -46,7 +47,9 @@ public class TreeServiceImpl implements TreeService {
                 TreeNode root = new TreeNode();
                 String rootText = c.getModuleName();
                 root.setText(rootText);
-                root.setNodes(getSubTree(rootText));
+
+                corr.setFather(rootText);
+                root.setNodes(getSubTree(corr));
                 subTree.add(root);
             }
         }

@@ -6,9 +6,12 @@
 
     <!-- 查询全部/根据condition查询条件 查询-->
     <select id="selectList" resultType="moduleCorrelation">
-        SELECT id, moduleName, father, corrClass, corrForm
+        SELECT id, moduleName, father, corrClass, corrForm, elevType
         FROM t_mcorrelations
-        WHERE 1=1
+        WHERE (elevType='basic'
+        <if test="elevType != null and elevType != ''">
+            OR elevType=#{elevType}
+        </if>)
         <if test="moduleName != null and moduleName != ''">
             AND moduleName=#{moduleName}
         </if>
@@ -22,7 +25,7 @@
 
     <!-- 查询全部-->
     <select id="selectAll" resultType="moduleCorrelation">
-        SELECT id, moduleName, father, corrClass, corrForm
+        SELECT id, moduleName, father, corrClass, corrForm, elevType
         FROM t_mcorrelations
     </select>
 
@@ -35,31 +38,34 @@
 
     <!-- 根据id查询-->
     <select id="selectById" resultType="moduleCorrelation">
-        SELECT id, moduleName, father, corrClass, corrForm
+        SELECT id, moduleName, father, corrClass, corrForm, elevType
         FROM t_mcorrelations
         WHERE id=#{id}
     </select>
 
     <!-- 根据father==null查询-->
     <select id="selectByFatherEqNull" resultType="moduleCorrelation">
-        SELECT id, moduleName, father, corrClass, corrForm
+        SELECT id, moduleName, father, corrClass, corrForm, elevType
         FROM t_mcorrelations
-        WHERE father='/'
+        WHERE father='-'
     </select>
 
     <!-- 根据father查询-->
     <select id="selectByFather" resultType="moduleCorrelation">
-        SELECT id, moduleName, father, corrClass, corrForm
+        SELECT id, moduleName, father, corrClass, corrForm, elevType
         FROM t_mcorrelations
-        WHERE father=#{father}
+        WHERE father=#{father} AND (elevType='basic'
+        <if test="elevType != null and elevType != ''">
+            OR elevType=#{elevType}
+        </if>)
     </select>
 
     <!-- 添加 -->
     <insert id="addModuleCorrelation">
         INSERT INTO t_mcorrelations
-        (moduleName, father, corrClass, corrForm)
+        (moduleName, father, corrClass, corrForm, elevType)
         VALUES
-        (#{moduleName}, #{father}, #{corrClass}, #{corrForm})
+        (#{moduleName}, #{father}, #{corrClass}, #{corrForm}, #{elevType})
         <selectKey resultType="int" keyProperty="id" order="AFTER">
             SELECT @@identity
         </selectKey>
@@ -69,7 +75,7 @@
     <update id="updateModuleCorrelation">
         UPDATE t_mcorrelations
         SET
-        moduleName=#{moduleName}, father=#{father}, corrClass=#{corrClass}, corrForm=#{corrForm}
+        moduleName=#{moduleName}, father=#{father}, corrClass=#{corrClass}, corrForm=#{corrForm}, elevType=#{elevType}
         WHERE id=#{id}
     </update>
 

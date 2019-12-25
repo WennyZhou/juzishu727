@@ -14,6 +14,9 @@
         <h2>Searchable Tree</h2>
         <div class="col-sm-3">
             <h2>Tree</h2>
+            <div class="form-inline">
+                <button class="btn btn-sm btn-primary" onclick="refreshTree()">更新树</button>
+            </div>
             <div id="treeview-searchable" class=""></div>
             <br>
             <h2>Input</h2>
@@ -50,8 +53,10 @@
     </div>
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>-->
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
 <script src="/js/bootstrap-treeview.min.js"></script>
 
 <script>
@@ -65,29 +70,29 @@
                         text: 'Child 1',
                         nodes: [
                             {
-                                text: 'Grandchild 1',
+                                text: 'Grandchild 1'
                             },
                             {
-                                text: 'Grandchild 2',
+                                text: 'Grandchild 2'
                             }
                         ]
                     },
                     {
-                        text: 'Child 2',
+                        text: 'Child 2'
                     }
                 ]
             },
             {
-                text: 'Parent 2',
+                text: 'Parent 2'
             },
             {
-                text: 'Parent 3',
+                text: 'Parent 3'
             },
             {
-                text: 'Parent 4',
+                text: 'Parent 4'
             },
             {
-                text: 'Parent 5',
+                text: 'Parent 5'
             }
         ];
 
@@ -129,24 +134,18 @@
     function refreshTree() {
 
         $.ajax({
+            url: "/testTreeView",
             type: "post",
             dataType: "json",
-            url: "/testTree.do",
             success:function(defaultData){
                 //  defaultData = JSON.parse(defaultData);
-
+                alert(defaultData);
                 $('#treeview-searchable').treeview({
                     data: defaultData,//数据源参数
                     color: "#428bca",
                     expandIcon: 'glyphicon glyphicon-chevron-right',
                     collapseIcon: 'glyphicon glyphicon-chevron-down',
                     nodeIcon: 'glyphicon glyphicon-bookmark'
-                    /*// levels:2,
-                    onNodeSelected: function(event, node) {
-                        alert(node.id+"前面是id，后面是名字"+node.text);//这里拿到id和name，就可以通过函数跳转触发点击事件
-                    },
-                    onNodeUnselected: function (event, node) {
-                    }*/
                 });
 
             },error:function(){

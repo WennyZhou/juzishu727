@@ -40,6 +40,11 @@
                         <input type="text" name="corrForm" id="corrForm" class="form-control" placeholder="PartOf(曳引机,曳引机系统)"
                         th:value="${info!=null}?${info.corrForm}">
                     </div>
+                    <div class="form-group">
+                        <label for="elevType">电梯型号</label>
+                        <input type="text" name="elevType" id="elevType" class="form-control" placeholder="KLk2金豹超高速电梯"
+                               th:value="${info!=null}?${info.elevType}">
+                    </div>
                     <button class="btn btn-primary" type="submit" th:text="${info!=null}?'修改':'添加'"></button>
                 </form>
             </main>
@@ -57,7 +62,7 @@
         var relation = $("#corrClassInput").val();
 
         if(relation != null && relation !== ''){
-            $("#constClass option[value='" + relation + "']").prop("selected", "selected");
+            $("#corrClass option[value='" + relation + "']").prop("selected", "selected");
         }
 
     });
