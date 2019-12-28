@@ -100,4 +100,13 @@ public class ElevatorController {
         return "/elevatorsystem/functionconfiguration/propertymodeltool/modcorre/list.html";
     }
 
+    /**
+     * 去配置规则定义工具首页
+     * @return
+     */
+    @RequestMapping("/ruleTool")
+    public String toRuleToolHome(){
+        return "/elevatorsystem/functionconfiguration/ruledefine/list.html";
+    }
+
 }

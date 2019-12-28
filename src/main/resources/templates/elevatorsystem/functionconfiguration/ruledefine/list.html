@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Elevator</title>
+
+    <!--<link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-table.min.css">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- 项目标示语 -->
+    <div class="jumbotron text-center" style="margin-bottom:0">
+        <h3>"互联网+"产品定制设计方法与技术——国家重点研发计划</h3>
+    </div>
+
+    <!-- 引入topbar 顶部导航栏 -->
+    <div th:replace="commons/bar::topbar(menuActiveUri='Sys')"></div>
+
+    <!-- 内容 -->
+    <div class="container">
+        <div class="row">
+            <!-- 引入sidebar 左侧工具导航栏 -->
+            <div th:replace="commons/bar::#sidebar(activeUri='ruleTool', activeFatherUri='ConfigTool')"></div>
+            <!-- 右侧内容面板 -->
+            <div class="col-sm-9">
+                <p>配置规则定义主页</p>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部内容 -->
+    <div class="jumbotron text-center" style="margin-bottom:0">
+        <p>底部内容</p>
+    </div>
+
+<!--<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/tableExport.min.js"></script>
+<script src="/js/bootstrap-table.min.js"></script>
+<script src="/js/bootstrap-table-locale-all.min.js"></script>
+<script src="/js/bootstrap-table-export.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table-locale-all.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+
+</body>
+</html>

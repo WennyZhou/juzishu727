@@ -24,111 +24,56 @@
         <div class="row">
             <!-- 引入sidebar 左侧工具导航栏 -->
             <div th:replace="commons/bar::#sidebar"></div>
-
             <!-- 右侧内容面板 -->
             <div class="col-sm-9">
                 <!-- 图片元素-->
-                <h2>电梯型号:<strong>KLK2"金豹"超高速电梯</strong></h2>
-                <img src="images/elevator.jpg" th:src="@{/images/elevator.jpg}" class="img-responsive" alt="Elevator" width="100%" height="300px">
+                <span style="font-size: larger;">电梯型号:<strong>KLK2"金豹"超高速电梯</strong></span>
+                <span class="btn btn-sm btn-success" id="basicInfoBtn" data-toggle="modal" data-target="#basicInfoTableModel" title="基本配置信息">
+                    <i class="glyphicon glyphicon-tasks"></i>
+                </span>
+                <span class="btn btn-sm btn-success" id="reqInfoBtn" data-toggle="modal" data-target="#reqInfoTableModel" title="客户需求信息">
+                    <i class="glyphicon glyphicon-list-alt"></i>
+                </span>
                 <br>
-                <!-- 引入Bootstrap Table Local 选择器 -->
-                <div th:replace="commons/selector::#btlocale-selector"></div>
+                <img src="images/elevator.jpg" th:src="@{/images/elevator.jpg}" class="img-responsive" alt="Elevator" width="100%" height="300px">
 
-                <!-- 引入 table 基本信息面板 -->
-                <div th:replace="commons/table::#tableFragement(ifHavingHeading='yes',panelHeadingMsg='基本配置信息',
-                tablePlaneUri='elevSysHomeBI',tableNumber='multiple-first',ifModuleSelected='No')">
-                </div>
-
-
-                <!-- 引入 table 需求信息面板 -->
-                <div th:replace="commons/table::#tableFragement(ifHavingHeading='yes',panelHeadingMsg='客户需求信息',
-                tablePlaneUri='elevSysHomeRI',tableNumber='multiple-second',ifModuleSelected='No')">
-                </div>
-
-
-                <!-- 基本信息 面板
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3>基本配置信息</h3>
-                    </div>
-                    <div class="panel-body" style="margin-bottom:0;">
-                        <div class="navbar-form" role="search">
-                            <a class="btn btn-sm btn-success" href="/basicInfo" th:href="@{/basicInfo}"><i class="glyphicon glyphicon-plus"></i>添加</a>
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="请输入查询条件" name="search_mfc" id="search_mfc">
+                <!-- 模态框: 基本配置信息表 -->
+                <div class="modal fade" id="basicInfoTableModel" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h2 class="modal-title" style="color: #761c19;">基本配置信息</h2>
                             </div>
-                            <button class="btn btn-sm btn-primary" id="searchBtn_mf" title="查询"><i class="glyphicon glyphicon-search"></i></button>
-                        </div>
-
-                        <div id="toolbar_mf">
-                            <button id="remove_mf" class="btn btn-danger" disabled>
-                                <i class="glyphicon glyphicon-remove"></i> Delete
-                            </button>
-                        </div>
-                        <table
-                                id="table_mf"
-                                data-toolbar="#toolbar_mf"
-                                data-search="true"
-                                data-show-refresh="true"
-                                data-show-toggle="true"
-                                data-show-columns="true"
-                                data-show-columns-toggle-all="true"
-                                data-detail-view="true"
-                                data-show-export="true"
-                                data-click-to-select="true"
-                                data-detail-formatter="detailFormatter"
-                                data-minimum-count-columns="2"
-                                data-show-pagination-switch="true"
-                                data-pagination="true"
-                                data-id-field="id"
-                                data-page-list="[10, 25, 50, 100, all]"
-                                data-side-pagination="server">
-                        </table>
-                    </div>
-                </div>
-                -->
-
-                <!-- 需求信息 面板
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3>客户需求信息</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="navbar-form" role="search">
-                            <a class="btn btn-sm btn-success" href="/reqInfo" th:href="@{/reqInfo}"><i class="glyphicon glyphicon-plus"></i>添加</a>
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="请输入查询条件" name="search_msc" id="search_msc">
+                            <div class="modal-body">
+                                <!-- 引入 table 基本信息面板 -->
+                                <div th:replace="commons/table::#tableFragement(tablePlaneUri='elevSysHomeBI',tableNumber='multiple-first',ifModuleSelected='No')"></div>
                             </div>
-                            <button class="btn btn-sm btn-primary" id="searchBtn_ms" title="查询"><i class="glyphicon glyphicon-search"></i></button>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger btn-md" type="button" data-dismiss="modal">关闭</button>
+                            </div>
                         </div>
-
-                        <div id="toolbar_ms">
-                            <button id="remove_ms" class="btn btn-danger" disabled>
-                                <i class="glyphicon glyphicon-remove"></i> Delete
-                            </button>
-                        </div>
-                        <table
-                                id="table_ms"
-                                data-toolbar="#toolbar_ms"
-                                data-search="true"
-                                data-show-refresh="true"
-                                data-show-toggle="true"
-                                data-show-columns="true"
-                                data-show-columns-toggle-all="true"
-                                data-detail-view="true"
-                                data-show-export="true"
-                                data-click-to-select="true"
-                                data-detail-formatter="detailFormatter"
-                                data-minimum-count-columns="2"
-                                data-show-pagination-switch="true"
-                                data-pagination="true"
-                                data-id-field="id"
-                                data-page-list="[10, 25, 50, 100, all]"
-                                data-side-pagination="server">
-                        </table>
                     </div>
                 </div>
-                -->
+
+                <!-- 模态框: 客户需求表 -->
+                <div class="modal fade" id="reqInfoTableModel" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h2 class="modal-title" style="color: #761c19;">客户需求信息</h2>
+                            </div>
+                            <div class="modal-body">
+                                <!-- 引入 table 需求信息面板 -->
+                                <div th:replace="commons/table::#tableFragement(tablePlaneUri='elevSysHomeRI',tableNumber='multiple-second',ifModuleSelected='No')"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger btn-md" type="button" data-dismiss="modal">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -149,280 +94,254 @@
     </div>
 
 
-<script src="/js/jquery-3.4.1.min.js"></script>
+<!--<script src="/js/jquery-3.4.1.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/tableExport.min.js"></script>
 <script src="/js/bootstrap-table.min.js"></script>
 <script src="/js/bootstrap-table-locale-all.min.js"></script>
-<script src="/js/bootstrap-table-export.min.js"></script>
-    <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script src="/js/bootstrap-table-export.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table-locale-all.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>-->
-
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>
 
     <script>
-    var $table_bi = $('#table_mf');
-    var $table_ri = $('#table_ms');
-    var $remove_bi = $('#remove_mf');
-    var $remove_ri = $('#remove_ms');
-    var selections = [];
-
-    $(function () {
-        initTable_bi();
-        initTable_ri();
-
-        $('#locale').change(initTable_bi);
-        $('#locale').change(initTable_ri);
-
-        //查询按钮事件
-        $('#searchBtn_mf').click(function () {
-            $('#table_mf').bootstrapTable('refresh');
+        var $table_bi = $('#table_mf');
+        var $table_ri = $('#table_ms');
+        var $remove_bi = $('#remove_mf');
+        var $remove_ri = $('#remove_ms');
+        var selections = [];
+        $(function () {
+            initTable_bi();
+            initTable_ri();
+            //查询按钮事件
+            $('#searchBtn_mf').click(function () {
+                $('#table_mf').bootstrapTable('refresh');
+            });
+            //查询按钮事件
+            $('#searchBtn_ms').click(function () {
+                $('#table_ms').bootstrapTable('refresh');
+            });
         });
-
-        //查询按钮事件
-        $('#searchBtn_ms').click(function () {
-            $('#table_ms').bootstrapTable('refresh');
-        });
-    });
-
-    function initTable_bi() {
-        $table_bi.bootstrapTable('destroy').bootstrapTable({
-            locale: $('#locale').val(),
-            method: 'post',
-            url: '/basicInfo_list',
-            contentType: 'application/x-www-form-urlencoded',
-            striped: true, //是否显示行间隔色
-            pageNumber: 1, //初始化加载第一页
-            pagination: true,//是否分页
-            sidePagination: 'server',//server:服务器端分页|client：前端分页
-            pageSize: 5,//单页记录数
-            pageList: [5, 10, 20, 30],//可选择单页记录数
-            queryParams: function (params) {//上传服务器的参数
-                var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
-                    offset: params.offset + 0,
-                    pageNumber: params.limit,
-                    propertyName: $('#search_mfc').val()
-                };
-                return temp;
-            },
-            columns: [
-                {
-                    field: 'state',
-                    checkbox: true,
-                    align: 'center',
-                    valign: 'middle'
-                }, {
-                    title: '序号',
+        function initTable_bi() {
+            $table_bi.bootstrapTable('destroy').bootstrapTable({
+                locale: 'zh-CN',
+                method: 'post',
+                url: '/basicInfo_list',
+                contentType: 'application/x-www-form-urlencoded',
+                striped: true, //是否显示行间隔色
+                pageNumber: 1, //初始化加载第一页
+                pagination: true,//是否分页
+                sidePagination: 'server',//server:服务器端分页|client：前端分页
+                pageSize: 5,//单页记录数
+                pageList: [5, 10, 20, 30],//可选择单页记录数
+                queryParams: function (params) {//上传服务器的参数
+                    var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                        offset: params.offset + 0,
+                        pageNumber: params.limit,
+                        propertyName: $('#search_mfc').val()
+                    };
+                    return temp;
+                },
+                columns: [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        align: 'center',
+                        valign: 'middle'
+                    }, {
+                        title: '序号',
+                        field: 'id',
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: idFormatter_bi
+                    }, {
+                        field: 'propertyName',
+                        title: '属性名称',
+                        sortable: true,
+                        align: 'center'
+                    }, {
+                        field: 'propertyLabel',
+                        title: '属性标识',
+                        sortable: true,
+                        align: 'center'
+                    }, {
+                        field: 'propertyValue',
+                        title: '属性值',
+                        sortable: true,
+                        align: 'center'
+                    }, {
+                        field: 'propertyUnit',
+                        title: '属性单位',
+                        sortable: false,
+                        align: 'center'
+                    }, {
+                        field: 'operate',
+                        title: 'operation',
+                        align: 'center',
+                        clickToSelect: false,
+                        events: window.operateEvents,
+                        formatter: operateFormatter_bi
+                    }
+                ]
+            });
+            $table_bi.on('check.bs.table uncheck.bs.table ' +
+                'check-all.bs.table uncheck-all.bs.table',
+                function () {
+                    $remove_bi.prop('disabled', !$table_bi.bootstrapTable('getSelections').length);
+                    // save your data, here just save the current page
+                    selections = getIdSelections_bi()
+                    // push or splice the selections if you want to save all data selections
+                });
+            $table_bi.on('all.bs.table', function (e, name, args) {
+                console.log(name, args)
+            });
+            $remove_bi.click(function () {
+                var ids = getIdSelections_bi();
+                $table_bi.bootstrapTable('remove', {
                     field: 'id',
-                    align: 'center',
-                    valign: 'middle',
-                    sortable: true,
-                    formatter: idFormatter_bi
-                }, {
-                    field: 'propertyName',
-                    title: '属性名称',
-                    sortable: true,
-                    align: 'center'
-                }, {
-                    field: 'propertyLabel',
-                    title: '属性标识',
-                    sortable: true,
-                    align: 'center'
-                }, {
-                    field: 'propertyValue',
-                    title: '属性值',
-                    sortable: true,
-                    align: 'center'
-                }, {
-                    field: 'propertyUnit',
-                    title: '属性单位',
-                    sortable: false,
-                    align: 'center'
-                }, {
-                    field: 'operate',
-                    title: 'operation',
-                    align: 'center',
-                    clickToSelect: false,
-                    events: window.operateEvents,
-                    formatter: operateFormatter_bi
-                }
-            ]
-        });
-
-        $table_bi.on('check.bs.table uncheck.bs.table ' +
-            'check-all.bs.table uncheck-all.bs.table',
-            function () {
-                $remove_bi.prop('disabled', !$table_bi.bootstrapTable('getSelections').length);
-
-                // save your data, here just save the current page
-                selections = getIdSelections_bi()
-                // push or splice the selections if you want to save all data selections
-            });
-
-        $table_bi.on('all.bs.table', function (e, name, args) {
-            console.log(name, args)
-        });
-
-        $remove_bi.click(function () {
-            var ids = getIdSelections_bi();
-            $table_bi.bootstrapTable('remove', {
-                field: 'id',
-                values: ids
-            });
-            $remove_bi.prop('disabled', true)
-        })
-    }
-
-    function initTable_ri() {
-        $table_ri.bootstrapTable('destroy').bootstrapTable({
-            locale: $('#locale').val(),
-            method: 'post',
-            url: '/reqInfo_list',
-            contentType: 'application/x-www-form-urlencoded',
-            striped: true, //是否显示行间隔色
-            pageNumber: 1, //初始化加载第一页
-            pagination: true,//是否分页
-            sidePagination: 'server',//server:服务器端分页|client：前端分页
-            pageSize: 5,//单页记录数
-            pageList: [5, 10, 20, 30],//可选择单页记录数
-            queryParams: function (params) {//上传服务器的参数
-                var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
-                    offset: params.offset + 0,
-                    pageNumber: params.limit,
-                    requirementName: $('#search_msc').val()
-                };
-                return temp;
-            },
-            columns: [
-                {
-                    field: 'state',
-                    checkbox: true,
-                    align: 'center',
-                    valign: 'middle'
-                }, {
-                    title: '序号',
-                    field: 'id',
-                    align: 'center',
-                    valign: 'middle',
-                    sortable: true,
-                    formatter: idFormatter_ri
-                }, {
-                    field: 'requirementName',
-                    title: '客户需求',
-                    sortable: true,
-                    align: 'center'
-                }, {
-                    field: 'requirementValue',
-                    title: '需求值',
-                    sortable: false,
-                    align: 'center'
-                }, {
-                    field: 'operate',
-                    title: 'Operation',
-                    align: 'center',
-                    clickToSelect: false,
-                    events: window.operateEvents,
-                    formatter: operateFormatter_ri
-                }
-            ]
-        });
-
-        $table_ri.on('check.bs.table uncheck.bs.table ' +
-            'check-all.bs.table uncheck-all.bs.table',
-            function () {
-                $remove_ri.prop('disabled', !$table_ri.bootstrapTable('getSelections').length)
-
-                // save your data, here just save the current page
-                selections = getIdSelections_ri()
-                // push or splice the selections if you want to save all data selections
-            });
-
-        $table_ri.on('all.bs.table', function (e, name, args) {
-            console.log(name, args)
-        });
-
-        $remove_ri.click(function () {
-            var ids = getIdSelections_ri();
-            $table_ri.bootstrapTable('remove', {
-                field: 'id',
-                values: ids
-            });
-            $remove_ri.prop('disabled', true)
-        })
-    }
-
-    function getIdSelections_bi() {
-        return $.map($table_bi.bootstrapTable('getSelections'), function (row) {
-            return row.id
-        })
-    }
-
-    function getIdSelections_ri() {
-        return $.map($table_ri.bootstrapTable('getSelections'), function (row) {
-            return row.id
-        })
-    }
-
-    function idFormatter_bi(value, row, index) {
-        var pageSize = $('#table_mf').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
-        var pageNumber = $('#table_mf').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
-        return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
-    }
-
-    function idFormatter_ri(value, row, index) {
-        var pageSize = $('#table_ms').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
-        var pageNumber = $('#table_ms').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
-        return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
-    }
-
-    function detailFormatter(index, row) {
-        var html = [];
-        $.each(row, function (key, value) {
-            html.push('<p><b>' + key + ':</b> ' + value + '</p>')
-        });
-        return html.join('')
-    }
-
-    function operateFormatter_bi(value, row, index) {
-        return [
-            '<a id="edit-bi" href="javascript:void(0)" title="Edit" style="margin-right: 10px;">',
-            '<i class="glyphicon glyphicon-pencil"></i>',
-            '</a>',
-            '<a id="remove-bi" href="javascript:void(0)" title="Remove">',
-            '<i class="glyphicon glyphicon-trash"></i>',
-            '</a>'
-        ].join('')
-    }
-
-    function operateFormatter_ri(value, row, index) {
-        return [
-            '<a id="edit-ri" href="javascript:void(0)" title="Edit" style="margin-right: 10px;">',
-            '<i class="glyphicon glyphicon-pencil"></i>',
-            '</a>',
-            '<a id="remove-ri" href="javascript:void(0)" title="Remove">',
-            '<i class="glyphicon glyphicon-trash"></i>',
-            '</a>'
-        ].join('')
-    }
-
-    window.operateEvents = {
-        'click #edit-bi': function (e, value, row, index) {
-            $("#editBindForm").attr('action', '/basicInfo/' + row.id).submit();
-        },
-        'click #remove-bi': function (e, value, row, index) {
-            $("#deleteBindForm").attr('action', '/basicInfo/' + row.id).submit();
-        },
-        'click #edit-ri': function (e, value, row, index) {
-            $("#editBindForm").attr('action', '/reqInfo/' + row.id).submit();
-        },
-        'click #remove-ri': function (e, value, row, index) {
-            $("#deleteBindForm").attr('action', '/reqInfo/' + row.id).submit();
+                    values: ids
+                });
+                $remove_bi.prop('disabled', true)
+            })
         }
-    };
-
-</script>
+        function initTable_ri() {
+            $table_ri.bootstrapTable('destroy').bootstrapTable({
+                locale: 'zh-CN',
+                method: 'post',
+                url: '/reqInfo_list',
+                contentType: 'application/x-www-form-urlencoded',
+                striped: true, //是否显示行间隔色
+                pageNumber: 1, //初始化加载第一页
+                pagination: true,//是否分页
+                sidePagination: 'server',//server:服务器端分页|client：前端分页
+                pageSize: 5,//单页记录数
+                pageList: [5, 10, 20, 30],//可选择单页记录数
+                queryParams: function (params) {//上传服务器的参数
+                    var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                        offset: params.offset + 0,
+                        pageNumber: params.limit,
+                        requirementName: $('#search_msc').val()
+                    };
+                    return temp;
+                },
+                columns: [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        align: 'center',
+                        valign: 'middle'
+                    }, {
+                        title: '序号',
+                        field: 'id',
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: idFormatter_ri
+                    }, {
+                        field: 'requirementName',
+                        title: '客户需求',
+                        sortable: true,
+                        align: 'center'
+                    }, {
+                        field: 'requirementValue',
+                        title: '需求值',
+                        sortable: false,
+                        align: 'center'
+                    }, {
+                        field: 'operate',
+                        title: 'Operation',
+                        align: 'center',
+                        clickToSelect: false,
+                        events: window.operateEvents,
+                        formatter: operateFormatter_ri
+                    }
+                ]
+            });
+            $table_ri.on('check.bs.table uncheck.bs.table ' +
+                'check-all.bs.table uncheck-all.bs.table',
+                function () {
+                    $remove_ri.prop('disabled', !$table_ri.bootstrapTable('getSelections').length)
+                    // save your data, here just save the current page
+                    selections = getIdSelections_ri()
+                    // push or splice the selections if you want to save all data selections
+                });
+            $table_ri.on('all.bs.table', function (e, name, args) {
+                console.log(name, args)
+            });
+            $remove_ri.click(function () {
+                var ids = getIdSelections_ri();
+                $table_ri.bootstrapTable('remove', {
+                    field: 'id',
+                    values: ids
+                });
+                $remove_ri.prop('disabled', true)
+            })
+        }
+        function getIdSelections_bi() {
+            return $.map($table_bi.bootstrapTable('getSelections'), function (row) {
+                return row.id
+            })
+        }
+        function getIdSelections_ri() {
+            return $.map($table_ri.bootstrapTable('getSelections'), function (row) {
+                return row.id
+            })
+        }
+        function idFormatter_bi(value, row, index) {
+            var pageSize = $('#table_mf').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
+            var pageNumber = $('#table_mf').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
+            return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
+        }
+        function idFormatter_ri(value, row, index) {
+            var pageSize = $('#table_ms').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
+            var pageNumber = $('#table_ms').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
+            return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
+        }
+        function detailFormatter(index, row) {
+            var html = [];
+            $.each(row, function (key, value) {
+                html.push('<p><b>' + key + ':</b> ' + value + '</p>')
+            });
+            return html.join('')
+        }
+        function operateFormatter_bi(value, row, index) {
+            return [
+                '<a id="edit-bi" href="javascript:void(0)" title="Edit" style="margin-right: 10px;">',
+                '<i class="glyphicon glyphicon-pencil"></i>',
+                '</a>',
+                '<a id="remove-bi" href="javascript:void(0)" title="Remove">',
+                '<i class="glyphicon glyphicon-trash"></i>',
+                '</a>'
+            ].join('')
+        }
+        function operateFormatter_ri(value, row, index) {
+            return [
+                '<a id="edit-ri" href="javascript:void(0)" title="Edit" style="margin-right: 10px;">',
+                '<i class="glyphicon glyphicon-pencil"></i>',
+                '</a>',
+                '<a id="remove-ri" href="javascript:void(0)" title="Remove">',
+                '<i class="glyphicon glyphicon-trash"></i>',
+                '</a>'
+            ].join('')
+        }
+        window.operateEvents = {
+            'click #edit-bi': function (e, value, row, index) {
+                $("#editBindForm").attr('action', '/basicInfo/' + row.id).submit();
+            },
+            'click #remove-bi': function (e, value, row, index) {
+                $("#deleteBindForm").attr('action', '/basicInfo/' + row.id).submit();
+            },
+            'click #edit-ri': function (e, value, row, index) {
+                $("#editBindForm").attr('action', '/reqInfo/' + row.id).submit();
+            },
+            'click #remove-ri': function (e, value, row, index) {
+                $("#deleteBindForm").attr('action', '/reqInfo/' + row.id).submit();
+            }
+        };
+    </script>
 </body>
 </html>

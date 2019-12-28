@@ -125,7 +125,11 @@
                                    th:href="@{/propTool}">
                                     <i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>模块属性建模
                                 </a>
-                                <a href="#" class="list-group-item list-group-item-warning"><i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>配置规则定义</a>
+                                <a href="#" class="list-group-item list-group-item-warning"
+                                   th:class="${activeUri=='ruleTool'?'list-group-item list-group-item-danger':'list-group-item list-group-item-warning'}"
+                                   th:href="@{/ruleTool}">
+                                    <i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>配置规则定义
+                                </a>
                                 <a href="#" class="list-group-item list-group-item-warning"><i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>配置模板创成</a>
                                 <a href="#" class="list-group-item list-group-item-warning"><i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>功能模块配置</a>
                                 <a href="#" class="list-group-item list-group-item-warning"><i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>模块结构变异</a>

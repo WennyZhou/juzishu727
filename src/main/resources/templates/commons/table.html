@@ -11,6 +11,7 @@
     <div th:if="${ifHavingHeading} eq 'yes'">
         <div class="panel-heading">
             <h3>[[${panelHeadingMsg}]]</h3>
+            <hr>
         </div>
     </div>
     <div class="panel-body" style="margin-bottom:0;">
@@ -68,6 +69,17 @@
                 </span>
             </span>
 
+            <!-- 详情按钮：生成树结构-->
+            <span th:if="${ifTreeView} eq 'yes'">
+                <span class="btn btn-sm btn-success" id="treeViewBtn" data-toggle="modal" data-target="#treeModel" title="树形结构图">
+                    <i class="glyphicon glyphicon-tree-deciduous"></i>
+                </span>
+            </span>
+
+            <!-- 引入电梯型号选择器 -->
+            <span th:if="${ifElevatorTypeSelected} eq 'yes'">
+                <div class="form-group" th:replace="commons/selector::#elevatorSeletor"></div>
+            </span>
 
             <!-- 引入模块选择器 -->
             <span th:if="${ifModuleSelected} eq 'yes'">

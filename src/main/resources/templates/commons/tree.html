@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tree</title>
+</head>
+<body>
+
+<!-- 可搜索树形结构 -->
+<div id="seachableTree">
+    <div id="treeview-searchable" class=""></div>
+    <br>
+    <hr>
+    <h3>搜索</h3>
+    <!-- <form> -->
+    <div class="form-group">
+        <label for="input-tree-search" class="sr-only">Search Tree:</label>
+        <input type="text" class="form-control" id="input-tree-search" placeholder="搜索..." value="">
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" class="checkbox" id="chk-ignore-case" value="false">
+            Ignore Case
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" class="checkbox" id="chk-exact-match" value="false">
+            Exact Match
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" class="checkbox" id="chk-reveal-results" value="false">
+            Reveal Results
+        </label>
+    </div>
+    <button type="button" class="btn btn-success" id="btn-tree-search">Search</button>
+    <button type="button" class="btn btn-default" id="btn-tree-clear-search">Clear</button>
+    <!-- </form> -->
+    <br>
+    <hr>
+    <h3>搜索结果</h3>
+    <div id="tree-search-output"></div>
+</div>
+
+</body>
+</html>
