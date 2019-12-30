@@ -5,7 +5,7 @@ import com.juzishu727.util.TreeNode;
 
 import java.util.List;
 
-public interface TreeService {
+public interface ModuleCorrelationTreeService {
 
     List<TreeNode> getTree(ModuleCorrelation corr);
 

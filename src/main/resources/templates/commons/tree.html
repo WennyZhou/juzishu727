@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<!-- 可搜索树形结构 -->
+<!-- 可搜索树形结构 竖向排列-->
 <div id="seachableTree">
     <div id="treeview-searchable" class=""></div>
     <br>
@@ -44,5 +44,47 @@
     <div id="tree-search-output"></div>
 </div>
 
+
+<!-- 可搜索树形结构 横向排列-->
+<div id="seachableTree-horizontal">
+    <div class="col-sm-3">
+        <h3>[[${msg}]]</h3>
+        <div id="treeview-searchable-h" class=""></div>
+    </div>
+    <div class="col-sm-3">
+        <h3>搜索</h3>
+        <!-- <form> -->
+        <div class="form-group">
+            <label for="input-tree-search" class="sr-only">Search Tree:</label>
+            <input type="text" class="form-control" id="input-tree-search-h" placeholder="搜索..." value="">
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" class="checkbox" id="chk-ignore-case-h" value="false">
+                Ignore Case
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" class="checkbox" id="chk-exact-match-h" value="false">
+                Exact Match
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" class="checkbox" id="chk-reveal-results-h" value="false">
+                Reveal Results
+            </label>
+        </div>
+        <button type="button" class="btn btn-success" id="btn-tree-search-h">Search</button>
+        <button type="button" class="btn btn-default" id="btn-tree-clear-search-h">Clear</button>
+        <!-- </form> -->
+    </div>
+    <div class="col-sm-3">
+        <h3>搜索结果</h3>
+        <div id="tree-search-output-h"></div>
+    </div>
+
+</div>
 </body>
 </html>

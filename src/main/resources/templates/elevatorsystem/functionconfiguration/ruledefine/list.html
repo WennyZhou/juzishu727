@@ -27,35 +27,247 @@
         <div class="row">
             <!-- 引入sidebar 左侧工具导航栏 -->
             <div th:replace="commons/bar::#sidebar(activeUri='ruleTool', activeFatherUri='ConfigTool')"></div>
+
             <!-- 右侧内容面板 -->
-            <div class="col-sm-9">
-                <p>配置规则定义主页</p>
-
-
-
-
+            <div th:replace="commons/tree::#seachableTree-horizontal(msg='电梯产品族结构视图')"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm-9 col-sm-offset-3">
+                <hr>
+                <!-- 引入table -->
+                <div th:replace="commons/table::#tableFragement(tablePlaneUri='rdModuleList',tableNumber='single')"></div>
             </div>
         </div>
     </div>
+
+    <!-- 编辑按钮绑定form-->
+    <form method="get" id="editBindForm">
+    </form>
+
+    <!-- 删除按钮绑定form -->
+    <form method="post" id="deleteBindForm">
+        <input type="hidden" name="_method" value="delete">
+    </form>
 
     <!-- 底部内容 -->
     <div class="jumbotron text-center" style="margin-bottom:0">
         <p>底部内容</p>
     </div>
 
-<!--<script src="/js/jquery-3.4.1.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery-3.4.1.min.js"></script>
+<!--<script src="/js/bootstrap.min.js"></script>
 <script src="/js/tableExport.min.js"></script>
 <script src="/js/bootstrap-table.min.js"></script>
 <script src="/js/bootstrap-table-locale-all.min.js"></script>
 <script src="/js/bootstrap-table-export.min.js"></script>-->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
-    <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table-locale-all.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>
 
+<!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table-locale-all.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+<script src="/js/bootstrap-treeview.min.js"></script>
+
+<script>
+    var $table = $('#table_s');
+    var $remove = $('#remove_s');
+    var selections = [];
+
+    $(function () {
+        initTable();
+
+        //查询按钮事件
+        $('#searchBtn_s').click(function () {
+            $('#table_s').bootstrapTable('refresh');
+        });
+
+        //树形控件初始化
+        initTree();
+
+    });
+
+    function initTable() {
+        $table.bootstrapTable('destroy').bootstrapTable({
+            locale: 'zh-CN',
+            method: 'post',
+            url: '/ruleTool/module_list',
+            contentType: 'application/x-www-form-urlencoded',
+            striped: true, //是否显示行间隔色
+            pageNumber: 1, //初始化加载第一页
+            pagination: true,//是否分页
+            sidePagination: 'server',//server:服务器端分页|client：前端分页
+            pageSize: 5,//单页记录数
+            pageList: [5, 10, 20, 30],//可选择单页记录数
+            queryParams: function (params) {//上传服务器的参数
+                var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                    offset: params.offset + 0,
+                    pageNumber: params.limit,
+                    moduleName: $('#search_sc').val()
+                };
+                return temp;
+            },
+            columns: [
+                {
+                    field: 'state',
+                    checkbox: true,
+                    align: 'center',
+                    valign: 'middle'
+                }, {
+                    title: '序号',
+                    field: 'id',
+                    align: 'center',
+                    valign: 'middle',
+                    sortable: true,
+                    formatter: idFormatter
+                }, {
+                    field: 'moduleName',
+                    title: '子功能模块名称',
+                    sortable: true,
+                    align: 'center'
+                }, {
+                    field: 'moduleLabel',
+                    title: '子功能模块代号',
+                    sortable: true,
+                    align: 'center'
+                }, {
+                    field: 'ifVirtual',
+                    title: '是否虚拟件',
+                    sortable: true,
+                    align: 'center'
+                }, {
+                    field: 'ifKey',
+                    title: '是否关键模块',
+                    sortable: true,
+                    align: 'center'
+                },{
+                    field: 'ifStandard',
+                    title: '是否标配',
+                    sortable: false,
+                    align: 'center'
+                },{
+                    field: 'operate',
+                    title: 'operation',
+                    align: 'center',
+                    clickToSelect: false,
+                    events: window.operateEvents,
+                    formatter: operateFormatter
+                }
+            ]
+        });
+
+        $table.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table',
+            function () {
+                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+
+                // save your data, here just save the current page
+                selections = getIdSelections()
+                // push or splice the selections if you want to save all data selections
+            });
+
+        $table.on('all.bs.table', function (e, name, args) {
+            console.log(name, args)
+        });
+
+        $remove.click(function () {
+            var ids = getIdSelections();
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: ids
+            });
+            $remove.prop('disabled', true)
+        })
+    }
+
+    function getIdSelections() {
+        return $.map($table.bootstrapTable('getSelections'), function (row) {
+            return row.id
+        })
+    }
+
+    function idFormatter(value, row, index) {
+        var pageSize = $('#table_s').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
+        var pageNumber = $('#table_s').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
+        return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
+    }
+
+    function detailFormatter(index, row) {
+        var html = [];
+        $.each(row, function (key, value) {
+            html.push('<p><b>' + key + ':</b> ' + value + '</p>')
+        });
+        return html.join('')
+    }
+
+    function operateFormatter(value, row, index) {
+        return [
+            '<a class="edit" href="javascript:void(0)" title="Edit" style="margin-right: 10px;">',
+            '<i class="glyphicon glyphicon-pencil"></i>',
+            '</a>',
+            '<a class="remove" href="javascript:void(0)" title="Remove">',
+            '<i class="glyphicon glyphicon-trash"></i>',
+            '</a>'
+        ].join('')
+    }
+
+    window.operateEvents = {
+        'click .edit': function (e, value, row, index) {
+            $("#editBindForm").attr('action', '/ruleTool/module/' + row.id).submit();
+        },
+        'click .remove': function (e, value, row, index) {
+            $("#deleteBindForm").attr('action', '/ruleTool/module/' + row.id).submit();
+        }
+    };
+
+    function initTree() {
+        console.log("树形结构初始化");
+
+        $.ajax({
+            url: "/ruleTool/moduleTree",
+            type: "post",
+            dataType: "json",
+            success: function (defaultData) {
+                console.log(defaultData);
+                $('#treeview-searchable-h').treeview({
+                    data: defaultData,//数据源参数
+                    color: "#428bca",
+                    expandIcon: 'glyphicon glyphicon-chevron-right',
+                    collapseIcon: 'glyphicon glyphicon-chevron-down',
+                    nodeIcon: 'glyphicon glyphicon-bookmark'
+                });
+            }, error: function () {
+                alert("加载树异常！");
+            }
+        });
+
+        var search = function(e) {
+            var pattern = $('#input-tree-search-h').val();
+            var options = {
+                ignoreCase: $('#chk-ignore-case-h').is(':checked'),
+                exactMatch: $('#chk-exact-match-h').is(':checked'),
+                revealResults: $('#chk-reveal-results-h').is(':checked')
+            };
+            var results = $searchableTree.treeview('search', [ pattern, options ]);
+
+            var output = '<p>' + results.length + ' matches found</p>';
+            $.each(results, function (index, result) {
+                output += '<p>- ' + result.text + '</p>';
+            });
+            $('#tree-search-output-h').html(output);
+        }
+
+        $('#btn-tree-search-h').on('click', search);
+        $('#input-tree-search-h').on('keyup', search);
+
+        $('#btn-tree-clear-search-h').on('click', function (e) {
+            $('#treeview-searchable-h').treeview('clearSearch');
+            $('#input-tree-search-h').val('');
+            $('#tree-search-output-h').html('');
+        });
+    }
+</script>
 
 </body>
 </html>

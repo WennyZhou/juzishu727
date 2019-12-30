@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Basic Info Edit</title>
+
+    <!--<link rel="stylesheet" href="/static/css/bootstrap.min.css">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                <form th:action="@{/ruleTool/module}" method="post">
+                    <!-- moduleBasicInfo 不为空 修改-->
+                    <input type="hidden" name="_method" value="put" th:if="${info!=null}">
+                    <input type="hidden" name="id" th:if="${info!=null}" th:value="${info.id}">
+                    <div class="form-group">
+                        <label for="moduleName">子功能模块名称</label>
+                        <input type="text" name="moduleName" id="moduleName" class="form-control" placeholder="曳引机" th:value="${info!=null}?${info.moduleName}">
+                    </div>
+                    <div class="form-group">
+                        <label for="moduleLabel">子功能模块代号</label>
+                        <input type="text" name="moduleLabel" id="moduleLabel" class="form-control" placeholder="M01" th:value="${info!=null}?${info.moduleLabel}">
+                    </div>
+                    <div class="form-group">
+                        <label for="father">父功能模块</label>
+                        <input type="text" name="father" id="father" class="form-control" placeholder="电梯" th:value="${info!=null}?${info.father}">
+                    </div>
+                    <div class="form-group">
+                        <label for="ifVirtual">是否虚拟件</label>
+                        <input type="text" name="ifVirtual" id="ifVirtual" class="form-control" placeholder="否" th:value="${info!=null}?${info.ifVirtual}">
+                    </div>
+                    <div class="form-group">
+                        <label for="ifKey">是否关键模块</label>
+                        <input type="text" name="ifKey" id="ifKey" class="form-control" placeholder="是" th:value="${info!=null}?${info.ifKey}">
+                    </div>
+                    <div class="form-group">
+                        <label for="ifStandard">是否标配</label>
+                        <input type="text" name="ifStandard" id="ifStandard" class="form-control" placeholder="标配" th:value="${info!=null}?${info.ifStandard}">
+                    </div>
+                    <button class="btn btn-primary" type="submit" th:text="${info!=null}?'修改':'添加'"></button>
+                </form>
+            </main>
+        </div>
+    </div>
+
+<!--<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 package com.juzishu727.service.impl;
 import com.juzishu727.bean.ModuleCorrelation;
 import com.juzishu727.dao.ModuleCorrelationDao;
-import com.juzishu727.service.TreeService;
+import com.juzishu727.service.ModuleCorrelationTreeService;
 import com.juzishu727.util.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class TreeServiceImpl implements TreeService {
+public class ModuleCorrelationTreeServiceImpl implements ModuleCorrelationTreeService {
 
     @Autowired
     private ModuleCorrelationDao moduleCorrelationDao;

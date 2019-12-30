@@ -47,6 +47,9 @@
                 <span th:case="'ptModuleCorrelation'">
                     <a class="btn btn-sm btn-success" href="#" th:href="@{/propTool/mcorrelation}"><i class="glyphicon glyphicon-plus"></i>添加</a>
                 </span>
+                <span th:case="'rdModuleList'">
+                    <a class="btn btn-sm btn-success" href="#" th:href="@{/ruleTool/module}"><i class="glyphicon glyphicon-plus"></i>添加</a>
+                </span>
             </span>
 
             <div class="form-group" th:switch="${tableNumber}">

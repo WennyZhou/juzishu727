@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juzishu727.dao.ModuleDao">
+
+    <!-- 查询全部/根据condition查询条件 查询-->
+    <select id="selectList" resultType="module">
+        SELECT id, moduleName, moduleLabel, father, ifVirtual, ifKey, ifStandard
+        FROM t_module
+        WHERE 1=1
+        <if test="moduleName != null and moduleName != ''">
+            AND (moduleName like concat('%', #{moduleName}, '%')
+            OR father like concat('%', #{moduleName}, '%')
+            OR moduleLabel  like concat('%', #{moduleName}, '%'))
+        </if>
+        LIMIT #{offset}, #{pageNumber}
+    </select>
+
+    <!-- 查询全部-->
+    <select id="selectAll" resultType="module">
+        SELECT id, moduleName, moduleLabel, father, ifVirtual, ifKey, ifStandard
+        FROM t_module
+    </select>
+
+
+    <!-- 查询数据库表中数据总条数-->
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_module
+    </select>
+
+    <!-- 根据id查询-->
+    <select id="selectById" resultType="module">
+        SELECT id, moduleName, moduleLabel, father, ifVirtual, ifKey, ifStandard
+        FROM t_module
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据father==null查询-->
+    <select id="selectByFatherEqNull" resultType="module">
+        SELECT id, moduleName, moduleLabel, father, ifVirtual, ifKey, ifStandard
+        FROM t_module
+        WHERE father='-'
+    </select>
+
+    <!-- 根据father查询-->
+    <select id="selectByFather" resultType="module">
+        SELECT id, moduleName, moduleLabel, father, ifVirtual, ifKey, ifStandard
+        FROM t_module
+        WHERE father=#{father}
+    </select>
+
+    <!-- 添加 -->
+    <insert id="addModule">
+        INSERT INTO t_module
+        (moduleName, moduleLabel, father, ifVirtual, ifKey, ifStandard)
+        VALUES
+        (#{moduleName}, #{moduleLabel}, #{father}, #{ifVirtual}, #{ifKey}, #{ifStandard})
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT @@identity
+        </selectKey>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="updateModule">
+        UPDATE t_module
+        SET
+        moduleName=#{moduleName}, moduleLabel=#{moduleLabel}, father=#{father}, ifVirtual=#{ifVirtual}, ifKey=#{ifKey}, ifStandard=#{ifStandard}
+        WHERE id=#{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="deleteModule">
+        DELETE FROM t_module
+        WHERE id=#{id}
+    </delete>
+
+</mapper>
