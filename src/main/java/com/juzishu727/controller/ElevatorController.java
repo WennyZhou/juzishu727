@@ -1,6 +1,9 @@
 package com.juzishu727.controller;
 
+import com.juzishu727.bean.Module;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
@@ -107,6 +110,27 @@ public class ElevatorController {
     @RequestMapping("/ruleTool")
     public String toRuleToolHome(){
         return "/elevatorsystem/functionconfiguration/ruledefine/list.html";
+    }
+
+    /**
+     * 去配置规则定义工具 模块规则显示页面
+     * @return
+     */
+    @RequestMapping("/ruleTool/ruleList")
+    public String toRuleToolRuleList(){
+        return "/elevatorsystem/functionconfiguration/ruledefine/rulelist.html";
+    }
+
+
+    /**
+     * 去配置规则定义工具 模块规则显示页面
+     * @return
+     */
+    @RequestMapping("/ruleTool/ruleList/{text}")
+    public String toRuleToolModuleRuleList(@PathVariable String text, Model model){
+        model.addAttribute("moduleName", text);
+        model.addAttribute("elevType", "KLK2金豹超高速电梯");
+        return "/elevatorsystem/functionconfiguration/ruledefine/rulelist.html";
     }
 
 }

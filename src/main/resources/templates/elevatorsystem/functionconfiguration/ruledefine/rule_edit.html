@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Basic Info Edit</title>
+
+    <!--<link rel="stylesheet" href="/static/css/bootstrap.min.css">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                <form th:action="@{/ruleTool/rule}" method="post">
+                    <!-- moduleBasicInfo 不为空 修改-->
+                    <input type="hidden" name="_method" value="put" th:if="${info!=null}">
+                    <input type="hidden" name="id" th:if="${info!=null}" th:value="${info.id}">
+                    <div class="form-group">
+                        <label for="ruleLabel">规则标识</label>
+                        <input type="text" name="ruleLabel" id="ruleLabel" class="form-control" placeholder="r0101" th:value="${info!=null}?${info.ruleLabel}">
+                    </div>
+                    <div class="form-group">
+                        <label for="moduleLink">关联模块</label>
+                        <input type="text" name="moduleLink" id="moduleLink" class="form-control" placeholder="曳引机" th:value="${info!=null}?${info.moduleLink}">
+                    </div>
+                    <div class="form-group">
+                        <label for="startChar">是否起始</label>
+                        <input type="text" name="startChar" id="startChar" class="form-control" placeholder="start" th:value="${info!=null}?${info.startChar}">
+                    </div>
+                    <div class="form-group">
+                        <label for="paraName">参数名称</label>
+                        <input type="text" name="paraName" id="paraName" class="form-control" placeholder="功率" th:value="${info!=null}?${info.paraName}">
+                    </div>
+                    <div class="form-group">
+                        <label for="comparator">比较符</label>
+                        <input type="text" name="comparator" id="comparator" class="form-control" placeholder=">" th:value="${info!=null}?${info.comparator}">
+                    </div>
+                    <div class="form-group">
+                        <label for="paraValue">参数值</label>
+                        <input type="text" name="paraValue" id="paraValue" class="form-control" placeholder="20" th:value="${info!=null}?${info.paraValue}">
+                    </div>
+                    <div class="form-group">
+                        <label for="logSymbol">逻辑符</label>
+                        <input type="text" name="logSymbol" id="logSymbol" class="form-control" placeholder="and" th:value="${info!=null}?${info.logSymbol}">
+                    </div>
+                    <div class="form-group">
+                        <label for="linkRule">逻辑关联规则标识</label>
+                        <input type="text" name="linkRule" id="linkRule" class="form-control" placeholder="r0102" th:value="${info!=null}?${info.linkRule}">
+                    </div>
+                    <div class="form-group">
+                        <label for="result">结果</label>
+                        <input type="text" name="result" id="result" class="form-control" placeholder="-" th:value="${info!=null}?${info.result}">
+                    </div>
+                    <button class="btn btn-primary" type="submit" th:text="${info!=null}?'修改':'添加'"></button>
+                </form>
+            </main>
+        </div>
+    </div>
+
+<!--<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

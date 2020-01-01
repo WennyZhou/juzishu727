@@ -27,13 +27,15 @@
             <!-- 右侧内容面板 -->
             <div class="col-sm-9">
                 <!-- 图片元素-->
-                <span style="font-size: larger;">电梯型号:<strong>KLK2"金豹"超高速电梯</strong></span>
-                <span class="btn btn-sm btn-success" id="basicInfoBtn" data-toggle="modal" data-target="#basicInfoTableModel" title="基本配置信息">
-                    <i class="glyphicon glyphicon-tasks"></i>
-                </span>
-                <span class="btn btn-sm btn-success" id="reqInfoBtn" data-toggle="modal" data-target="#reqInfoTableModel" title="客户需求信息">
-                    <i class="glyphicon glyphicon-list-alt"></i>
-                </span>
+                <div class="form-inline">
+                    <span style="font-size: larger;">电梯型号:<strong>KLK2"金豹"超高速电梯</strong></span>
+                    <span class="btn btn-sm btn-success" id="basicInfoBtn" data-toggle="modal" data-target="#basicInfoTableModel" title="基本配置信息">
+                        <i class="glyphicon glyphicon-tasks"></i>
+                    </span>
+                    <span class="btn btn-sm btn-success" id="reqInfoBtn" data-toggle="modal" data-target="#reqInfoTableModel" title="客户需求信息">
+                        <i class="glyphicon glyphicon-list-alt"></i>
+                    </span>
+                </div>
                 <br>
                 <img src="images/elevator.jpg" th:src="@{/images/elevator.jpg}" class="img-responsive" alt="Elevator" width="100%" height="300px">
 

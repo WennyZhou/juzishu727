@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juzishu727.dao.RuleDao">
+
+    <!-- 查询全部/根据condition查询条件 查询 -->
+    <select id="selectList" resultType="rule">
+        SELECT id, ruleLabel, moduleLink, startChar, paraName, comparator, paraValue, logSymbol, linkRule, result
+        FROM t_rule
+        WHERE 1=1
+        <if test="moduleLink != null and moduleLink != ''">
+            AND moduleLink like concat('%', #{moduleLink}, '%')
+        </if>
+        <if test="paraName != null and paraName != ''">
+            AND paraName like concat('%', #{paraName}, '%')
+        </if>
+        LIMIT #{offset}, #{pageNumber}
+    </select>
+
+    <!-- 查询数据库表中数据总条数 -->
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_rule
+    </select>
+
+    <!-- 根据id查询-->
+    <select id="selectById" resultType="rule">
+        SELECT id, ruleLabel, moduleLink, startChar, paraName, comparator, paraValue, logSymbol, linkRule, result
+        FROM t_rule
+        WHERE id=#{id}
+    </select>
+
+    <!-- 添加 -->
+    <insert id="addRule">
+        INSERT INTO t_rule
+        (ruleLabel, moduleLink, startChar, paraName, comparator, paraValue, logSymbol, linkRule, result)
+        VALUES
+        (#{ruleLabel}, #{moduleLink}, #{startChar}, #{paraName}, #{comparator},
+        #{paraValue}, #{logSymbol}, #{linkRule}, #{result})
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT @@identity
+        </selectKey>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="updateRule">
+        UPDATE t_rule
+        SET
+        ruleLabel=#{ruleLabel}, moduleLink=#{moduleLink}, startChar=#{startChar}, paraName=#{paraName},
+        comparator=#{comparator}, paraValue=#{paraValue}, logSymbol=#{logSymbol}, linkRule=#{linkRule},
+        result=#{result}
+        WHERE id=#{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="deleteRule">
+        DELETE FROM t_rule
+        WHERE id=#{id}
+    </delete>
+</mapper>
