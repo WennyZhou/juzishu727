@@ -1,5 +1,6 @@
 package com.juzishu727.controller.funconfig.proptool;
 
+import com.alibaba.fastjson.JSON;
 import com.juzishu727.bean.ModuleBasicInfo;
 import com.juzishu727.service.ModuleBasicInfoService;
 import com.juzishu727.util.PageHelper;
@@ -32,14 +33,6 @@ public class ModuleBasicInfoController {
         return pageHelper;
     }
 
-    /**
-     * 去添加
-     * Get请求 <a></a>链接
-     */
-    @GetMapping("/mbasicInfo")
-    public String toAdd() {
-        return "/elevatorsystem/functionconfiguration/propertymodeltool/mbasicinfo_edit";
-    }
 
     /**
      * 添加用户
@@ -54,15 +47,15 @@ public class ModuleBasicInfoController {
     }
 
     /**
-     * 去更新页面
-     * Get请求
-     * <a></a>链接
+     * 去更新
+     * Post请求
+     * ajax
      */
-    @GetMapping("/mbasicInfo/{id}")
-    public String toUpdate(@PathVariable Integer id, Model model) {
+    @PostMapping("/mbasicInfo/{id}")
+    @ResponseBody
+    public String toUpdate(@PathVariable Integer id) {
         ModuleBasicInfo info = mService.selectById(id);
-        model.addAttribute("info", info);
-        return "/elevatorsystem/functionconfiguration/propertymodeltool/mbasicinfo_edit";
+        return JSON.toJSONString(info);
     }
 
     /**

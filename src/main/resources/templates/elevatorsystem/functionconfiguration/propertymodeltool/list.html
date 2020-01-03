@@ -37,16 +37,51 @@
                 <div th:replace="commons/selector::#btlocale-selector"></div>
 
                 <!-- 引入table 模块基本信息面板 -->
-                <div th:replace="commons/table::#tableFragement(ifHavingHeading='no',
-                tablePlaneUri='ptBasicInfo',tableNumber='single',ifModuleSelected='No')"></div>
+                <div th:replace="commons/table::#tableFragement(tableNumber='single')"></div>
+
+                <!-- 模态框: 表格信息编辑表单 -->
+                <div class="modal fade" id="SingleEditFormModel" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" id="headerCloseBtn">&times;</button>
+                                <h2 class="modal-title" style="color: #761c19;">模块基本信息</h2>
+                            </div>
+                            <div class="modal-body">
+                                <!-- 模块基本信息编辑表单 -->
+                                <form th:action="@{/mbasicInfo}" method="post">
+                                    <!-- moduleBasicInfo 不为空 修改-->
+                                    <input type="hidden" name="_method" value="post" id="moduleInfoEditFormMethod">
+                                    <input type="hidden" name="id" id="moduleInfoIdHiddenInput">
+                                    <div class="form-group">
+                                        <label for="moduleName">模块名称</label>
+                                        <input type="text" name="moduleName" id="moduleName" class="form-control" placeholder="曳引机">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="moduleLabel">模块标识</label>
+                                        <input type="text" name="moduleLabel" id="moduleLabel" class="form-control" placeholder="MYYJ01">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="sortProperty">分类属性</label>
+                                        <input type="text" name="sortProperty" id="sortProperty" class="form-control" placeholder="必选">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="funcDesc">功能描述</label>
+                                        <input type="text" name="funcDesc" id="funcDesc" class="form-control" placeholder="驱动">
+                                    </div>
+                                    <button class="btn btn-primary" type="submit" id="moduleInfoSubmitBtn">添加</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger btn-md" type="button" data-dismiss="modal" id="footerCloseBtn">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
     </div>
-
-    <!-- 编辑按钮绑定form-->
-    <form method="get" id="editBindForm">
-    </form>
 
     <!-- 删除按钮绑定form -->
     <form method="post" id="deleteBindForm">
@@ -77,6 +112,8 @@
         var selections = [];
 
         $(function () {
+            initFormContent();
+
             initTable();
 
             $('#locale').change(initTable);
@@ -87,6 +124,19 @@
             });
 
         });
+
+        function initFormContent(){
+            $("#moduleInfoEditFormMethod").attr("value", "post");
+
+            $("#moduleInfoIdHiddenInput").attr("value", "");
+
+            $("#moduleName").attr("value", "");
+            $("#moduleLabel").attr("value", "");
+            $("#sortProperty").attr("value", "");
+            $("#funcDesc").attr("value", "");
+
+            $("#moduleInfoSubmitBtn")[0].innerText = "添加";
+        }
 
         function initTable() {
             $table.bootstrapTable('destroy').bootstrapTable({
@@ -198,7 +248,7 @@
 
         function operateFormatter(value, row, index) {
             return [
-                '<a class="edit" href="javascript:void(0)" title="Edit" style="margin-right: 10px;">',
+                '<a class="edit" data-toggle="modal" data-target="#SingleEditFormModel" title="Edit" style="margin-right: 10px;">',
                 '<i class="glyphicon glyphicon-pencil"></i>',
                 '</a>',
                 '<a class="remove" href="javascript:void(0)" title="Remove">',
@@ -209,12 +259,37 @@
 
         window.operateEvents = {
             'click .edit': function (e, value, row, index) {
-                $("#editBindForm").attr('action', '/mbasicInfo/' + row.id).submit();
+                //修改表单提交方式
+                $("#moduleInfoEditFormMethod").attr("value", "put");
+                //采用ajax查询当前对象信息
+                $.ajax({
+                    url: "/mbasicInfo/" + row.id,
+                    type: "post",
+                    dataType: "json",
+                    success: function (defaultData) {
+                        $("#moduleInfoIdHiddenInput").attr("value", defaultData.id);
+                        $("#moduleName").attr("value", defaultData.moduleName);
+                        $("#moduleLabel").attr("value", defaultData.moduleLabel);
+                        $("#sortProperty").attr("value", defaultData.sortProperty);
+                        $("#funcDesc").attr("value", defaultData.funcDesc);
+                        $("#moduleInfoSubmitBtn")[0].innerText = "修改";
+                    }, error: function () {
+                        alert("查询失败！");
+                    }
+                });
             },
             'click .remove': function (e, value, row, index) {
                 $("#deleteBindForm").attr('action', '/mbasicInfo/' + row.id).submit();
             }
         };
+
+        $("#headerCloseBtn").click(function () {
+            initFormContent();
+        });
+
+        $("#footerCloseBtn").click(function () {
+            initFormContent();
+        });
 
     </script>
 </body>

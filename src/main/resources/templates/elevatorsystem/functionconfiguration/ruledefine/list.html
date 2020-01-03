@@ -42,7 +42,7 @@
                         </div>
                         <div class="modal-body">
                             <!-- 引入table -->
-                            <div th:replace="commons/table::#tableFragement(tablePlaneUri='rdModuleList',tableNumber='single')"></div>
+                            <div th:replace="commons/table::#tableFragement(tableNumber='multiple-first')"></div>
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-danger btn-md" type="button" data-dismiss="modal">关闭</button>
@@ -50,13 +50,140 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ruleTableModel -->
+            <!-- 模态框: 模块规则表 -->
+            <div class="modal fade" id="ruleTableModel" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h2 class="modal-title" style="color: #761c19;">规则信息</h2>
+                        </div>
+                        <div class="modal-body">
+                            <!-- 引入table -->
+                            <div th:replace="commons/table::#tableFragement(tableNumber='multiple-second', ifModuleSelected='yes')"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-danger btn-md" type="button" data-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- detailInfoTableEdit-->
+            <!-- 模态框： 编辑表格信息表单-->
+            <div class="modal fade" id="FirstEditFormModel" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" id="headerCloseBtn-first">&times;</button>
+                            <h2 class="modal-title" style="color: #761c19;">功能结构信息</h2>
+                        </div>
+                        <div class="modal-body">
+                            <!-- 功能结构信息编辑表单 -->
+                            <form th:action="@{/ruleTool/module}" method="post">
+                                <input type="hidden" name="_method" value="post" id="firstEditFormMethod">
+                                <input type="hidden" name="id" id="firstIdHiddenInput">
+                                <div class="form-group">
+                                    <label for="moduleName">子功能模块名称</label>
+                                    <input type="text" name="moduleName" id="moduleName" class="form-control" placeholder="曳引机">
+                                </div>
+                                <div class="form-group">
+                                    <label for="moduleLabel">子功能模块代号</label>
+                                    <input type="text" name="moduleLabel" id="moduleLabel" class="form-control" placeholder="M01">
+                                </div>
+                                <div class="form-group">
+                                    <label for="father">父功能模块</label>
+                                    <input type="text" name="father" id="father" class="form-control" placeholder="电梯">
+                                </div>
+                                <div class="form-group">
+                                    <label for="ifVirtual">是否虚拟件</label>
+                                    <input type="text" name="ifVirtual" id="ifVirtual" class="form-control" placeholder="否">
+                                </div>
+                                <div class="form-group">
+                                    <label for="ifKey">是否关键模块</label>
+                                    <input type="text" name="ifKey" id="ifKey" class="form-control" placeholder="是">
+                                </div>
+                                <div class="form-group">
+                                    <label for="ifStandard">是否标配</label>
+                                    <input type="text" name="ifStandard" id="ifStandard" class="form-control" placeholder="标配">
+                                </div>
+                                <button class="btn btn-primary" id="firstSubmitBtn" type="submit">添加</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-danger btn-md" type="button" data-dismiss="modal" id="footerCloseBtn-first">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 模态框: 模块规则信息编辑表单 -->
+            <div class="modal fade" id="SecondEditFormModel" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" id="headerCloseBtn-second">&times;</button>
+                            <h2 class="modal-title" style="color: #761c19;">规则信息</h2>
+                        </div>
+                        <div class="modal-body">
+                            <!-- 模块规则信息编辑表单 -->
+                            <form th:action="@{/ruleTool/rule}" method="post">
+                                <input type="hidden" name="_method" value="post" id="secondEditFormMethod">
+                                <input type="hidden" name="id" id="secondIdHiddenInput">
+                                <div class="form-group">
+                                    <label for="ruleLabel">规则标识</label>
+                                    <input type="text" name="ruleLabel" id="ruleLabel" class="form-control" placeholder="r0101">
+                                </div>
+                                <div class="form-group">
+                                    <label for="moduleLink">关联模块</label>
+                                    <input type="text" name="moduleLink" id="moduleLink" class="form-control" placeholder="曳引机">
+                                </div>
+                                <div class="form-group">
+                                    <label for="startChar">是否起始</label>
+                                    <input type="text" name="startChar" id="startChar" class="form-control" placeholder="start">
+                                </div>
+                                <div class="form-group">
+                                    <label for="paraName">参数名称</label>
+                                    <input type="text" name="paraName" id="paraName" class="form-control" placeholder="功率">
+                                </div>
+                                <div class="form-group">
+                                    <label for="comparator">比较符</label>
+                                    <input type="text" name="comparator" id="comparator" class="form-control" placeholder=">">
+                                </div>
+                                <div class="form-group">
+                                    <label for="paraValue">参数值</label>
+                                    <input type="text" name="paraValue" id="paraValue" class="form-control" placeholder="20">
+                                </div>
+                                <div class="form-group">
+                                    <label for="logSymbol">逻辑符</label>
+                                    <input type="text" name="logSymbol" id="logSymbol" class="form-control" placeholder="and">
+                                </div>
+                                <div class="form-group">
+                                    <label for="linkRule">逻辑关联规则标识</label>
+                                    <input type="text" name="linkRule" id="linkRule" class="form-control" placeholder="r0102">
+                                </div>
+                                <div class="form-group">
+                                    <label for="result">结果</label>
+                                    <input type="text" name="result" id="result" class="form-control" placeholder="-">
+                                </div>
+                                <div class="form-group">
+                                    <label for="detail">规则描述</label>
+                                    <input type="text" name="detail" id="detail" class="form-control" placeholder="-">
+                                </div>
+                                <button class="btn btn-primary" id="secondSubmitBtn" type="submit">添加</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-danger btn-md" type="button" data-dismiss="modal" id="footerCloseBtn-second">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-
     </div>
-
-    <!-- 编辑按钮绑定form-->
-    <form method="get" id="editBindForm">
-    </form>
 
     <!-- 删除按钮绑定form -->
     <form method="post" id="deleteBindForm">
@@ -89,16 +216,25 @@
 <script src="/js/bootstrap-treeview.min.js"></script>
 
 <script>
-    var $table = $('#table_s');
-    var $remove = $('#remove_s');
+    var $table_bi = $('#table_mf');
+    var $table_ri = $('#table_ms');
+    var $remove_bi = $('#remove_mf');
+    var $remove_ri = $('#remove_ms');
     var selections = [];
 
     $(function () {
-        initTable();
+        initFormContent();
+
+        initTable_bi();
+        initTable_ri();
 
         //查询按钮事件
-        $('#searchBtn_s').click(function () {
-            $('#table_s').bootstrapTable('refresh');
+        $('#searchBtn_mf').click(function () {
+            $('#table_mf').bootstrapTable('refresh');
+        });
+        //查询按钮事件
+        $('#searchBtn_ms').click(function () {
+            $('#table_ms').bootstrapTable('refresh');
         });
 
         //树形控件初始化
@@ -106,8 +242,37 @@
 
     });
 
-    function initTable() {
-        $table.bootstrapTable('destroy').bootstrapTable({
+    function initFormContent(){
+        $("#firstEditFormMethod").attr("value", "post");
+        $("#secondEditFormMethod").attr("value", "post");
+
+        $("#firstIdHiddenInput").attr("value", "");
+        $("#secondIdHiddenInput").attr("value", "");
+
+        $("#moduleName").attr("value", "");
+        $("#moduleLabel").attr("value", "");
+        $("#father").attr("value", "");
+        $("#ifVirtual").attr("value", "");
+        $("#ifKey").attr("value", "");
+        $("#ifStandard").attr("value", "");
+
+        $("#ruleLabel").attr("value", "");
+        $("#moduleLink").attr("value", "");
+        $("#startChar").attr("value", "");
+        $("#paraName").attr("value", "");
+        $("#comparator").attr("value", "");
+        $("#paraValue").attr("value", "");
+        $("#logSymbol").attr("value", "");
+        $("#linkRule").attr("value", "");
+        $("#result").attr("value", "");
+        $("#detail").attr("value", "");
+
+        $("#firstSubmitBtn")[0].innerText = "添加";
+        $("#secondSubmitBtn")[0].innerText = "添加";
+    }
+
+    function initTable_bi() {
+        $table_bi.bootstrapTable('destroy').bootstrapTable({
             locale: 'zh-CN',
             method: 'post',
             url: '/ruleTool/module_list',
@@ -122,7 +287,7 @@
                 var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
                     offset: params.offset + 0,
                     pageNumber: params.limit,
-                    moduleName: $('#search_sc').val()
+                    moduleName: $('#search_mfc').val()
                 };
                 return temp;
             },
@@ -138,7 +303,7 @@
                     align: 'center',
                     valign: 'middle',
                     sortable: true,
-                    formatter: idFormatter
+                    formatter: idFormatter_bi
                 }, {
                     field: 'moduleName',
                     title: '子功能模块名称',
@@ -170,45 +335,128 @@
                     align: 'center',
                     clickToSelect: false,
                     events: window.operateEvents,
-                    formatter: operateFormatter
+                    formatter: operateFormatter_bi
                 }
             ]
         });
-
-        $table.on('check.bs.table uncheck.bs.table ' +
+        $table_bi.on('check.bs.table uncheck.bs.table ' +
             'check-all.bs.table uncheck-all.bs.table',
             function () {
-                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
-
+                $remove_bi.prop('disabled', !$table_bi.bootstrapTable('getSelections').length);
                 // save your data, here just save the current page
-                selections = getIdSelections()
+                selections = getIdSelections_bi()
                 // push or splice the selections if you want to save all data selections
             });
-
-        $table.on('all.bs.table', function (e, name, args) {
+        $table_bi.on('all.bs.table', function (e, name, args) {
             console.log(name, args)
         });
-
-        $remove.click(function () {
-            var ids = getIdSelections();
-            $table.bootstrapTable('remove', {
+        $remove_bi.click(function () {
+            var ids = getIdSelections_bi();
+            $table_bi.bootstrapTable('remove', {
                 field: 'id',
                 values: ids
             });
-            $remove.prop('disabled', true)
+            $remove_bi.prop('disabled', true)
         })
     }
 
-    function getIdSelections() {
-        return $.map($table.bootstrapTable('getSelections'), function (row) {
+    function initTable_ri() {
+        $table_ri.bootstrapTable('destroy').bootstrapTable({
+            locale: 'zh-CN',
+            method: 'post',
+            url: '/ruleTool/rules',
+            contentType: 'application/x-www-form-urlencoded',
+            striped: true, //是否显示行间隔色
+            pageNumber: 1, //初始化加载第一页
+            pagination: true,//是否分页
+            sidePagination: 'server',//server:服务器端分页|client：前端分页
+            pageSize: 5,//单页记录数
+            pageList: [5, 10, 20, 30],//可选择单页记录数
+            queryParams: function (params) {//上传服务器的参数
+                var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                    offset: params.offset + 0,
+                    pageNumber: params.limit,
+                    moduleLink: $('#moduleSeletor').val(),
+                    paraName: $('#search_msc').val()
+                };
+                return temp;
+            },
+            columns: [
+                {
+                    field: 'state',
+                    checkbox: true,
+                    align: 'center',
+                    valign: 'middle'
+                }, {
+                    title: '序号',
+                    field: 'id',
+                    align: 'center',
+                    valign: 'middle',
+                    sortable: true,
+                    formatter: idFormatter_ri
+                }, {
+                    field: 'moduleLink',
+                    title: '关联模块',
+                    sortable: true,
+                    align: 'center'
+                }, {
+                    field: 'detail',
+                    title: '规则表达式',
+                    sortable: true,
+                    align: 'center'
+                },{
+                    field: 'operate',
+                    title: 'operation',
+                    align: 'center',
+                    clickToSelect: false,
+                    events: window.operateEvents,
+                    formatter: operateFormatter_ri
+                }
+            ]
+        });
+        $table_ri.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table',
+            function () {
+                $remove_ri.prop('disabled', !$table_ri.bootstrapTable('getSelections').length)
+                // save your data, here just save the current page
+                selections = getIdSelections_ri()
+                // push or splice the selections if you want to save all data selections
+            });
+        $table_ri.on('all.bs.table', function (e, name, args) {
+            console.log(name, args)
+        });
+        $remove_ri.click(function () {
+            var ids = getIdSelections_ri();
+            $table_ri.bootstrapTable('remove', {
+                field: 'id',
+                values: ids
+            });
+            $remove_ri.prop('disabled', true)
+        })
+    }
+
+    function getIdSelections_bi() {
+        return $.map($table_bi.bootstrapTable('getSelections'), function (row) {
             return row.id
         })
     }
 
-    function idFormatter(value, row, index) {
-        var pageSize = $('#table_s').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
-        var pageNumber = $('#table_s').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
-        return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
+    function getIdSelections_ri() {
+        return $.map($table_ri.bootstrapTable('getSelections'), function (row) {
+            return row.id
+        })
+    }
+
+    function idFormatter_bi(value, row, index) {
+        var pageSize = $('#table_mf').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
+        var pageNumber = $('#table_mf').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
+        return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
+    }
+
+    function idFormatter_ri(value, row, index) {
+        var pageSize = $('#table_ms').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
+        var pageNumber = $('#table_ms').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
+        return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
     }
 
     function detailFormatter(index, row) {
@@ -219,40 +467,117 @@
         return html.join('')
     }
 
-    function operateFormatter(value, row, index) {
+    function operateFormatter_bi(value, row, index) {
         return [
-            '<a class="edit" href="javascript:void(0)" title="Edit" style="margin-right: 10px;">',
+            '<a id="edit-bi" data-toggle="modal" data-target="#FirstEditFormModel" title="Edit" style="margin-right: 10px;">',
             '<i class="glyphicon glyphicon-pencil"></i>',
             '</a>',
-            '<a class="remove" href="javascript:void(0)" title="Remove">',
+            '<a id="remove-bi" href="javascript:void(0)" title="Remove">',
+            '<i class="glyphicon glyphicon-trash"></i>',
+            '</a>'
+        ].join('')
+    }
+
+    function operateFormatter_ri(value, row, index) {
+        return [
+            '<a id="edit-ri" data-toggle="modal" data-target="#SecondEditFormModel" title="Edit" style="margin-right: 10px;">',
+            '<i class="glyphicon glyphicon-pencil"></i>',
+            '</a>',
+            '<a id="remove-ri" href="javascript:void(0)" title="Remove">',
             '<i class="glyphicon glyphicon-trash"></i>',
             '</a>'
         ].join('')
     }
 
     window.operateEvents = {
-        'click .edit': function (e, value, row, index) {
-            $("#editBindForm").attr('action', '/ruleTool/module/' + row.id).submit();
+        'click #edit-bi': function (e, value, row, index) {
+            //修改表单提交方式
+            $("#firstEditFormMethod").attr("value", "put");
+            //采用ajax查询当前对象信息
+            $.ajax({
+                url: "/ruleTool/module/" + row.id,
+                type: "post",
+                dataType: "json",
+                success: function (defaultData) {
+                    $("#firstIdHiddenInput").attr("value", defaultData.id);
+                    $("#moduleName").attr("value", defaultData.moduleName);
+                    $("#moduleLabel").attr("value", defaultData.moduleLabel);
+                    $("#father").attr("value", defaultData.father);
+                    $("#ifVirtual").attr("value", defaultData.ifVirtual);
+                    $("#ifKey").attr("value", defaultData.ifKey);
+                    $("#ifStandard").attr("value", defaultData.ifStandard);
+                    $("#firstSubmitBtn")[0].innerText = "修改";
+                }, error: function () {
+                    alert("查询失败！");
+                }
+            });
         },
-        'click .remove': function (e, value, row, index) {
+        'click #remove-bi': function (e, value, row, index) {
             $("#deleteBindForm").attr('action', '/ruleTool/module/' + row.id).submit();
+        },
+        'click #edit-ri': function (e, value, row, index) {
+            //修改表单提交方式
+            $("#secondEditFormMethod").attr("value", "put");
+            //采用ajax查询当前对象信息
+            $.ajax({
+                url: "/ruleTool/rule/" + row.id,
+                type: "post",
+                dataType: "json",
+                success: function (defaultData) {
+                    $("#secondIdHiddenInput").attr("value", defaultData.id);
+                    $("#ruleLabel").attr("value", defaultData.ruleLabel);
+                    $("#moduleLink").attr("value", defaultData.moduleLink);
+                    $("#startChar").attr("value", defaultData.startChar);
+                    $("#paraName").attr("value", defaultData.paraName);
+                    $("#comparator").attr("value", defaultData.comparator);
+                    $("#paraValue").attr("value", defaultData.paraValue);
+                    $("#logSymbol").attr("value", defaultData.logSymbol);
+                    $("#linkRule").attr("value", defaultData.linkRule);
+                    $("#result").attr("value", defaultData.result);
+                    $("#detail").attr("value", defaultData.detail);
+                    $("#secondSubmitBtn")[0].innerText = "修改";
+                }, error: function () {
+                    alert("查询失败！");
+                }
+            });
+        },
+        'click #remove-ri': function (e, value, row, index) {
+            $("#deleteBindForm").attr('action', '/ruleTool/rule/' + row.id).submit();
         }
     };
 
+    $("#headerCloseBtn-first").click(function () {
+        initFormContent();
+    });
+
+    $("#footerCloseBtn-first").click(function () {
+        initFormContent();
+    });
+
+    $("#headerCloseBtn-second").click(function () {
+        initFormContent();
+    });
+
+    $("#footerCloseBtn-second").click(function () {
+        initFormContent();
+    });
+
+
+
     function initTree() {
         console.log("树形结构初始化");
-        var jsonData = {};
+       /* var jsonData = {};
 
         jsonData["elevType"] = $("#elevatorSeletor").val();
 
         //将JSON类型对象转换为json字符串
-        var params = JSON.stringify(jsonData);
+        var params = JSON.stringify(jsonData);*/
 
         $.ajax({
-            url: "/propTool/correlation/eleTree",
+            url: "/ruleTool/moduleTree",
             type: "post",
-            data: params,
-            contentType: "application/json;charset=UTF-8",
+           /* data: params,
+            contentType: "application/json;charset=UTF-8",*/
             dataType: "json",
             success: function (defaultData) {
                 console.log(defaultData);
@@ -263,7 +588,12 @@
                     collapseIcon: 'glyphicon glyphicon-chevron-down',
                     nodeIcon: 'glyphicon glyphicon-bookmark',
                     onNodeSelected: function(event, node) {
-                        $("#treeNodeBindForm").attr('action', '/ruleTool/ruleList' + node.text).submit();
+                        $("#ruleBtn").attr("style", "");
+                        $("#moduleSeletor option[value='" + node.text + "']").prop("selected", "selected");
+                        $('#table_ms').bootstrapTable('refresh');
+                    },
+                    onNodeUnselected: function (event, node) {
+                        $("#ruleBtn").attr("style", "display:none;");
                     }
                 });
             }, error: function () {
@@ -312,7 +642,12 @@
                     collapseIcon: 'glyphicon glyphicon-chevron-down',
                     nodeIcon: 'glyphicon glyphicon-bookmark',
                     onNodeSelected: function(event, node) {
-                        $("#treeNodeBindForm").attr('action', '/ruleTool/ruleList/' + node.text).submit();
+                        $("#ruleBtn").attr("style", "");
+                        $("#moduleSeletor option[value='" + node.text + "']").prop("selected", "selected");
+                        $('#table_ms').bootstrapTable('refresh');
+                    },
+                    onNodeUnselected: function (event, node) {
+                        $("#ruleBtn").attr("style", "display:none;");
                     }
                 });
             }, error: function () {

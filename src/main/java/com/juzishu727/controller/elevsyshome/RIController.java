@@ -1,5 +1,6 @@
 package com.juzishu727.controller.elevsyshome;
 
+import com.alibaba.fastjson.JSON;
 import com.juzishu727.bean.ReqInfo;
 import com.juzishu727.service.ReqInfoService;
 import com.juzishu727.util.PageHelper;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -31,36 +33,28 @@ public class RIController {
     }
 
     /**
-     * 去添加
-     * Get请求 <a></a>链接
-     */
-    @GetMapping("/reqInfo")
-    public String toAdd() {
-        return "elevatorsystem/home/reqinfo_edit";
-    }
-
-    /**
      * 添加用户
      * post请求
      * <form></form>表单提交post请求
      */
     @PostMapping("/reqInfo")
-    public String addReqInfo(ReqInfo info) {
+    public String addReqInfo(ReqInfo info, RedirectAttributes model) {
         reqInfoService.addReqInfo(info);
+        model.addFlashAttribute("flag", "reqInfo");
         //重定向,发送请求实现查询所有用户
         return "redirect:/elevSys";
     }
 
     /**
-     * 去更新页面
-     * Get请求
-     * <a></a>链接
+     * 去更新
+     * Post请求
+     * ajax
      */
-    @GetMapping("/reqInfo/{id}")
-    public String toUpdate(@PathVariable Integer id, Model model) {
+    @PostMapping("/reqInfo/{id}")
+    @ResponseBody
+    public String toUpdate(@PathVariable Integer id) {
         ReqInfo info = reqInfoService.selectById(id);
-        model.addAttribute("info", info);
-        return "elevatorsystem/home/reqinfo_edit";
+        return JSON.toJSONString(info);
     }
 
     /**
@@ -69,8 +63,9 @@ public class RIController {
      * <form></form>表单提交请求
      */
     @PutMapping("/reqInfo")
-    public String updateReqInfo(ReqInfo info) {
+    public String updateReqInfo(ReqInfo info, RedirectAttributes model) {
         reqInfoService.updateReqInfo(info);
+        model.addFlashAttribute("flag", "reqInfo");
         //重定向，发送请求实现查询所有用户
         return "redirect:/elevSys";
     }
@@ -81,8 +76,9 @@ public class RIController {
      * <form></form>表单提交请求
      */
     @DeleteMapping("/reqInfo/{id}")
-    public String deleteReqInfo(@PathVariable Integer id) {
+    public String deleteReqInfo(@PathVariable Integer id, RedirectAttributes model) {
         reqInfoService.deleteReqInfo(id);
+        model.addFlashAttribute("flag", "reqInfo");
         //重定向
         return "redirect:/elevSys";
     }

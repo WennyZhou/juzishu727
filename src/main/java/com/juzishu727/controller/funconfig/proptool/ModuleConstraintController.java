@@ -1,6 +1,7 @@
 package com.juzishu727.controller.funconfig.proptool;
 
 
+import com.alibaba.fastjson.JSON;
 import com.juzishu727.bean.ModuleBasicInfo;
 import com.juzishu727.bean.ModuleConstraint;
 import com.juzishu727.bean.ModuleFeatureParam;
@@ -41,58 +42,6 @@ public class ModuleConstraintController {
         pageHelper.setTotal(total);
 
         return pageHelper;
-    }
-
-    /**
-     * 去添加 全部约束下
-     * Get请求 <a></a>链接
-     */
-    @GetMapping("/propTool/mconstraint")
-    public String toAdd() {
-        return "/elevatorsystem/functionconfiguration/propertymodeltool/modconst/all_constraint_edit";
-    }
-    /**
-     * 去添加 模块-模块约束下
-     * Get请求 <a></a>链接
-     */
-    @GetMapping("/propTool/mconstrmm")
-    public String toAdd_mm(Model model) {
-        List<ModuleBasicInfo> infos = mbiService.selectAll();
-        model.addAttribute("modules", infos);
-        return "/elevatorsystem/functionconfiguration/propertymodeltool/modconst/mm_constraint_edit";
-    }
-    /**
-     * 去添加 模块-模块特征参数下
-     * Get请求 <a></a>链接
-     */
-    @GetMapping("/propTool/mconstrmf")
-    public String toAdd_mf(Model model) {
-        List<ModuleBasicInfo> infos = mbiService.selectAll();
-        model.addAttribute("modules", infos);
-        List<ModuleFeatureParam> params = mfService.selectAll();
-        model.addAttribute("features", params);
-        return "/elevatorsystem/functionconfiguration/propertymodeltool/modconst/mf_constraint_edit";
-    }
-    /**
-     * 去添加 模块特征参数-模块特征参数下
-     * Get请求 <a></a>链接
-     */
-    @GetMapping("/propTool/mconstrff")
-    public String toAdd_ff(Model model) {
-        List<ModuleFeatureParam> params = mfService.selectAll();
-        model.addAttribute("features", params);
-        return "/elevatorsystem/functionconfiguration/propertymodeltool/modconst/ff_constraint_edit";
-    }
-    /**
-     * 去添加 模块内部约束下
-     * Get请求 <a></a>链接
-     */
-    @GetMapping("/propTool/mconstrmself")
-    public String toAdd_mself(Model model) {
-        List<ModuleBasicInfo> infos = mbiService.selectAll();
-        model.addAttribute("modules", infos);
-
-        return "/elevatorsystem/functionconfiguration/propertymodeltool/modconst/mself_constraint_edit";
     }
 
     /**
@@ -152,74 +101,31 @@ public class ModuleConstraintController {
     }
 
     /**
-     * 去更新页面 全部约束下
-     * Get请求
-     * <a></a>链接
+     * 去更新
+     * Post请求
+     * ajax
      */
-    @GetMapping("/propTool/mconstraint/{id}")
-    public String toUpdate(@PathVariable Integer id, Model model) {
-        ModuleConstraint constraint = mService.selectById(id);
-        model.addAttribute("info", constraint);
-        return "/elevatorsystem/functionconfiguration/propertymodeltool/modconst/all_constraint_edit";
-    }
-    /**
-     * 去更新页面 模块-模块约束下
-     * Get请求
-     * <a></a>链接
-     */
-    @GetMapping("/propTool/mconstrmm/{id}")
-    public String toUpdate_mm(@PathVariable Integer id, Model model) {
+    //获取所有模块名称
+    @PostMapping("/propTool/mconstraint/module_list")
+    @ResponseBody
+    public  String getAllModule(){
         List<ModuleBasicInfo> infos = mbiService.selectAll();
-        model.addAttribute("modules", infos);
-
-        ModuleConstraint constraint = mService.selectById(id);
-        model.addAttribute("info", constraint);
-        return "/elevatorsystem/functionconfiguration/propertymodeltool/modconst/mm_constraint_edit";
+        return JSON.toJSONString(infos);
     }
-    /**
-     * 去更新页面 模块-模块特征参数约束下
-     * Get请求
-     * <a></a>链接
-     */
-    @GetMapping("/propTool/mconstrmf/{id}")
-    public String toUpdate_mf(@PathVariable Integer id, Model model) {
 
-        List<ModuleBasicInfo> infos = mbiService.selectAll();
-        model.addAttribute("modules", infos);
+    //获取所有特征参数名称
+    @PostMapping("/propTool/mconstraint/feapara_list")
+    @ResponseBody
+    public  String getAllFeatureParams(){
         List<ModuleFeatureParam> params = mfService.selectAll();
-        model.addAttribute("features", params);
-
-        ModuleConstraint constraint = mService.selectById(id);
-        model.addAttribute("info", constraint);
-        return "/elevatorsystem/functionconfiguration/propertymodeltool/modconst/mf_constraint_edit";
+        return JSON.toJSONString(params);
     }
-    /**
-     * 去更新页面 模块特征参数-模块特征参数约束下
-     * Get请求
-     * <a></a>链接
-     */
-    @GetMapping("/propTool/mconstrff/{id}")
-    public String toUpdate_ff(@PathVariable Integer id, Model model) {
-        List<ModuleFeatureParam> params = mfService.selectAll();
-        model.addAttribute("features", params);
 
+    @PostMapping("/propTool/mconstraint/{id}")
+    @ResponseBody
+    public String toUpdate(@PathVariable Integer id) {
         ModuleConstraint constraint = mService.selectById(id);
-        model.addAttribute("info", constraint);
-        return "/elevatorsystem/functionconfiguration/propertymodeltool/modconst/ff_constraint_edit";
-    }
-    /**
-     * 去更新页面 模块内部约束下
-     * Get请求
-     * <a></a>链接
-     */
-    @GetMapping("/propTool/mconstrmself/{id}")
-    public String toUpdate_mself(@PathVariable Integer id, Model model) {
-        List<ModuleBasicInfo> infos = mbiService.selectAll();
-        model.addAttribute("modules", infos);
-
-        ModuleConstraint constraint = mService.selectById(id);
-        model.addAttribute("info", constraint);
-        return "/elevatorsystem/functionconfiguration/propertymodeltool/modconst/mself_constraint_edit";
+        return JSON.toJSONString(constraint);
     }
 
     /**

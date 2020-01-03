@@ -49,7 +49,7 @@
                             </div>
                             <div class="modal-body">
                                 <!-- 引入 table 基本信息面板 -->
-                                <div th:replace="commons/table::#tableFragement(tablePlaneUri='elevSysHomeBI',tableNumber='multiple-first',ifModuleSelected='No')"></div>
+                                <div th:replace="commons/table::#tableFragement(tableNumber='multiple-first',ifModuleSelected='No')"></div>
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-danger btn-md" type="button" data-dismiss="modal">关闭</button>
@@ -68,10 +68,80 @@
                             </div>
                             <div class="modal-body">
                                 <!-- 引入 table 需求信息面板 -->
-                                <div th:replace="commons/table::#tableFragement(tablePlaneUri='elevSysHomeRI',tableNumber='multiple-second',ifModuleSelected='No')"></div>
+                                <div th:replace="commons/table::#tableFragement(tableNumber='multiple-second',ifModuleSelected='No')"></div>
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-danger btn-md" type="button" data-dismiss="modal">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 模态框: 基本配置信息编辑表单 -->
+                <div class="modal fade" id="FirstEditFormModel" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" id="headerCloseBtn-bi">&times;</button>
+                                <h2 class="modal-title" style="color: #761c19;">基本配置信息</h2>
+                            </div>
+                            <div class="modal-body">
+                                <!-- 基本配置信息编辑表单 -->
+                                <form th:action="@{/basicInfo}" method="post">
+                                    <input type="hidden" name="_method" value="post" id="basicInfoEditFormMethod">
+                                    <input type="hidden" name="id" id="basicInfoIdHiddenInput">
+                                    <div class="form-group">
+                                        <label for="propertyName">属性名称</label>
+                                        <input type="text" name="propertyName" id="propertyName" class="form-control" placeholder="曳引机直径">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="propertyLabel">属性标识</label>
+                                        <input type="text" name="propertyLabel" id="propertyLabel" class="form-control" placeholder="yyjzj">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="propertyValue">属性值</label>
+                                        <input type="text" name="propertyValue" id="propertyValue" class="form-control" placeholder="100">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="propertyUnit">属性单位</label>
+                                        <input type="text" name="propertyUnit" id="propertyUnit" class="form-control" placeholder="cm">
+                                    </div>
+                                    <button class="btn btn-primary" id="basicInfoSubmitBtn" type="submit">添加</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger btn-md" type="button" data-dismiss="modal" id="footerCloseBtn-bi">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 模态框: 客户需求信息编辑表单 -->
+                <div class="modal fade" id="SecondEditFormModel" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" id="headerCloseBtn-ri">&times;</button>
+                                <h2 class="modal-title" style="color: #761c19;">客户需求信息</h2>
+                            </div>
+                            <div class="modal-body">
+                                <!-- 客户需求信息编辑表单 -->
+                                <form th:action="@{/reqInfo}" method="post">
+                                    <input type="hidden" name="_method" value="post" id="reqInfoEditFormMethod">
+                                    <input type="hidden" name="id" id="reqInfoIdHiddenInput">
+                                    <div class="form-group">
+                                        <label for="requirementName">客户需求</label>
+                                        <input type="text" name="requirementName" id="requirementName" class="form-control" placeholder="并联控制">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="requirementValue">需求值</label>
+                                        <input type="text" name="requirementValue" id="requirementValue" class="form-control" placeholder="是">
+                                    </div>
+                                    <button class="btn btn-primary" id="reqInfoSubmitBtn" type="submit">添加</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger btn-md" type="button" data-dismiss="modal" id="footerCloseBtn-ri">关闭</button>
                             </div>
                         </div>
                     </div>
@@ -81,9 +151,7 @@
         </div>
     </div>
 
-    <!-- 编辑按钮绑定form-->
-    <form method="get" id="editBindForm">
-    </form>
+    <input type="hidden" id="redirectFlag", th:value="${flag!=null}?${flag}">
 
     <!-- 删除按钮绑定form -->
     <form method="post" id="deleteBindForm">
@@ -115,8 +183,12 @@
         var $remove_bi = $('#remove_mf');
         var $remove_ri = $('#remove_ms');
         var selections = [];
+
         $(function () {
+            initFormContent();
+
             initTable_bi();
+
             initTable_ri();
             //查询按钮事件
             $('#searchBtn_mf').click(function () {
@@ -126,7 +198,28 @@
             $('#searchBtn_ms').click(function () {
                 $('#table_ms').bootstrapTable('refresh');
             });
+
         });
+
+        function initFormContent(){
+            $("#basicInfoEditFormMethod").attr("value", "post");
+            $("#reqInfoEditFormMethod").attr("value", "post");
+
+            $("#basicInfoIdHiddenInput").attr("value", "");
+            $("#reqInfoIdHiddenInput").attr("value", "");
+
+            $("#propertyName").attr("value", "");
+            $("#propertyLabel").attr("value", "");
+            $("#propertyValue").attr("value", "");
+            $("#propertyUnit").attr("value", "");
+
+            $("#requirementName").attr("value", "");
+            $("#requirementValue").attr("value", "");
+
+            $("#basicInfoSubmitBtn")[0].innerText = "添加";
+            $("#reqInfoSubmitBtn")[0].innerText = "添加";
+        }
+
         function initTable_bi() {
             $table_bi.bootstrapTable('destroy').bootstrapTable({
                 locale: 'zh-CN',
@@ -198,9 +291,11 @@
                     selections = getIdSelections_bi()
                     // push or splice the selections if you want to save all data selections
                 });
+
             $table_bi.on('all.bs.table', function (e, name, args) {
                 console.log(name, args)
             });
+
             $remove_bi.click(function () {
                 var ids = getIdSelections_bi();
                 $table_bi.bootstrapTable('remove', {
@@ -271,9 +366,11 @@
                     selections = getIdSelections_ri()
                     // push or splice the selections if you want to save all data selections
                 });
+
             $table_ri.on('all.bs.table', function (e, name, args) {
                 console.log(name, args)
             });
+
             $remove_ri.click(function () {
                 var ids = getIdSelections_ri();
                 $table_ri.bootstrapTable('remove', {
@@ -312,7 +409,7 @@
         }
         function operateFormatter_bi(value, row, index) {
             return [
-                '<a id="edit-bi" href="javascript:void(0)" title="Edit" style="margin-right: 10px;">',
+                '<a id="edit-bi" data-toggle="modal" data-target="#FirstEditFormModel" title="Edit" style="margin-right: 10px;">',
                 '<i class="glyphicon glyphicon-pencil"></i>',
                 '</a>',
                 '<a id="remove-bi" href="javascript:void(0)" title="Remove">',
@@ -322,7 +419,7 @@
         }
         function operateFormatter_ri(value, row, index) {
             return [
-                '<a id="edit-ri" href="javascript:void(0)" title="Edit" style="margin-right: 10px;">',
+                '<a id="edit-ri" data-toggle="modal" data-target="#SecondEditFormModel" title="Edit" style="margin-right: 10px;">',
                 '<i class="glyphicon glyphicon-pencil"></i>',
                 '</a>',
                 '<a id="remove-ri" href="javascript:void(0)" title="Remove">',
@@ -332,18 +429,69 @@
         }
         window.operateEvents = {
             'click #edit-bi': function (e, value, row, index) {
-                $("#editBindForm").attr('action', '/basicInfo/' + row.id).submit();
+                //修改表单提交方式
+                $("#basicInfoEditFormMethod").attr("value", "put");
+                //采用ajax查询当前对象信息
+                $.ajax({
+                    url: "/basicInfo/" + row.id,
+                    type: "post",
+                    dataType: "json",
+                    success: function (defaultData) {
+                        $("#basicInfoIdHiddenInput").attr("value", defaultData.id);
+                        $("#propertyName").attr("value", defaultData.propertyName);
+                        $("#propertyLabel").attr("value", defaultData.propertyLabel);
+                        $("#propertyValue").attr("value", defaultData.propertyValue);
+                        $("#propertyUnit").attr("value", defaultData.propertyUnit);
+                        $("#basicInfoSubmitBtn")[0].innerText = "修改";
+                    }, error: function () {
+                        alert("查询失败！");
+                    }
+                });
             },
             'click #remove-bi': function (e, value, row, index) {
                 $("#deleteBindForm").attr('action', '/basicInfo/' + row.id).submit();
             },
             'click #edit-ri': function (e, value, row, index) {
-                $("#editBindForm").attr('action', '/reqInfo/' + row.id).submit();
+                //修改表单提交方式
+                $("#reqInfoEditFormMethod").attr("value", "put");
+                //采用ajax查询当前对象信息
+                $.ajax({
+                    url: "/reqInfo/" + row.id,
+                    type: "post",
+                    dataType: "json",
+                    success: function (defaultData) {
+                        $("#reqInfoIdHiddenInput").attr("value", defaultData.id);
+                        $("#requirementName").attr("value", defaultData.requirementName);
+                        $("#requirementValue").attr("value", defaultData.requirementValue);
+                        $("#reqInfoSubmitBtn")[0].innerText = "修改";
+                    }, error: function () {
+                        alert("查询失败！");
+                    }
+                });
+
             },
             'click #remove-ri': function (e, value, row, index) {
                 $("#deleteBindForm").attr('action', '/reqInfo/' + row.id).submit();
             }
         };
+
+        $("#headerCloseBtn-bi").click(function () {
+            initFormContent();
+        });
+
+        $("#footerCloseBtn-bi").click(function () {
+            initFormContent();
+        });
+
+        $("#headerCloseBtn-ri").click(function () {
+            initFormContent();
+        });
+
+        $("#footerCloseBtn-ri").click(function () {
+            initFormContent();
+        });
+
+
     </script>
 </body>
 </html>

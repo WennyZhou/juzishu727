@@ -6,9 +6,9 @@
 
     <!-- 查询全部/根据condition查询条件 查询 -->
     <select id="selectList" resultType="rule">
-        SELECT id, ruleLabel, moduleLink, startChar, paraName, comparator, paraValue, logSymbol, linkRule, result
+        SELECT id, ruleLabel, moduleLink, startChar, paraName, comparator, paraValue, logSymbol, linkRule, result, detail
         FROM t_rule
-        WHERE 1=1
+        WHERE detail != '-'
         <if test="moduleLink != null and moduleLink != ''">
             AND moduleLink like concat('%', #{moduleLink}, '%')
         </if>
@@ -26,7 +26,7 @@
 
     <!-- 根据id查询-->
     <select id="selectById" resultType="rule">
-        SELECT id, ruleLabel, moduleLink, startChar, paraName, comparator, paraValue, logSymbol, linkRule, result
+        SELECT id, ruleLabel, moduleLink, startChar, paraName, comparator, paraValue, logSymbol, linkRule, result, detail
         FROM t_rule
         WHERE id=#{id}
     </select>
@@ -34,10 +34,10 @@
     <!-- 添加 -->
     <insert id="addRule">
         INSERT INTO t_rule
-        (ruleLabel, moduleLink, startChar, paraName, comparator, paraValue, logSymbol, linkRule, result)
+        (ruleLabel, moduleLink, startChar, paraName, comparator, paraValue, logSymbol, linkRule, result, detail)
         VALUES
         (#{ruleLabel}, #{moduleLink}, #{startChar}, #{paraName}, #{comparator},
-        #{paraValue}, #{logSymbol}, #{linkRule}, #{result})
+        #{paraValue}, #{logSymbol}, #{linkRule}, #{result}, #{detail})
         <selectKey resultType="int" keyProperty="id" order="AFTER">
             SELECT @@identity
         </selectKey>
@@ -49,7 +49,7 @@
         SET
         ruleLabel=#{ruleLabel}, moduleLink=#{moduleLink}, startChar=#{startChar}, paraName=#{paraName},
         comparator=#{comparator}, paraValue=#{paraValue}, logSymbol=#{logSymbol}, linkRule=#{linkRule},
-        result=#{result}
+        result=#{result}, detail=#{detail}
         WHERE id=#{id}
     </update>
 

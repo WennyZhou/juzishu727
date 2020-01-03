@@ -37,8 +37,7 @@
                 <div th:replace="commons/selector::#btlocale-selector"></div>
 
                 <!-- 引入table 模块基本信息面板 -->
-                <div th:replace="commons/table::#tableFragement(ifHavingHeading='no',
-                tablePlaneUri='ptModuleCorrelation',tableNumber='single',ifTreeView='yes',
+                <div th:replace="commons/table::#tableFragement(tableNumber='single',ifTreeView='yes',
                 ifModuleSelected='yes', ifElevatorTypeSelected='yes')"></div>
 
                 <!-- 模态框: 树形结构图 -->
@@ -59,13 +58,59 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- 模态框: 表格信息编辑表单 -->
+                <div class="modal fade" id="SingleEditFormModel" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" id="headerCloseBtn">&times;</button>
+                                <h2 class="modal-title" style="color: #761c19;">模块-模块约束</h2>
+                            </div>
+                            <div class="modal-body">
+                                <!-- 模块-模块约束 编辑表单 -->
+                                <form th:action="@{/propTool/mcorrelation}" method="post">
+                                    <!-- moduleBasicInfo 不为空 修改-->
+                                    <input type="hidden" name="_method" value="post" id="corrEditFormMethod">
+                                    <input type="hidden" name="id" id="corrIdHiddenInput">
+                                    <div class="form-group">
+                                        <label for="moduleName">模块名称</label>
+                                        <input type="text" name="moduleName" id="moduleName" class="form-control" placeholder="曳引机">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="father">父模块</label>
+                                        <input type="text" name="father" id="father" class="form-control" placeholder="曳引机系统">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="corrClass">关系类型</label>
+                                        <select id="corrClass" name="corrClass" class="form-control" onchange="SelectOnChange()">
+                                            <option value=""></option>
+                                            <option value="组成关系">组成关系</option>
+                                            <option value="聚类关系">聚类关系</option>
+                                        </select>
+                                        <input type="hidden" id="corrClassInput">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="corrForm">关系表达式</label>
+                                        <input type="text" name="corrForm" id="corrForm" class="form-control" placeholder="PartOf(曳引机,曳引机系统)">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="elevType">电梯型号</label>
+                                        <input type="text" name="elevType" id="elevType" class="form-control" placeholder="KLk2金豹超高速电梯">
+                                    </div>
+                                    <button class="btn btn-primary" type="submit" id="corrSubmitBtn">添加</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger btn-md" type="button" data-dismiss="modal" id="footerCloseBtn">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
-
-    <!-- 编辑按钮绑定form-->
-    <form method="get" id="editBindForm">
-    </form>
 
     <!-- 删除按钮绑定form -->
     <form method="post" id="deleteBindForm">
@@ -97,6 +142,8 @@
         var selections = [];
 
         $(function () {
+            initFormContent();
+
             initTable();
 
             $('#locale').change(initTable);
@@ -110,6 +157,29 @@
             initTree();
 
         });
+
+        function initFormContent(){
+            $("#corrEditFormMethod").attr("value", "post");
+
+            $("#corrIdHiddenInput").attr("value", "");
+
+            $("#moduleName").attr("value", "");
+            $("#father").attr("value", "");
+            $("#corrClassInput").attr("value", "");
+            $("#corrForm").attr("value", "");
+            $("#elevType").attr("value", "");
+
+            $("#corrSubmitBtn")[0].innerText = "添加";
+        }
+
+        function refreshFormContent(){
+            //刷新表单信息 编辑页面
+            var relation = $("#corrClassInput").val();
+
+            if(relation != null && relation !== ''){
+                $("#corrClass option[value='" + relation + "']").prop("selected", "selected");
+            }
+        }
 
         function initTable() {
             $table.bootstrapTable('destroy').bootstrapTable({
@@ -228,7 +298,7 @@
 
         function operateFormatter(value, row, index) {
             return [
-                '<a class="edit" href="javascript:void(0)" title="Edit" style="margin-right: 10px;">',
+                '<a class="edit" data-toggle="modal" data-target="#SingleEditFormModel" title="Edit" style="margin-right: 10px;">',
                 '<i class="glyphicon glyphicon-pencil"></i>',
                 '</a>',
                 '<a class="remove" href="javascript:void(0)" title="Remove">',
@@ -239,12 +309,60 @@
 
         window.operateEvents = {
             'click .edit': function (e, value, row, index) {
-                $("#editBindForm").attr('action', '/propTool/mcorrelation/' + row.id).submit();
+                //修改表单提交方式
+                $("#corrEditFormMethod").attr("value", "put");
+                //采用ajax查询当前对象信息
+                $.ajax({
+                    url: "/propTool/mcorrelation/" + row.id,
+                    type: "post",
+                    dataType: "json",
+                    success: function (defaultData) {
+                        $("#corrIdHiddenInput").attr("value", defaultData.id);
+                        $("#moduleName").attr("value", defaultData.moduleName);
+                        $("#father").attr("value", defaultData.father);
+                        $("#corrClassInput").attr("value", defaultData.corrClass);
+                        $("#corrForm").attr("value", defaultData.corrForm);
+                        $("#elevType").attr("value", defaultData.elevType);
+                        $("#corrSubmitBtn")[0].innerText = "修改";
+                        refreshFormContent();
+                    }, error: function () {
+                        alert("查询失败！");
+                    }
+                });
             },
             'click .remove': function (e, value, row, index) {
                 $("#deleteBindForm").attr('action', '/propTool/mcorrelation/' + row.id).submit();
             }
         };
+
+        function SelectOnChange() {
+            var relation = $("#corrClass").val();
+            var pairOne = $("#moduleName").val();
+            var pairTwo = $("#father").val();
+
+            if(pairOne != null && pairOne !== ''){
+                if(pairTwo != null && pairTwo !== ''){
+                    switch (relation) {
+                        case "组成关系":
+                            $("#corrForm").attr('value', 'PartOf(' + pairOne + ',' + pairTwo + ')');
+                            break;
+                        case "聚类关系":
+                            $("#corrForm").attr('value', 'KindOf(' + pairOne + ',' + pairTwo + ')');
+                            break;
+                    }
+                }
+            }
+        }
+
+        $("#headerCloseBtn").click(function () {
+            initFormContent();
+            refreshFormContent();
+        });
+
+        $("#footerCloseBtn").click(function () {
+            initFormContent();
+            refreshFormContent();
+        });
 
         function initTree() {
             console.log("树形结构初始化");

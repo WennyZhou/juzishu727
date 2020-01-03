@@ -45,13 +45,65 @@
                 <div th:replace="commons/table::#tableFragement(ifHavingHeading='no',
                 tablePlaneUri='ptModuleConstraint-mm',tableNumber='single',ifModuleSelected='yes')"></div>
 
+                <!-- 模态框: 表格信息编辑表单 -->
+                <div class="modal fade" id="SingleEditFormModel" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" id="headerCloseBtn">&times;</button>
+                                <h2 class="modal-title" style="color: #761c19;">模块-模块约束</h2>
+                            </div>
+                            <div class="modal-body">
+                                <!-- 模块-模块约束 编辑表单 -->
+                                <form th:action="@{/propTool/mconstrmm}" method="post">
+                                    <!-- moduleBasicInfo 不为空 修改-->
+                                    <input type="hidden" name="_method" value="post" id="mmEditFormMethod">
+                                    <input type="hidden" name="id" id="mmIdHiddenInput">
+                                    <div class="form-group">
+                                        <label for="constPair">约束对</label>
+                                        <div class="form-inline">
+                                            <input type="text" name="constPair" id="constPair" class="form-control" placeholder="曳引机-导向轮">
+                                            <select id="pairone" class="form-control" onchange="SelectOnChange()"></select>
+                                            <label class="">-</label>
+                                            <select id="pairtwo" class="form-control" onchange="SelectOnChange()"></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="constMaster">约束主模块</label>
+                                        <input type="text" name="constMaster" id="constMaster" class="form-control" placeholder="曳引机">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pairClass">约束对类型</label>
+                                        <input type="text" name="pairClass" id="pairClass" class="form-control" value="模块-模块" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="constClass">约束关系类型</label>
+                                        <select id="constClass" name="constClass" class="form-control" onchange="SelectOnChangeR()">
+                                            <option value=""></option>
+                                            <option value="依赖关系">依赖关系</option>
+                                            <option value="包含关系">包含关系</option>
+                                            <option value="互斥关系">互斥关系</option>
+                                            <option value="装配数量关系">装配数量关系</option>
+                                        </select>
+                                        <input type="hidden" id="constClassInput">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="constForm">约束关系表达式</label>
+                                        <input type="text" name="constForm" id="constForm" class="form-control" placeholder="Dependency(曳引机,导向轮)">
+                                    </div>
+                                    <button class="btn btn-primary" type="submit" id="mmSubmitBtn">添加</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger btn-md" type="button" data-dismiss="modal" id="footerCloseBtn">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
-
-    <!-- 编辑按钮绑定form-->
-    <form method="get" id="editBindForm">
-    </form>
 
     <!-- 删除按钮绑定form -->
     <form method="post" id="deleteBindForm">
@@ -81,6 +133,10 @@
         var selections = [];
 
         $(function () {
+            initFormModuleSelector();
+
+            initFormContent();
+
             initTable();
 
             $('#locale').change(initTable);
@@ -91,6 +147,59 @@
             });
 
         });
+
+        function initFormModuleSelector(){
+            //ajax 获取所有模块
+            $.ajax({
+                url: "/propTool/mconstraint/module_list",
+                type: "post",
+                dataType: "json",
+                success: function (result) {
+                    if(result != null){
+                        $(result).each(function () {
+                            $("#pairone").append("<option value='" + this.moduleName + "'>" + this.moduleName + "</option>");
+                            $("#pairtwo").append("<option value='" + this.moduleName + "'>" + this.moduleName + "</option>");
+                        });
+                    }
+                    refreshFormContent();
+
+                }, error: function () {
+                    alert("查询失败！");
+                }
+            });
+        }
+
+        function initFormContent(){
+            $("#mmEditFormMethod").attr("value", "post");
+
+            $("#mmIdHiddenInput").attr("value", "");
+
+            $("#constPair").attr("value", "");
+            $("#constMaster").attr("value", "");
+            $("#pairClass").attr("value", "模块-模块");
+            $("#constClass").attr("value", "");
+            $("#constForm").attr("value", "");
+
+            $("#mmSubmitBtn")[0].innerText = "添加";
+        }
+
+        function refreshFormContent(){
+            //刷新表单信息 编辑页面
+            var pairValue = $("#constPair").val();
+            var relation = $("#constClassInput").val();
+
+            if(pairValue != null && pairValue !== ''){
+                $("#pairone option[value='" + pairValue.split('-')[0] + "']").prop("selected", "selected");
+                $("#pairtwo option[value='" + pairValue.split('-')[1] + "']").prop("selected", "selected");
+            }else{
+                $("#pairone option[value='" + "曳引机" + "']").prop("selected", "selected");
+                $("#pairtwo option[value='" + "导向轮" + "']").prop("selected", "selected");
+            }
+
+            if(relation != null && relation !== ''){
+                $("#constClass option[value='" + $("#constClassInput").val() + "']").prop("selected", "selected");
+            }
+        }
 
         function initTable() {
             $table.bootstrapTable('destroy').bootstrapTable({
@@ -209,7 +318,7 @@
 
         function operateFormatter(value, row, index) {
             return [
-                '<a class="edit" href="javascript:void(0)" title="Edit" style="margin-right: 10px;">',
+                '<a class="edit" data-toggle="modal" data-target="#SingleEditFormModel" title="Edit" style="margin-right: 10px;">',
                 '<i class="glyphicon glyphicon-pencil"></i>',
                 '</a>',
                 '<a class="remove" href="javascript:void(0)" title="Remove">',
@@ -220,12 +329,71 @@
 
         window.operateEvents = {
             'click .edit': function (e, value, row, index) {
-                $("#editBindForm").attr('action', '/propTool/mconstrmm/' + row.id).submit();
+                //修改表单提交方式
+                $("#mmEditFormMethod").attr("value", "put");
+                //采用ajax查询当前对象信息
+                $.ajax({
+                    url: "/propTool/mconstraint/" + row.id,
+                    type: "post",
+                    dataType: "json",
+                    success: function (defaultData) {
+                        $("#mmIdHiddenInput").attr("value", defaultData.id);
+                        $("#constPair").attr("value", defaultData.constPair);
+                        $("#constMaster").attr("value", defaultData.constMaster);
+                        $("#pairClass").attr("value", defaultData.pairClass);
+                        $("#constClassInput").attr("value", defaultData.constClass);
+                        $("#constForm").attr("value", defaultData.constForm);
+                        $("#mmSubmitBtn")[0].innerText = "修改";
+                        refreshFormContent();
+                    }, error: function () {
+                        alert("查询失败！");
+                    }
+                });
             },
             'click .remove': function (e, value, row, index) {
                 $("#deleteBindForm").attr('action', '/propTool/mconstrmm/' + row.id).submit();
             }
         };
+
+        function SelectOnChange(){
+            var pairOne = $("#pairone").val();
+            var pairTwo = $("#pairtwo").val();
+            var pair = pairOne + "-" + pairTwo;
+            $("#constPair").attr('value', pair);
+            $("#constMaster").attr('value', pairOne);
+        }
+
+        function SelectOnChangeR() {
+            var relation = $("#constClass").val();
+            var pairOne = $("#pairone").val();
+            var pairTwo = $("#pairtwo").val();
+            console.log(relation);
+            switch (relation) {
+                case "依赖关系":
+                    $("#constForm").attr('value', 'Dependency(' + pairOne + ',' + pairTwo + ')');
+                    break;
+                case "包含关系":
+                    $("#constForm").attr('value', 'Inclusion(' + pairOne + ',' + pairTwo + ')');
+                    break;
+                case "互斥关系":
+                    $("#constForm").attr('value', 'Exclusion(' + pairOne + ',' + pairTwo + ')');
+                    break;
+                case "装配数量关系":
+                    $("#constForm").attr('value', 'Quantity(' + pairOne + ',' + pairTwo + ')');
+                    break;
+            }
+
+        }
+
+        $("#headerCloseBtn").click(function () {
+            initFormContent();
+            refreshFormContent();
+        });
+
+        $("#footerCloseBtn").click(function () {
+            initFormContent();
+            refreshFormContent();
+        });
 
     </script>
 </body>

@@ -38,16 +38,67 @@
                 <div th:replace="commons/selector::#btlocale-selector"></div>
 
                 <!-- 引入table 特征参数面板-->
-                <div th:replace="commons/table::#tableFragement(ifHavingHeading='no',
-                tablePlaneUri='ptFeatureParam',tableNumber='single',ifModuleSelected='yes')"></div>
+                <div th:replace="commons/table::#tableFragement(tableNumber='single')"></div>
+
+                <!-- 模态框: 表格信息编辑表单 -->
+                <div class="modal fade" id="SingleEditFormModel" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" id="headerCloseBtn">&times;</button>
+                                <h2 class="modal-title" style="color: #761c19;">模块特征参数</h2>
+                            </div>
+                            <div class="modal-body">
+                                <!-- 模块特征参数编辑表单 -->
+                                <form th:action="@{/propTool/mfeaParam}" method="post">
+                                    <!-- moduleBasicInfo 不为空 修改-->
+                                    <input type="hidden" name="_method" value="post" id="moduleFeaParaEditFormMethod">
+                                    <input type="hidden" name="id" id="moduleFeaParaIdHiddenInput">
+                                    <div class="form-group">
+                                        <label for="feaParaName">参数名称</label>
+                                        <input type="text" name="feaParaName" id="feaParaName" class="form-control" placeholder="曳引机功率">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="feaParaClass">参数类型</label>
+                                        <input type="text" name="feaParaClass" id="feaParaClass" class="form-control" placeholder="性能参数">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="feaParaLabel">参数标识</label>
+                                        <input type="text" name="feaParaLabel" id="feaParaLabel" class="form-control" placeholder="yyjgl">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="feaParaDataClass">参数数据类型</label>
+                                        <input type="text" name="feaParaDataClass" id="feaParaDataClass" class="form-control" placeholder="浮点型">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="feaParaValueClass">参数值类型</label>
+                                        <input type="text" name="feaParaValueClass" id="feaParaValueClass" class="form-control" placeholder="离散型">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="feaParaRange">参数取值范围</label>
+                                        <input type="text" name="feaParaRange" id="feaParaRange" class="form-control" placeholder="20~40">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="feaParaUnit">参数单位</label>
+                                        <input type="text" name="feaParaUnit" id="feaParaUnit" class="form-control" placeholder="KW">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="moduleLinked">关联模块</label>
+                                        <input type="text" name="moduleLinked" id="moduleLinked" class="form-control" placeholder="曳引机">
+                                    </div>
+                                    <button class="btn btn-primary" type="submit" id="moduleFeaParaSubmitBtn">添加</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger btn-md" type="button" data-dismiss="modal" id="footerCloseBtn">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
     </div>
-
-    <!-- 编辑按钮绑定form-->
-    <form method="get" id="editBindForm">
-    </form>
 
     <!-- 删除按钮绑定form -->
     <form method="post" id="deleteBindForm">
@@ -78,6 +129,8 @@
         var selections = [];
 
         $(function () {
+            initFormContent();
+
             initTable();
 
             $('#locale').change(initTable);
@@ -88,6 +141,23 @@
             });
 
         });
+
+        function initFormContent(){
+            $("#moduleFeaParaEditFormMethod").attr("value", "post");
+
+            $("#moduleFeaParaIdHiddenInput").attr("value", "");
+
+            $("#feaParaName").attr("value", "");
+            $("#feaParaClass").attr("value", "");
+            $("#feaParaLabel").attr("value", "");
+            $("#feaParaDataClass").attr("value", "");
+            $("#feaParaValueClass").attr("value", "");
+            $("#feaParaRange").attr("value", "");
+            $("#feaParaUnit").attr("value", "");
+            $("#moduleLinked").attr("value", "");
+
+            $("#moduleFeaParaSubmitBtn")[0].innerText = "添加";
+        }
 
         function initTable() {
             $table.bootstrapTable('destroy').bootstrapTable({
@@ -220,7 +290,7 @@
 
         function operateFormatter(value, row, index) {
             return [
-                '<a class="edit" href="javascript:void(0)" title="Edit" style="margin-right: 10px;">',
+                '<a class="edit" data-toggle="modal" data-target="#SingleEditFormModel" title="Edit" style="margin-right: 10px;">',
                 '<i class="glyphicon glyphicon-pencil"></i>',
                 '</a>',
                 '<a class="remove" href="javascript:void(0)" title="Remove">',
@@ -231,12 +301,41 @@
 
         window.operateEvents = {
             'click .edit': function (e, value, row, index) {
-                $("#editBindForm").attr('action', '/propTool/mfeaParam/' + row.id).submit();
+                //修改表单提交方式
+                $("#moduleInfoEditFormMethod").attr("value", "put");
+                //采用ajax查询当前对象信息
+                $.ajax({
+                    url: "/propTool/mfeaParam/" + row.id,
+                    type: "post",
+                    dataType: "json",
+                    success: function (defaultData) {
+                        $("#moduleFeaParaIdHiddenInput").attr("value", defaultData.id);
+                        $("#feaParaName").attr("value", defaultData.feaParaName);
+                        $("#feaParaClass").attr("value", defaultData.feaParaClass);
+                        $("#feaParaLabel").attr("value", defaultData.feaParaLabel);
+                        $("#feaParaDataClass").attr("value", defaultData.feaParaDataClass);
+                        $("#feaParaValueClass").attr("value", defaultData.feaParaValueClass);
+                        $("#feaParaRange").attr("value", defaultData.feaParaRange);
+                        $("#feaParaUnit").attr("value", defaultData.feaParaUnit);
+                        $("#moduleLinked").attr("value", defaultData.moduleLinked);
+                        $("#moduleFeaParaSubmitBtn")[0].innerText = "修改";
+                    }, error: function () {
+                        alert("查询失败！");
+                    }
+                });
             },
             'click .remove': function (e, value, row, index) {
                 $("#deleteBindForm").attr('action', '/propTool/mfeaParam/' + row.id).submit();
             }
         };
+
+        $("#headerCloseBtn").click(function () {
+            initFormContent();
+        });
+
+        $("#footerCloseBtn").click(function () {
+            initFormContent();
+        });
 
     </script>
 </body>

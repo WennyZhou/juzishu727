@@ -16,42 +16,22 @@
     </div>
     <div class="panel-body" style="margin-bottom:0;">
         <div class="navbar-form" role="search">
-            <span th:switch="${tablePlaneUri}">
-                <span th:case="'elevSysHomeBI'">
-                    <a class="btn btn-sm btn-success" href="/basicInfo" th:href="@{/basicInfo}"><i class="glyphicon glyphicon-plus"></i>添加</a>
+            <span th:switch="${tableNumber}">
+                <!-- 编辑表单模态框触发器 -->
+                <span th:case="'single'">
+                     <span class="btn btn-sm btn-success" id="singleBtn" data-toggle="modal" data-target="#SingleEditFormModel">
+                         <i class="glyphicon glyphicon-plus">添加</i>
+                    </span>
                 </span>
-                <span th:case="'elevSysHomeRI'">
-                    <a class="btn btn-sm btn-success" href="/reqInfo" th:href="@{/reqInfo}"><i class="glyphicon glyphicon-plus"></i>添加</a>
+                <span th:case="'multiple-first'">
+                     <span class="btn btn-sm btn-success" id="multiple-firstBtn" data-toggle="modal" data-target="#FirstEditFormModel">
+                         <i class="glyphicon glyphicon-plus">添加</i>
+                    </span>
                 </span>
-                <span th:case="'ptBasicInfo'">
-                    <a class="btn btn-sm btn-success" href="#" th:href="@{/mbasicInfo}"><i class="glyphicon glyphicon-plus"></i>添加</a>
-                </span>
-                <span th:case="'ptFeatureParam'">
-                    <a class="btn btn-sm btn-success" href="#" th:href="@{/propTool/mfeaParam}"><i class="glyphicon glyphicon-plus"></i>添加</a>
-                </span>
-                <span th:case="'ptModuleConstraint-all'">
-                    <a class="btn btn-sm btn-success" href="#" th:href="@{/propTool/mconstraint}"><i class="glyphicon glyphicon-plus"></i>添加</a>
-                </span>
-                <span th:case="'ptModuleConstraint-mm'">
-                    <a class="btn btn-sm btn-success" href="#" th:href="@{/propTool/mconstrmm}"><i class="glyphicon glyphicon-plus"></i>添加</a>
-                </span>
-                <span th:case="'ptModuleConstraint-mf'">
-                    <a class="btn btn-sm btn-success" href="#" th:href="@{/propTool/mconstrmf}"><i class="glyphicon glyphicon-plus"></i>添加</a>
-                </span>
-                <span th:case="'ptModuleConstraint-ff'">
-                    <a class="btn btn-sm btn-success" href="#" th:href="@{/propTool/mconstrff}"><i class="glyphicon glyphicon-plus"></i>添加</a>
-                </span>
-                <span th:case="'ptModuleConstraint-mself'">
-                    <a class="btn btn-sm btn-success" href="#" th:href="@{/propTool/mconstrmself}"><i class="glyphicon glyphicon-plus"></i>添加</a>
-                </span>
-                <span th:case="'ptModuleCorrelation'">
-                    <a class="btn btn-sm btn-success" href="#" th:href="@{/propTool/mcorrelation}"><i class="glyphicon glyphicon-plus"></i>添加</a>
-                </span>
-                <span th:case="'rdModuleList'">
-                    <a class="btn btn-sm btn-success" href="#" th:href="@{/ruleTool/module}"><i class="glyphicon glyphicon-plus"></i>添加</a>
-                </span>
-                <span th:case="'moduleRuleList'">
-                    <a class="btn btn-sm btn-success" href="#" th:href="@{/ruleTool/rule}"><i class="glyphicon glyphicon-plus"></i>添加</a>
+                <span th:case="'multiple-second'">
+                     <span class="btn btn-sm btn-success" id="multiple-secondBtn" data-toggle="modal" data-target="#SecondEditFormModel">
+                         <i class="glyphicon glyphicon-plus">添加</i>
+                    </span>
                 </span>
             </span>
 

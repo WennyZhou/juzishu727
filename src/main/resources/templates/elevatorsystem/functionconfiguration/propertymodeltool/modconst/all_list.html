@@ -41,16 +41,55 @@
                 <div th:replace="commons/proptool::#pt-nav-tab-child(eleUri='all')"></div>
 
                 <!-- 引入table 模块约束面板-->
-                <div th:replace="commons/table::#tableFragement(ifHavingHeading='no',
-                tablePlaneUri='ptModuleConstraint-all',tableNumber='single',ifModuleSelected='yes')"></div>
+                <div th:replace="commons/table::#tableFragement(tableNumber='single',ifModuleSelected='yes')"></div>
+
+                <!-- 模态框: 表格信息编辑表单 -->
+                <div class="modal fade" id="SingleEditFormModel" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" id="headerCloseBtn">&times;</button>
+                                <h2 class="modal-title" style="color: #761c19;">约束</h2>
+                            </div>
+                            <div class="modal-body">
+                                <!-- 模块约束编辑表单 -->
+                                <form th:action="@{/propTool/mconstraint}" method="post">
+                                    <!-- moduleBasicInfo 不为空 修改-->
+                                    <input type="hidden" name="_method" value="post" id="allEditFormMethod">
+                                    <input type="hidden" name="id" id="allIdHiddenInput">
+                                    <div class="form-group">
+                                        <label for="constPair">约束对</label>
+                                        <input type="text" name="constPair" id="constPair" class="form-control" placeholder="曳引机-导向轮">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="constMaster">约束主模块</label>
+                                        <input type="text" name="constMaster" id="constMaster" class="form-control" placeholder="曳引机">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pairClass">约束对类型</label>
+                                        <input type="text" name="pairClass" id="pairClass" class="form-control" placeholder="模块-模块">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="constClass">约束关系类型</label>
+                                        <input type="text" name="constClass" id="constClass" class="form-control" placeholder="依赖关系">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="constForm">约束关系表达式</label>
+                                        <input type="text" name="constForm" id="constForm" class="form-control" placeholder="Dependency(曳引机,导向轮)">
+                                    </div>
+                                    <button class="btn btn-primary" type="submit" id="allSubmitBtn">添加</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger btn-md" type="button" data-dismiss="modal" id="footerCloseBtn">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
     </div>
-
-    <!-- 编辑按钮绑定form-->
-    <form method="get" id="editBindForm">
-    </form>
 
     <!-- 删除按钮绑定form -->
     <form method="post" id="deleteBindForm">
@@ -81,6 +120,8 @@
         var selections = [];
 
         $(function () {
+            initFormContent();
+
             initTable();
 
             $('#locale').change(initTable);
@@ -91,6 +132,20 @@
             });
 
         });
+
+        function initFormContent(){
+            $("#allEditFormMethod").attr("value", "post");
+
+            $("#allIdHiddenInput").attr("value", "");
+
+            $("#constPair").attr("value", "");
+            $("#constMaster").attr("value", "");
+            $("#pairClass").attr("value", "");
+            $("#constClass").attr("value", "");
+            $("#constForm").attr("value", "");
+
+            $("#allSubmitBtn")[0].innerText = "添加";
+        }
 
         function initTable() {
             $table.bootstrapTable('destroy').bootstrapTable({
@@ -209,7 +264,7 @@
 
         function operateFormatter(value, row, index) {
             return [
-                '<a class="edit" href="javascript:void(0)" title="Edit" style="margin-right: 10px;">',
+                '<a class="edit" data-toggle="modal" data-target="#SingleEditFormModel" title="Edit" style="margin-right: 10px;">',
                 '<i class="glyphicon glyphicon-pencil"></i>',
                 '</a>',
                 '<a class="remove" href="javascript:void(0)" title="Remove">',
@@ -220,12 +275,38 @@
 
         window.operateEvents = {
             'click .edit': function (e, value, row, index) {
-                $("#editBindForm").attr('action', '/propTool/mconstraint/' + row.id).submit();
+                //修改表单提交方式
+                $("#allEditFormMethod").attr("value", "put");
+                //采用ajax查询当前对象信息
+                $.ajax({
+                    url: "/propTool/mconstraint/" + row.id,
+                    type: "post",
+                    dataType: "json",
+                    success: function (defaultData) {
+                        $("#allIdHiddenInput").attr("value", defaultData.id);
+                        $("#constPair").attr("value", defaultData.constPair);
+                        $("#constMaster").attr("value", defaultData.constMaster);
+                        $("#pairClass").attr("value", defaultData.pairClass);
+                        $("#constClass").attr("value", defaultData.constClass);
+                        $("#constForm").attr("value", defaultData.constForm);
+                        $("#allSubmitBtn")[0].innerText = "修改";
+                    }, error: function () {
+                        alert("查询失败！");
+                    }
+                });
             },
             'click .remove': function (e, value, row, index) {
                 $("#deleteBindForm").attr('action', '/propTool/mconstraint/' + row.id).submit();
             }
         };
+
+        $("#headerCloseBtn").click(function () {
+            initFormContent();
+        });
+
+        $("#footerCloseBtn").click(function () {
+            initFormContent();
+        });
 
     </script>
 </body>

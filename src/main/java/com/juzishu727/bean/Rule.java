@@ -25,4 +25,6 @@ public class Rule extends Page {
     private String linkRule;
 
     private String result;
+
+    private String detail;
 }

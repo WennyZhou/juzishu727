@@ -1,5 +1,6 @@
 package com.juzishu727.controller.funconfig.proptool;
 
+import com.alibaba.fastjson.JSON;
 import com.juzishu727.bean.ModuleCorrelation;
 import com.juzishu727.service.ModuleCorrelationService;
 import com.juzishu727.util.PageHelper;
@@ -31,15 +32,6 @@ public class ModuleCorrelationController {
     }
 
     /**
-     * 去添加
-     * Get请求 <a></a>链接
-     */
-    @GetMapping("/propTool/mcorrelation")
-    public String toAdd() {
-        return "/elevatorsystem/functionconfiguration/propertymodeltool/modcorre/correlation_edit";
-    }
-
-    /**
      * 添加
      * post请求
      * <form></form>表单提交post请求
@@ -52,15 +44,15 @@ public class ModuleCorrelationController {
     }
 
     /**
-     * 去更新页面
-     * Get请求
-     * <a></a>链接
+     * 去更新
+     * Post请求
+     * ajax
      */
-    @GetMapping("/propTool/mcorrelation/{id}")
-    public String toUpdate(@PathVariable Integer id, Model model) {
+    @PostMapping("/propTool/mcorrelation/{id}")
+    @ResponseBody
+    public String toUpdate(@PathVariable Integer id) {
         ModuleCorrelation correlation = mService.selectById(id);
-        model.addAttribute("info", correlation);
-        return "/elevatorsystem/functionconfiguration/propertymodeltool/modcorre/correlation_edit";
+        return JSON.toJSONString(correlation);
     }
 
     /**

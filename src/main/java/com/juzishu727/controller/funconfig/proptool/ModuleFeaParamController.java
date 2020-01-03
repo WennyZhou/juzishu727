@@ -1,5 +1,6 @@
 package com.juzishu727.controller.funconfig.proptool;
 
+import com.alibaba.fastjson.JSON;
 import com.juzishu727.bean.ModuleFeatureParam;
 import com.juzishu727.service.ModuleFeaParamService;
 import com.juzishu727.util.PageHelper;
@@ -31,15 +32,6 @@ public class ModuleFeaParamController {
     }
 
     /**
-     * 去添加
-     * Get请求 <a></a>链接
-     */
-    @GetMapping("/propTool/mfeaParam")
-    public String toAdd() {
-        return "/elevatorsystem/functionconfiguration/propertymodeltool/feaparam/feaparam_edit";
-    }
-
-    /**
      * 添加用户
      * post请求
      * <form></form>表单提交post请求
@@ -52,15 +44,15 @@ public class ModuleFeaParamController {
     }
 
     /**
-     * 去更新页面
-     * Get请求
-     * <a></a>链接
+     * 去更新
+     * Post请求
+     * ajax
      */
-    @GetMapping("/propTool/mfeaParam/{id}")
-    public String toUpdate(@PathVariable Integer id, Model model) {
+    @PostMapping("/propTool/mfeaParam/{id}")
+    @ResponseBody
+    public String toUpdate(@PathVariable Integer id) {
         ModuleFeatureParam param = mService.selectById(id);
-        model.addAttribute("info", param);
-        return "/elevatorsystem/functionconfiguration/propertymodeltool/feaparam/feaparam_edit";
+        return JSON.toJSONString(param);
     }
 
     /**
