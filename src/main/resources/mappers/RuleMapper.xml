@@ -24,6 +24,12 @@
         FROM t_rule
     </select>
 
+    <select id="selectAll" resultType="rule">
+        SELECT id, ruleLabel, moduleLink, startChar, paraName, comparator, paraValue, logSymbol, linkRule, result, detail
+        FROM t_rule
+        LIMIT #{offset}, #{pageNumber}
+    </select>
+
     <!-- 根据id查询-->
     <select id="selectById" resultType="rule">
         SELECT id, ruleLabel, moduleLink, startChar, paraName, comparator, paraValue, logSymbol, linkRule, result, detail

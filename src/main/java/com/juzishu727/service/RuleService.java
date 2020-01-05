@@ -9,6 +9,8 @@ public interface RuleService {
 
     Integer getTotal();
 
+    List<Rule> selectAll(Rule rule);
+
     Rule selectById(Integer id);
 
     void addRule(Rule rule);

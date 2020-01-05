@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import java.util.List;
@@ -115,4 +116,11 @@ public class ElevatorController {
         return "/elevatorsystem/functionconfiguration/ruledefine/list.html";
     }
 
+    /**
+     * 去配置规则定义 规则编辑页面 ruleedit
+     */
+    @RequestMapping("/ruleTool/ruleedit")
+    public String toRuleEditPage(){
+        return "elevatorsystem/functionconfiguration/ruledefine/ruleedit.html";
+    }
 }

@@ -32,6 +32,20 @@ public class RuleController {
         return pageHelper;
     }
 
+    @PostMapping("/ruleTool/allrule")
+    @ResponseBody
+    public PageHelper<Rule> findAllRule(Rule rule){
+        PageHelper<Rule> pageHelper = new PageHelper<>();
+
+        List<Rule> rules = ruleService.selectAll(rule);
+        pageHelper.setRows(rules);
+
+        Integer total = ruleService.getTotal();
+        pageHelper.setTotal(total);
+
+        return pageHelper;
+    }
+
     /**
      * 添加
      * post请求

@@ -27,6 +27,11 @@ public class RuleServiceImpl implements RuleService {
     }
 
     @Override
+    public List<Rule> selectAll(Rule rule) {
+        return ruleDao.selectAll(rule);
+    }
+
+    @Override
     public Rule selectById(Integer id) {
         return ruleDao.selectById(id);
     }

@@ -12,6 +12,8 @@ public interface RuleDao {
 
     Integer getTotal();
 
+    List<Rule> selectAll(Rule rule);
+
     Rule selectById(Integer id);
 
     void addRule(Rule rule);

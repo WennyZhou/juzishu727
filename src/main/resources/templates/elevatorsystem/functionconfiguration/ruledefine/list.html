@@ -589,11 +589,13 @@
                     nodeIcon: 'glyphicon glyphicon-bookmark',
                     onNodeSelected: function(event, node) {
                         $("#ruleBtn").attr("style", "");
+                        $("#ruleEditBtn").attr("style", "");
                         $("#moduleSeletor option[value='" + node.text + "']").prop("selected", "selected");
                         $('#table_ms').bootstrapTable('refresh');
                     },
                     onNodeUnselected: function (event, node) {
                         $("#ruleBtn").attr("style", "display:none;");
+                        $("#ruleEditBtn").attr("style", "display:none;");
                     }
                 });
             }, error: function () {
@@ -643,11 +645,13 @@
                     nodeIcon: 'glyphicon glyphicon-bookmark',
                     onNodeSelected: function(event, node) {
                         $("#ruleBtn").attr("style", "");
+                        $("#ruleEditBtn").attr("style", "");
                         $("#moduleSeletor option[value='" + node.text + "']").prop("selected", "selected");
                         $('#table_ms').bootstrapTable('refresh');
                     },
                     onNodeUnselected: function (event, node) {
                         $("#ruleBtn").attr("style", "display:none;");
+                        $("#ruleEditBtn").attr("style", "display:none;");
                     }
                 });
             }, error: function () {

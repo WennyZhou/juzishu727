@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Elevator</title>
+
+    <!--<link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-table.min.css">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- 项目标示语 -->
+    <div class="jumbotron text-center" style="margin-bottom:0">
+        <h3>"互联网+"产品定制设计方法与技术——国家重点研发计划</h3>
+    </div>
+
+    <!-- 引入topbar 顶部导航栏 -->
+    <div th:replace="commons/bar::topbar(menuActiveUri='Sys')"></div>
+
+    <!-- 内容 -->
+    <div class="container">
+        <div class="row">
+            <!-- 引入sidebar 左侧工具导航栏 -->
+            <div th:replace="commons/bar::#sidebar(activeUri='ruleTool', activeFatherUri='ConfigTool')"></div>
+
+            <!-- 右侧内容面板 -->
+            <div class="col-sm-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>规则定义</h3>
+                    </div>
+                    <div class="panel-body" style="margin-bottom:0;">
+                        <!-- 条件表达式面板 -->
+                        <div class="panel panel-primary">
+                            <div class="panel-body" style="margin-bottom: 0;">
+                                <!-- 引入table -->
+                                <div class="navbar-form" role="search">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="请输入查询条件" name="search_sc" id="search_sc">
+                                    </div>
+                                    <button class="btn btn-sm btn-primary" id="searchBtn_s" title="查询"><i class="glyphicon glyphicon-search"></i></button>
+                                </div>
+
+                                <div id="toolbar_s">
+                                    <button id="remove_s" class="btn btn-danger" disabled>
+                                        <i class="glyphicon glyphicon-remove"></i> Delete
+                                    </button>
+                                    <button id="addRow_s" class="btn btn-success">
+                                        <i class="glyphicon glyphicon-plus"></i> Insert Row
+                                    </button>
+                                </div>
+                                <table
+                                        id="table_s"
+                                        data-toolbar="#toolbar_s"
+                                        data-search="true"
+                                        data-show-refresh="true"
+                                        data-show-toggle="true"
+                                        data-show-columns="true"
+                                        data-show-columns-toggle-all="true"
+                                        data-detail-view="true"
+                                        data-show-export="true"
+                                        data-click-to-select="true"
+                                        data-minimum-count-columns="2"
+                                        data-show-pagination-switch="true"
+                                        data-pagination="true"
+                                        data-id-field="id"
+                                        data-page-list="[10, 25, 50, 100, all]"
+                                        data-side-pagination="server">
+                                </table>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 底部内容 -->
+    <div class="jumbotron text-center" style="margin-bottom:0">
+        <p>底部内容</p>
+    </div>
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+<!--<script src="/js/bootstrap.min.js"></script>
+<script src="/js/tableExport.min.js"></script>
+<script src="/js/bootstrap-table.min.js"></script>
+<script src="/js/bootstrap-table-locale-all.min.js"></script>
+<script src="/js/bootstrap-table-export.min.js"></script>-->
+
+<!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table-locale-all.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+<script src="/js/bootstrap-treeview.min.js"></script>
+
+<script>
+    var $insertIfRowBtn = $("#addRow_s");
+
+    var $table = $('#table_s');
+    var $remove = $('#remove_s');
+    var selections = [];
+
+    $(function () {
+        initTable();
+
+        //查询按钮事件
+        $('#searchBtn_s').click(function () {
+            $('#table_s').bootstrapTable('refresh');
+        });
+
+        $insertIfRowBtn.click(function() {
+            $table.bootstrapTable('insertRow', {
+                index: 0,
+                row: {
+                    id: '',
+                    ruleLabel: '',
+                    paraName: '',
+                    comparator:'',
+                    paraValue:'',
+                    logSymbol:'',
+                    result:''
+                }
+            });
+        });
+    });
+
+    function initTable() {
+        $table.bootstrapTable('destroy').bootstrapTable({
+            locale: 'zh-CN',
+            method: 'post',
+            url: '/ruleTool/allrule',
+            contentType: 'application/x-www-form-urlencoded',
+            striped: true, //是否显示行间隔色
+            clickEdit: true,
+            pageNumber: 1, //初始化加载第一页
+            pagination: true,//是否分页
+            sidePagination: 'server',//server:服务器端分页|client：前端分页
+            pageSize: 5,//单页记录数
+            pageList: [5, 10, 20, 30],//可选择单页记录数
+            queryParams: function (params) {//上传服务器的参数
+                var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                    offset: params.offset + 0,
+                    pageNumber: params.limit,
+                    moduleLink: $('#moduleSeletor').val(),
+                    paraName: $('#search_sc').val()
+                };
+                return temp;
+            },
+            columns: [
+                {
+                    field: 'state',
+                    checkbox: true,
+                    align: 'center',
+                    valign: 'middle'
+                },{
+                    title: '序号',
+                    field: 'id',
+                    align: 'center',
+                    valign: 'middle',
+                    sortable: true,
+                    formatter: idFormatter
+                }, {
+                    field: 'ruleLabel',
+                    title: '规则标识',
+                    sortable: true,
+                    align: 'center'
+                }, {
+                    field: 'paraName',
+                    title: '属性名称',
+                    sortable: true,
+                    align: 'center'
+                }, {
+                    field: 'comparator',
+                    title: '比较符',
+                    sortable: true,
+                    align: 'center'
+                }, {
+                    field: 'paraValue',
+                    title: '比较值',
+                    sortable: true,
+                    align: 'center'
+                },{
+                    field: 'logSymbol',
+                    title: '逻辑符',
+                    sortable: false,
+                    align: 'center'
+                },{
+                    field: 'linkRule',
+                    title: '关联规则',
+                    sortable: false,
+                    align: 'center'
+                },{
+                    field: 'result',
+                    title: '结果',
+                    sortable: false,
+                    align: 'center'
+                }
+            ],
+            onClickCell: function(field, value, row, $element) {
+                $element.attr('contenteditable', true);
+                $element.blur(function() {
+                    var index = $element.parent().data('index');
+                    var tdValue = $element.html();
+                    saveData(index, field, tdValue);
+                })
+            }
+        });
+        $table.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table',
+            function () {
+                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length)
+                // save your data, here just save the current page
+                selections = getIdSelections()
+                // push or splice the selections if you want to save all data selections
+            });
+        $table.on('all.bs.table', function (e, name, args) {
+            console.log(name, args)
+        });
+        $remove.click(function () {
+            var ids = getIdSelections();
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: ids
+            });
+            $remove.prop('disabled', true)
+        })
+    }
+
+    function getIdSelections() {
+        return $.map($table.bootstrapTable('getSelections'), function (row) {
+            return row.id
+        })
+    }
+
+    function idFormatter(value, row, index) {
+        var pageSize = $('#table_s').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
+        var pageNumber = $('#table_s').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
+        return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
+    }
+
+    function saveData(index, field, value) {
+        $table.bootstrapTable('updateCell', {
+            index: index,       //行索引
+            field: field,       //列名
+            value: value        //cell值
+        })
+    }
+</script>
+
+</body>
+</html>
