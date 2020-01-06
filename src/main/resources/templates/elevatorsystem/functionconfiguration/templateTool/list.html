@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Template of Elevator</title>
+
+    <!--<link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-table.min.css">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- 项目标示语 -->
+    <div class="jumbotron text-center" style="margin-bottom:0">
+        <h3>"互联网+"产品定制设计方法与技术——国家重点研发计划</h3>
+    </div>
+
+    <!-- 引入topbar 顶部导航栏 -->
+    <div th:replace="commons/bar::topbar(menuActiveUri='Sys')"></div>
+
+    <!-- 引入sidebar 左侧工具导航栏 -->
+    <div th:replace="commons/bar::#sidebar(activeUri='templateTool', activeFatherUri='ConfigTool')"></div>
+
+    <!-- 右侧内容 -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- 引入树形结构 不带搜索-->
+                <div th:replace="commons/tree::#onlyTree"></div>
+
+                <div class="col-sm-8">
+                    <!-- 引入 table -->
+                    <div th:replace="commons/table::#simpleTable(ifHavingHeading='yes', panelHeadingMsg='电梯子功能结构表',ifModuleSelected='yes')"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除按钮绑定form -->
+    <form method="post" id="deleteBindForm">
+        <input type="hidden" name="_method" value="delete">
+    </form>
+
+    <!-- 树形控件节点绑定form -->
+    <form method="post" id="treeNodeBindForm">
+    </form>
+
+    <!-- 底部内容 -->
+    <div class="jumbotron text-center" style="margin-bottom:0">
+        <p>底部内容</p>
+    </div>
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+<!--<script src="/js/bootstrap.min.js"></script>
+<script src="/js/tableExport.min.js"></script>
+<script src="/js/bootstrap-table.min.js"></script>
+<script src="/js/bootstrap-table-locale-all.min.js"></script>
+<script src="/js/bootstrap-table-export.min.js"></script>-->
+
+<!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table-locale-all.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+<script src="/js/bootstrap-treeview.min.js"></script>
+
+<script>
+    var $table = $('#table_simple');
+
+    var $remove = $('#remove_simple');
+
+    var selections = [];
+
+    $(function () {
+
+        initTable();
+
+        //查询按钮事件
+        $('#simple_searchBtn').click(function () {
+            $('#table_simple').bootstrapTable('refresh');
+        });
+
+        //树形控件初始化
+        initTree();
+
+    });
+
+    function initTable() {
+        $table.bootstrapTable('destroy').bootstrapTable({
+            locale: 'zh-CN',
+            method: 'post',
+            url: '/templateTool/module_list',
+            contentType: 'application/x-www-form-urlencoded',
+            striped: true, //是否显示行间隔色
+            pageNumber: 1, //初始化加载第一页
+            pagination: true,//是否分页
+            sidePagination: 'server',//server:服务器端分页|client：前端分页
+            pageSize: 10,//单页记录数
+            pageList: [5, 10, 20, 30, 50, 100],//可选择单页记录数
+            queryParams: function (params) {//上传服务器的参数
+                var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                    offset: params.offset + 0,
+                    pageNumber: params.limit,
+                    moduleName: $('#moduleSeletor').val(),
+                    moduleLabel: $('#elevatorSeletor').val(),
+                    father: $('#simple_search').val()
+                };
+                return temp;
+            },
+            columns: [
+                {
+                    field: 'state',
+                    checkbox: true,
+                    align: 'center',
+                    valign: 'middle'
+                }, {
+                    title: '序号',
+                    field: 'id',
+                    align: 'center',
+                    valign: 'middle',
+                    sortable: true,
+                    formatter: idFormatter
+                }, {
+                    field: 'moduleName',
+                    title: '子功能模块名称',
+                    sortable: true,
+                    align: 'center'
+                }, {
+                    field: 'moduleLabel',
+                    title: '子功能模块代号',
+                    sortable: true,
+                    align: 'center'
+                }, {
+                    field: 'ifVirtual',
+                    title: '是否虚拟件',
+                    sortable: true,
+                    align: 'center'
+                }, {
+                    field: 'ifKey',
+                    title: '是否关键模块',
+                    sortable: true,
+                    align: 'center'
+                },{
+                    field: 'ifStandard',
+                    title: '是否标配',
+                    sortable: false,
+                    align: 'center'
+                }
+            ]
+        });
+        $table.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table',
+            function () {
+                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+                // save your data, here just save the current page
+                selections = getIdSelections()
+                // push or splice the selections if you want to save all data selections
+            });
+        $remove.click(function () {
+            var ids = getIdSelections();
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: ids
+            });
+            $remove.prop('disabled', true)
+        })
+    }
+
+    function getIdSelections() {
+        return $.map($table.bootstrapTable('getSelections'), function (row) {
+            return row.id
+        })
+    }
+
+    function idFormatter(value, row, index) {
+        var pageSize = $('#table_simple').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
+        var pageNumber = $('#table_simple').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
+        return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
+    }
+
+    function initTree() {
+        var jsonData = {};
+
+        jsonData["moduleLabel"] = $("#elevatorSeletor").val();
+
+        //将JSON类型对象转换为json字符串
+        var params = JSON.stringify(jsonData);
+
+        $.ajax({
+            url: "/templateTool/moduleTree",
+            type: "post",
+            data: params,
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            success: function (defaultData) {
+                console.log(defaultData);
+                $('#treeview-selected').treeview({
+                    data: defaultData,//数据源参数
+                    color: "#428bca",
+                    expandIcon: 'glyphicon glyphicon-chevron-right',
+                    collapseIcon: 'glyphicon glyphicon-chevron-down',
+                    nodeIcon: 'glyphicon glyphicon-bookmark',
+                    onNodeSelected: function(event, node) {
+
+                    },
+                    onNodeUnselected: function (event, node) {
+
+                    }
+                });
+            }, error: function () {
+                alert("加载树异常！");
+            }
+        });
+    }
+
+    //根据电梯型号选择器，实现更新
+    function SelectOnChangeWithElevatorType(){
+        //table 刷新
+        $('#table_simple').bootstrapTable('refresh');
+
+        //树形控件刷新
+        initTree();
+    }
+
+</script>
+
+</body>
+</html>

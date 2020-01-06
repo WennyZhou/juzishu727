@@ -22,14 +22,13 @@
     <!-- 引入topbar 顶部导航栏 -->
     <div th:replace="commons/bar::topbar(menuActiveUri='Sys')"></div>
 
-    <!-- 内容 -->
+    <!-- 引入sidebar 左侧工具导航栏 -->
+    <div th:replace="commons/bar::#sidebar(activeUri='propTool', activeFatherUri='ConfigTool')"></div>
+
+    <!-- 右侧内容 -->
     <div class="container">
         <div class="row">
-            <!-- 引入sidebar 左侧工具导航栏 -->
-            <div th:replace="commons/bar::#sidebar(activeUri='propTool', activeFatherUri='ConfigTool')"></div>
-
-            <!-- 右侧内容面板 -->
-            <div class="col-sm-9">
+            <div class="col-sm-12">
                 <!-- 引入面板导航元素-->
                 <div th:replace="commons/proptool::#pt-nav-tab(textSize='normal',elementUri='basicinfo')"></div>
 

@@ -22,17 +22,16 @@
     <!-- 引入topbar 顶部导航栏 -->
     <div th:replace="commons/bar::topbar(menuActiveUri='Sys')"></div>
 
-    <!-- 内容 -->
+    <!-- 引入sidebar 左侧工具导航栏 -->
+    <div th:replace="commons/bar::#sidebar(activeUri='ruleTool', activeFatherUri='ConfigTool')"></div>
+
+    <!-- 右侧内容 -->
     <div class="container">
         <div class="row">
-            <!-- 引入sidebar 左侧工具导航栏 -->
-            <div th:replace="commons/bar::#sidebar(activeUri='ruleTool', activeFatherUri='ConfigTool')"></div>
-
-            <!-- 右侧内容面板 -->
-            <div class="col-sm-9">
+            <div class="col-sm-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3>规则定义</h3>
+                        <h3 class="text-primary">规则定义</h3>
                     </div>
                     <div class="panel-body" style="margin-bottom:0;">
                         <!-- 条件表达式面板 -->

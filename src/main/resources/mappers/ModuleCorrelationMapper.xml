@@ -9,8 +9,8 @@
         SELECT id, moduleName, father, corrClass, corrForm, elevType
         FROM t_mcorrelations
         WHERE (elevType='basic'
-        <if test="elevType != null and elevType != ''">
-            OR elevType=#{elevType}
+        <if test="elevType != 'basic'">
+        OR elevType=#{elevType}
         </if>)
         <if test="moduleName != null and moduleName != ''">
             AND moduleName=#{moduleName}

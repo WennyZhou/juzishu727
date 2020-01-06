@@ -53,7 +53,7 @@
     </nav>
 
     <!-- 左侧导航栏 left sidebar-->
-    <nav class="col-md-3 d-none d-md-block bg-light sidebar" id="sidebar">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar" id="sidebar">
         <div class="sidebar-sticky">
             <div class="panel-group" id="accordion">
                 <div class="panel panel-primary">
@@ -130,7 +130,11 @@
                                    th:href="@{/ruleTool}">
                                     <i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>配置规则定义
                                 </a>
-                                <a href="#" class="list-group-item list-group-item-warning"><i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>配置模板创成</a>
+                                <a href="#" class="list-group-item list-group-item-warning"
+                                   th:class="${activeUri=='templateTool'?'list-group-item list-group-item-danger':'list-group-item list-group-item-warning'}"
+                                   th:href="@{/templateTool}">
+                                    <i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>配置模板创成
+                                </a>
                                 <a href="#" class="list-group-item list-group-item-warning"><i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>功能模块配置</a>
                                 <a href="#" class="list-group-item list-group-item-warning"><i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>模块结构变异</a>
                                 <a href="#" class="list-group-item list-group-item-warning"><i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>模块重构设计</a>

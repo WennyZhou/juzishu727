@@ -158,5 +158,49 @@
     </div>
 </div>
 
+<!-- Simple Table -->
+<div class="panel panel-primary" id="simpleTable">
+    <div th:if="${ifHavingHeading} eq 'yes'">
+        <div class="panel-heading">
+            <h3 class="text-primary">[[${panelHeadingMsg}]]</h3>
+            <hr>
+        </div>
+    </div>
+    <div class="panel-body" style="margin-bottom:0;">
+        <div class="navbar-form" role="search">
+            <input type="text" class="form-control" placeholder="请输入查询条件" name="search_sc" id="simple_search">
+
+            <button class="btn btn-sm btn-primary" id="simple_searchBtn" title="查询"><i class="glyphicon glyphicon-search"></i></button>
+
+            <!-- 引入电梯型号选择器 -->
+            <span th:if="${ifElevatorTypeSelected} eq 'yes'">
+                <div class="form-group" th:replace="commons/selector::#elevatorSeletor"></div>
+            </span>
+
+            <!-- 引入模块选择器 -->
+            <span th:if="${ifModuleSelected} eq 'yes'">
+                <div class="form-group" th:replace="commons/selector::#moduleSeletor"></div>
+            </span>
+        </div>
+        <div id="toolbar_simple">
+            <button id="remove_simple" class="btn btn-danger" disabled>
+                <i class="glyphicon glyphicon-remove"></i> Delete
+            </button>
+        </div>
+        <table
+                id="table_simple"
+                data-toolbar="#toolbar_simple"
+                data-show-columns="true"
+                data-show-columns-toggle-all="true"
+                data-click-to-select="true"
+                data-minimum-count-columns="2"
+                data-pagination="true"
+                data-id-field="id"
+                data-page-list="[10, 25, 50, 100, all]"
+                data-side-pagination="server">
+        </table>
+    </div>
+</div>
+
 </body>
 </html>

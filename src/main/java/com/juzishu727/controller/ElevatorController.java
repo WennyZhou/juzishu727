@@ -123,4 +123,14 @@ public class ElevatorController {
     public String toRuleEditPage(){
         return "elevatorsystem/functionconfiguration/ruledefine/ruleedit.html";
     }
+
+    /**
+     * 去配置模板创成定义工具首页
+     * @return
+     */
+    @RequestMapping("/templateTool")
+    public String toTemplateToolHome(){
+        return "/elevatorsystem/functionconfiguration/templateTool/list.html";
+    }
+
 }

@@ -1,8 +1,8 @@
 package com.juzishu727.service.impl;
 
 import com.juzishu727.bean.Module;
-import com.juzishu727.dao.ModuleDao;
-import com.juzishu727.service.RuleDefineModuleTreeService;
+import com.juzishu727.dao.ModuleTemplateDao;
+import com.juzishu727.service.TemplateToolModuleTreeService;
 import com.juzishu727.util.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,23 +13,22 @@ import java.util.List;
 
 @Service
 @Transactional
-public class RuleDefineModuleTreeServcieImpl implements RuleDefineModuleTreeService {
+public class TemplateToolModuleTreeServiceImpl implements TemplateToolModuleTreeService {
 
     @Autowired
-    private ModuleDao moduleDao;
+    private ModuleTemplateDao moduleTemplateDao;
 
     @Override
-
     public List<TreeNode> getTree(Module module) {
         //查询根节点
-        Module moduleRoot = moduleDao.selectByFatherEqNull();
+        Module moduleRoot = moduleTemplateDao.selectByFatherEqNull(module);
 
         List<TreeNode> tree = new ArrayList<>();
         TreeNode root = new TreeNode();
 
         root.setText(moduleRoot.getModuleName());
 
-        module.setFather(moduleRoot.getModuleName());
+        module.setFather(moduleRoot.getModuleLabel());
         root.setNodes(getSubTree(module));
         tree.add(root);
 
@@ -38,7 +37,7 @@ public class RuleDefineModuleTreeServcieImpl implements RuleDefineModuleTreeServ
 
     @Override
     public List<TreeNode> getSubTree(Module module) {
-        List<Module> modules = moduleDao.selectByFather(module);
+        List<Module> modules = moduleTemplateDao.selectByFather(module);
 
         List<TreeNode> subTree = new ArrayList<>();
 
@@ -46,10 +45,9 @@ public class RuleDefineModuleTreeServcieImpl implements RuleDefineModuleTreeServ
             for(Module m : modules)
             {
                 TreeNode root = new TreeNode();
-                String rootText = m.getModuleName();
-                root.setText(rootText);
+                root.setText(m.getModuleName());
 
-                module.setFather(rootText);
+                module.setFather(m.getModuleLabel());
                 root.setNodes(getSubTree(module));
                 subTree.add(root);
             }

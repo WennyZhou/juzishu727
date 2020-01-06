@@ -4,6 +4,7 @@ import com.juzishu727.bean.Module;
 import com.juzishu727.bean.ModuleCorrelation;
 import com.juzishu727.service.ModuleCorrelationTreeService;
 import com.juzishu727.service.RuleDefineModuleTreeService;
+import com.juzishu727.service.TemplateToolModuleTreeService;
 import com.juzishu727.util.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,9 @@ public class TreeController {
 
     @Autowired
     private RuleDefineModuleTreeService rdTreeService;
+
+    @Autowired
+    private TemplateToolModuleTreeService ttTreeService;
 
     /**
      * 测试TreeView控件
@@ -60,10 +64,20 @@ public class TreeController {
      */
     @RequestMapping("/ruleTool/moduleTree")
     @ResponseBody
-    public String getTreeView(){
+    public String getTreeViewAtRuleDefinePage(){
         Module module = new Module();
         List<TreeNode> tree = rdTreeService.getTree(module);
-       /* System.out.println(JSON.toJSONString(tree).replace("\"nodes\":[],", ""));*/
+        return JSON.toJSONString(tree).replace("\"nodes\":[],", "");
+    }
+
+    /**
+     * 配置模板创成工具
+     * @return
+     */
+    @RequestMapping("/templateTool/moduleTree")
+    @ResponseBody
+    public String getTreeViewAtTemplateToolPage(@RequestBody Module module){
+        List<TreeNode> tree = ttTreeService.getTree(module);
         return JSON.toJSONString(tree).replace("\"nodes\":[],", "");
     }
 }

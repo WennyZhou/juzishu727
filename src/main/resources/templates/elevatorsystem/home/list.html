@@ -19,13 +19,13 @@
     <!-- topbar 顶部导航栏 -->
     <div th:replace="commons/bar::topbar(menuActiveUri='Sys')"></div>
 
-    <!-- 内容 -->
+    <!-- 引入sidebar 左侧工具导航栏 -->
+    <div th:replace="commons/bar::#sidebar"></div>
+
+    <!-- 右侧内容 -->
     <div class="container">
         <div class="row">
-            <!-- 引入sidebar 左侧工具导航栏 -->
-            <div th:replace="commons/bar::#sidebar"></div>
-            <!-- 右侧内容面板 -->
-            <div class="col-sm-9">
+            <div class="col-sm-12">
                 <!-- 图片元素-->
                 <div class="form-inline">
                     <span style="font-size: larger;">电梯型号:<strong>KLK2"金豹"超高速电梯</strong></span>

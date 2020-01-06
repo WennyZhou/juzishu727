@@ -22,166 +22,168 @@
     <!-- 引入topbar 顶部导航栏 -->
     <div th:replace="commons/bar::topbar(menuActiveUri='Sys')"></div>
 
-    <!-- 内容 -->
+    <!-- 引入sidebar 左侧工具导航栏 -->
+    <div th:replace="commons/bar::#sidebar(activeUri='ruleTool', activeFatherUri='ConfigTool')"></div>
+
+    <!-- 右侧内容 -->
     <div class="container">
         <div class="row">
-            <!-- 引入sidebar 左侧工具导航栏 -->
-            <div th:replace="commons/bar::#sidebar(activeUri='ruleTool', activeFatherUri='ConfigTool')"></div>
+            <div class="col-sm-12">
+                <!-- 引入 树形控件 -->
+                <div th:replace="commons/tree::#seachableTree-horizontal(ifSearch='yes')"></div>
 
-            <!-- 右侧内容面板 -->
-            <div th:replace="commons/tree::#seachableTree-horizontal(ifSearch='yes')"></div>
-
-            <!-- detailInfoTableModel -->
-            <!-- 模态框: 详情表 -->
-            <div class="modal fade" id="detailInfoTableModel" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h2 class="modal-title" style="color: #761c19;">子功能结构信息</h2>
-                        </div>
-                        <div class="modal-body">
-                            <!-- 引入table -->
-                            <div th:replace="commons/table::#tableFragement(tableNumber='multiple-first')"></div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-danger btn-md" type="button" data-dismiss="modal">关闭</button>
+                <!-- detailInfoTableModel -->
+                <!-- 模态框: 详情表 -->
+                <div class="modal fade" id="detailInfoTableModel" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h2 class="modal-title" style="color: #761c19;">子功能结构信息</h2>
+                            </div>
+                            <div class="modal-body">
+                                <!-- 引入table -->
+                                <div th:replace="commons/table::#tableFragement(tableNumber='multiple-first')"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger btn-md" type="button" data-dismiss="modal">关闭</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- ruleTableModel -->
-            <!-- 模态框: 模块规则表 -->
-            <div class="modal fade" id="ruleTableModel" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h2 class="modal-title" style="color: #761c19;">规则信息</h2>
-                        </div>
-                        <div class="modal-body">
-                            <!-- 引入table -->
-                            <div th:replace="commons/table::#tableFragement(tableNumber='multiple-second', ifModuleSelected='yes')"></div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-danger btn-md" type="button" data-dismiss="modal">关闭</button>
+                <!-- ruleTableModel -->
+                <!-- 模态框: 模块规则表 -->
+                <div class="modal fade" id="ruleTableModel" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h2 class="modal-title" style="color: #761c19;">规则信息</h2>
+                            </div>
+                            <div class="modal-body">
+                                <!-- 引入table -->
+                                <div th:replace="commons/table::#tableFragement(tableNumber='multiple-second', ifModuleSelected='yes')"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger btn-md" type="button" data-dismiss="modal">关闭</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- detailInfoTableEdit-->
-            <!-- 模态框： 编辑表格信息表单-->
-            <div class="modal fade" id="FirstEditFormModel" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" id="headerCloseBtn-first">&times;</button>
-                            <h2 class="modal-title" style="color: #761c19;">功能结构信息</h2>
-                        </div>
-                        <div class="modal-body">
-                            <!-- 功能结构信息编辑表单 -->
-                            <form th:action="@{/ruleTool/module}" method="post">
-                                <input type="hidden" name="_method" value="post" id="firstEditFormMethod">
-                                <input type="hidden" name="id" id="firstIdHiddenInput">
-                                <div class="form-group">
-                                    <label for="moduleName">子功能模块名称</label>
-                                    <input type="text" name="moduleName" id="moduleName" class="form-control" placeholder="曳引机">
-                                </div>
-                                <div class="form-group">
-                                    <label for="moduleLabel">子功能模块代号</label>
-                                    <input type="text" name="moduleLabel" id="moduleLabel" class="form-control" placeholder="M01">
-                                </div>
-                                <div class="form-group">
-                                    <label for="father">父功能模块</label>
-                                    <input type="text" name="father" id="father" class="form-control" placeholder="电梯">
-                                </div>
-                                <div class="form-group">
-                                    <label for="ifVirtual">是否虚拟件</label>
-                                    <input type="text" name="ifVirtual" id="ifVirtual" class="form-control" placeholder="否">
-                                </div>
-                                <div class="form-group">
-                                    <label for="ifKey">是否关键模块</label>
-                                    <input type="text" name="ifKey" id="ifKey" class="form-control" placeholder="是">
-                                </div>
-                                <div class="form-group">
-                                    <label for="ifStandard">是否标配</label>
-                                    <input type="text" name="ifStandard" id="ifStandard" class="form-control" placeholder="标配">
-                                </div>
-                                <button class="btn btn-primary" id="firstSubmitBtn" type="submit">添加</button>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-danger btn-md" type="button" data-dismiss="modal" id="footerCloseBtn-first">关闭</button>
+                <!-- detailInfoTableEdit-->
+                <!-- 模态框： 编辑表格信息表单-->
+                <div class="modal fade" id="FirstEditFormModel" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" id="headerCloseBtn-first">&times;</button>
+                                <h2 class="modal-title" style="color: #761c19;">功能结构信息</h2>
+                            </div>
+                            <div class="modal-body">
+                                <!-- 功能结构信息编辑表单 -->
+                                <form th:action="@{/ruleTool/module}" method="post">
+                                    <input type="hidden" name="_method" value="post" id="firstEditFormMethod">
+                                    <input type="hidden" name="id" id="firstIdHiddenInput">
+                                    <div class="form-group">
+                                        <label for="moduleName">子功能模块名称</label>
+                                        <input type="text" name="moduleName" id="moduleName" class="form-control" placeholder="曳引机">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="moduleLabel">子功能模块代号</label>
+                                        <input type="text" name="moduleLabel" id="moduleLabel" class="form-control" placeholder="M01">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="father">父功能模块</label>
+                                        <input type="text" name="father" id="father" class="form-control" placeholder="电梯">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ifVirtual">是否虚拟件</label>
+                                        <input type="text" name="ifVirtual" id="ifVirtual" class="form-control" placeholder="否">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ifKey">是否关键模块</label>
+                                        <input type="text" name="ifKey" id="ifKey" class="form-control" placeholder="是">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ifStandard">是否标配</label>
+                                        <input type="text" name="ifStandard" id="ifStandard" class="form-control" placeholder="标配">
+                                    </div>
+                                    <button class="btn btn-primary" id="firstSubmitBtn" type="submit">添加</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger btn-md" type="button" data-dismiss="modal" id="footerCloseBtn-first">关闭</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- 模态框: 模块规则信息编辑表单 -->
-            <div class="modal fade" id="SecondEditFormModel" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" id="headerCloseBtn-second">&times;</button>
-                            <h2 class="modal-title" style="color: #761c19;">规则信息</h2>
-                        </div>
-                        <div class="modal-body">
-                            <!-- 模块规则信息编辑表单 -->
-                            <form th:action="@{/ruleTool/rule}" method="post">
-                                <input type="hidden" name="_method" value="post" id="secondEditFormMethod">
-                                <input type="hidden" name="id" id="secondIdHiddenInput">
-                                <div class="form-group">
-                                    <label for="ruleLabel">规则标识</label>
-                                    <input type="text" name="ruleLabel" id="ruleLabel" class="form-control" placeholder="r0101">
-                                </div>
-                                <div class="form-group">
-                                    <label for="moduleLink">关联模块</label>
-                                    <input type="text" name="moduleLink" id="moduleLink" class="form-control" placeholder="曳引机">
-                                </div>
-                                <div class="form-group">
-                                    <label for="startChar">是否起始</label>
-                                    <input type="text" name="startChar" id="startChar" class="form-control" placeholder="start">
-                                </div>
-                                <div class="form-group">
-                                    <label for="paraName">参数名称</label>
-                                    <input type="text" name="paraName" id="paraName" class="form-control" placeholder="功率">
-                                </div>
-                                <div class="form-group">
-                                    <label for="comparator">比较符</label>
-                                    <input type="text" name="comparator" id="comparator" class="form-control" placeholder=">">
-                                </div>
-                                <div class="form-group">
-                                    <label for="paraValue">参数值</label>
-                                    <input type="text" name="paraValue" id="paraValue" class="form-control" placeholder="20">
-                                </div>
-                                <div class="form-group">
-                                    <label for="logSymbol">逻辑符</label>
-                                    <input type="text" name="logSymbol" id="logSymbol" class="form-control" placeholder="and">
-                                </div>
-                                <div class="form-group">
-                                    <label for="linkRule">逻辑关联规则标识</label>
-                                    <input type="text" name="linkRule" id="linkRule" class="form-control" placeholder="r0102">
-                                </div>
-                                <div class="form-group">
-                                    <label for="result">结果</label>
-                                    <input type="text" name="result" id="result" class="form-control" placeholder="-">
-                                </div>
-                                <div class="form-group">
-                                    <label for="detail">规则描述</label>
-                                    <input type="text" name="detail" id="detail" class="form-control" placeholder="-">
-                                </div>
-                                <button class="btn btn-primary" id="secondSubmitBtn" type="submit">添加</button>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-danger btn-md" type="button" data-dismiss="modal" id="footerCloseBtn-second">关闭</button>
+                <!-- 模态框: 模块规则信息编辑表单 -->
+                <div class="modal fade" id="SecondEditFormModel" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" id="headerCloseBtn-second">&times;</button>
+                                <h2 class="modal-title" style="color: #761c19;">规则信息</h2>
+                            </div>
+                            <div class="modal-body">
+                                <!-- 模块规则信息编辑表单 -->
+                                <form th:action="@{/ruleTool/rule}" method="post">
+                                    <input type="hidden" name="_method" value="post" id="secondEditFormMethod">
+                                    <input type="hidden" name="id" id="secondIdHiddenInput">
+                                    <div class="form-group">
+                                        <label for="ruleLabel">规则标识</label>
+                                        <input type="text" name="ruleLabel" id="ruleLabel" class="form-control" placeholder="r0101">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="moduleLink">关联模块</label>
+                                        <input type="text" name="moduleLink" id="moduleLink" class="form-control" placeholder="曳引机">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="startChar">是否起始</label>
+                                        <input type="text" name="startChar" id="startChar" class="form-control" placeholder="start">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="paraName">参数名称</label>
+                                        <input type="text" name="paraName" id="paraName" class="form-control" placeholder="功率">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="comparator">比较符</label>
+                                        <input type="text" name="comparator" id="comparator" class="form-control" placeholder=">">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="paraValue">参数值</label>
+                                        <input type="text" name="paraValue" id="paraValue" class="form-control" placeholder="20">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="logSymbol">逻辑符</label>
+                                        <input type="text" name="logSymbol" id="logSymbol" class="form-control" placeholder="and">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="linkRule">逻辑关联规则标识</label>
+                                        <input type="text" name="linkRule" id="linkRule" class="form-control" placeholder="r0102">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="result">结果</label>
+                                        <input type="text" name="result" id="result" class="form-control" placeholder="-">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="detail">规则描述</label>
+                                        <input type="text" name="detail" id="detail" class="form-control" placeholder="-">
+                                    </div>
+                                    <button class="btn btn-primary" id="secondSubmitBtn" type="submit">添加</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger btn-md" type="button" data-dismiss="modal" id="footerCloseBtn-second">关闭</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
 

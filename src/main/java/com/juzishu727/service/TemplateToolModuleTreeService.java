@@ -5,8 +5,7 @@ import com.juzishu727.util.TreeNode;
 
 import java.util.List;
 
-public interface RuleDefineModuleTreeService {
-
+public interface TemplateToolModuleTreeService {
     List<TreeNode> getTree(Module module);
 
     List<TreeNode> getSubTree(Module module);
