@@ -135,7 +135,11 @@
                                    th:href="@{/templateTool}">
                                     <i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>配置模板创成
                                 </a>
-                                <a href="#" class="list-group-item list-group-item-warning"><i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>功能模块配置</a>
+                                <a href="#" class="list-group-item list-group-item-warning"
+                                   th:class="${activeUri=='configurationTool'?'list-group-item list-group-item-danger':'list-group-item list-group-item-warning'}"
+                                   th:href="@{/configurationTool}">
+                                    <i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>功能模块配置
+                                </a>
                                 <a href="#" class="list-group-item list-group-item-warning"><i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>模块结构变异</a>
                                 <a href="#" class="list-group-item list-group-item-warning"><i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>模块重构设计</a>
                                 <a href="#" class="list-group-item list-group-item-warning"><i class="glyphicon glyphicon-wrench" style="margin-right: 10px;"></i>模块功能求解</a>

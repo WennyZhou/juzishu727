@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juzishu727.dao.ConfigResultDao">
+
+    <!-- 查询全部/根据condition查询条件 查询-->
+    <select id="selectList" resultType="configResult">
+        SELECT id, instanceName, instanceLabel, father
+        FROM t_configresult
+        WHERE 1=1
+        <if test="instanceName != null and instanceName != ''">
+            AND (instanceName like concat('%', #{instanceName}, '%')
+            OR father like concat('%', #{instanceName}, '%')
+            OR instanceLabel  like concat('%', #{instanceName}, '%'))
+        </if>
+        LIMIT #{offset}, #{pageNumber}
+    </select>
+
+    <!-- 查询全部-->
+    <select id="selectAll" resultType="configResult">
+        SELECT id, instanceName, instanceLabel, father
+        FROM t_configresult
+    </select>
+
+
+    <!-- 查询数据库表中数据总条数-->
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_configresult
+    </select>
+
+    <!-- 根据id查询-->
+    <select id="selectById" resultType="configResult">
+        SELECT id, instanceName, instanceLabel, father
+        FROM t_configresult
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据father==null查询-->
+    <select id="selectByFatherEqNull" resultType="configResult">
+        SELECT id, instanceName, instanceLabel, father
+        FROM t_configresult
+        WHERE father='-'
+    </select>
+
+    <!-- 根据father查询-->
+    <select id="selectByFather" resultType="configResult">
+        SELECT id, instanceName, instanceLabel, father
+        FROM t_configresult
+        WHERE father=#{father}
+    </select>
+
+    <!-- 添加 -->
+    <insert id="addConfigResult">
+        INSERT INTO t_configresult
+        (instanceName, instanceLabel, father)
+        VALUES
+        (#{instanceName}, #{instanceLabel}, #{father})
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT @@identity
+        </selectKey>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="updateConfigResult">
+        UPDATE t_configresult
+        SET
+        instanceName=#{instanceName}, instanceLabel=#{instanceLabel}, father=#{father}
+        WHERE id=#{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="deleteConfigResult">
+        DELETE FROM t_configresult
+        WHERE id=#{id}
+    </delete>
+
+</mapper>

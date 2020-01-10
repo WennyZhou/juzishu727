@@ -133,4 +133,13 @@ public class ElevatorController {
         return "/elevatorsystem/functionconfiguration/templateTool/list.html";
     }
 
+    /**
+     * 去功能配置工具首页
+     * @return
+     */
+    @RequestMapping("/configurationTool")
+    public String toConfigurationToolHome(){
+        return "/elevatorsystem/functionconfiguration/configurationTool/list.html";
+    }
+
 }

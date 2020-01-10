@@ -35,19 +35,31 @@
                 <div class="col-sm-8">
                     <!-- 引入 table -->
                     <div th:replace="commons/table::#simpleTable(ifHavingHeading='yes', panelHeadingMsg='电梯子功能结构表',ifModuleSelected='yes')"></div>
+
+                    <!-- 模态框: 详情表 -->
+                    <span class="btn btn-sm btn-success" id="operationBtn" data-toggle="modal" data-target="#operationListModel" style="display:none;">
+                        <i class="glyphicon glyphicon-tasks"></i>
+                    </span>
+                    <div class="modal fade" id="operationListModel" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">增加子功能结构</a></li>
+                                        <li class="list-group-item"><a href="#">删除子功能结构</a></li>
+                                        <li class="list-group-item"><a href="#">复制子功能结构</a></li>
+                                        <li class="list-group-item divider"></li>
+                                        <li class="list-group-item"><a href="#">选择电梯型号</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- 删除按钮绑定form -->
-    <form method="post" id="deleteBindForm">
-        <input type="hidden" name="_method" value="delete">
-    </form>
-
-    <!-- 树形控件节点绑定form -->
-    <form method="post" id="treeNodeBindForm">
-    </form>
 
     <!-- 底部内容 -->
     <div class="jumbotron text-center" style="margin-bottom:0">
@@ -207,7 +219,7 @@
                     collapseIcon: 'glyphicon glyphicon-chevron-down',
                     nodeIcon: 'glyphicon glyphicon-bookmark',
                     onNodeSelected: function(event, node) {
-
+                        $("#operationBtn").click();
                     },
                     onNodeUnselected: function (event, node) {
 

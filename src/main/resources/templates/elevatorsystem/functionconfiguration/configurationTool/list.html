@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Configuration</title>
+
+    <!--<link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-table.min.css">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+<!-- 项目标示语 -->
+<div class="jumbotron text-center" style="margin-bottom:0">
+    <h3>"互联网+"产品定制设计方法与技术——国家重点研发计划</h3>
+</div>
+
+<!-- 引入topbar 顶部导航栏 -->
+<div th:replace="commons/bar::topbar(menuActiveUri='Sys')"></div>
+
+<!-- 引入sidebar 左侧工具导航栏 -->
+<div th:replace="commons/bar::#sidebar(activeUri='configurationTool', activeFatherUri='ConfigTool')"></div>
+
+<!-- 右侧内容 -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+
+            <!-- 引入table 配置任务面板 -->
+            <div th:replace="commons/table::#tableFragement(ifHavingHeading='yes', panelHeadingMsg='配置任务', ifBtnGroup='yes',tableNumber='single')"></div>
+
+            <!-- 模态框: 配置结果树-->
+            <div class="modal fade" id="treeModel" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <!-- 引入树形控件-->
+                            <div th:replace="commons/tree::#onlyTreeNoWidth"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary btn-md" type="button">生成清单</button>
+                            <button class="btn btn-danger btn-md" type="button" data-dismiss="modal">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 模态框: 表格信息编辑表单 -->
+            <div class="modal fade" id="SingleEditFormModel" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" id="headerCloseBtn">&times;</button>
+                            <h2 class="modal-title" style="color: #761c19;">功能配置任务</h2>
+                        </div>
+                        <div class="modal-body">
+                            <!-- 模块基本信息编辑表单 -->
+                            <form th:action="@{/configTask}" method="post">
+                                <!-- moduleBasicInfo 不为空 修改-->
+                                <input type="hidden" name="_method" value="post" id="moduleInfoEditFormMethod">
+                                <input type="hidden" name="id" id="moduleInfoIdHiddenInput">
+                                <div class="form-group">
+                                    <label for="projectCode">项目代码</label>
+                                    <input type="text" name="projectCode" id="projectCode" class="form-control" placeholder="0000000000">
+                                </div>
+                                <div class="form-group">
+                                    <label for="taskName">任务名称</label>
+                                    <input type="text" name="taskName" id="taskName" class="form-control" placeholder="xxx合同项目">
+                                </div>
+                                <div class="form-group">
+                                    <label for="taskStatus">任务状态</label>
+                                    <input type="text" name="taskStatus" id="taskStatus" class="form-control" placeholder="可以开始">
+                                </div>
+                                <div class="form-group">
+                                    <label for="taskType">任务类型</label>
+                                    <input type="text" name="taskType" id="taskType" class="form-control" placeholder="项目">
+                                </div>
+                                <div class="form-group">
+                                    <label for="taskCode">任务代码</label>
+                                    <input type="text" name="taskCode" id="taskCode" class="form-control" placeholder="200101-0001">
+                                </div>
+                                <button class="btn btn-primary" type="submit" id="moduleInfoSubmitBtn">添加</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-danger btn-md" type="button" data-dismiss="modal" id="footerCloseBtn">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- 删除按钮绑定form -->
+<form method="post" id="deleteBindForm">
+    <input type="hidden" name="_method" value="delete">
+</form>
+
+<!-- 底部内容 -->
+<div class="jumbotron text-center" style="margin-bottom:0">
+    <p>底部内容</p>
+</div>
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+<!--<script src="/js/bootstrap.min.js"></script>
+<script src="/js/tableExport.min.js"></script>
+<script src="/js/bootstrap-table.min.js"></script>
+<script src="/js/bootstrap-table-locale-all.min.js"></script>
+<script src="/js/bootstrap-table-export.min.js"></script>-->
+
+<!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table-locale-all.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+<script src="/js/bootstrap-treeview.min.js"></script>
+
+<script>
+    var $table = $('#table_s');
+    var $remove = $('#remove_s');
+    var selections = [];
+
+    var $toDoBtn = $("#toDoBtn");
+    var $doingBtn = $('#doingBtn');
+    var $doneBtn = $('#doneBtn');
+    var $allBtn = $('#allBtn');
+
+    $(function () {
+        initFormContent();
+
+        initTable();
+
+        //查询按钮事件
+        $('#searchBtn_s').click(function () {
+            $('#table_s').bootstrapTable('refresh');
+        });
+
+        //按钮组按钮绑定事件
+        initBtnGroup();
+
+        //树形控件初始化
+        initTree();
+    });
+
+    function initBtnGroup(){
+        $toDoBtn.click(function () {
+            btnGroupChanged(0);
+            $('#table_s').bootstrapTable('refresh');
+        });
+        $doingBtn.click(function () {
+            btnGroupChanged(1);
+            $('#table_s').bootstrapTable('refresh');
+        });
+        $doneBtn.click(function () {
+            btnGroupChanged(2);
+            $('#table_s').bootstrapTable('refresh');
+        });
+        $allBtn.click(function () {
+            btnGroupChanged(3);
+            $('#table_s').bootstrapTable('refresh');
+        });
+    }
+
+    function btnGroupChanged(i){
+        $("input[name='options']").each(function (index, item) {
+            if(index === i){
+                item.checked = true;
+                $("#currentBtnValue").attr('value', item.value);
+            }else{
+                item.checked = false;
+            }
+        });
+        console.log($("#currentBtnValue").val());
+    }
+
+    function initFormContent(){
+        $("#moduleInfoEditFormMethod").attr("value", "post");
+
+        $("#moduleInfoIdHiddenInput").attr("value", "");
+
+        $("#projectCode").attr("value", "");
+        $("#taskName").attr("value", "");
+        $("#taskStatus").attr("value", "");
+        $("#taskType").attr("value", "");
+        $("#taskCode").attr("value", "");
+
+        $("#moduleInfoSubmitBtn")[0].innerText = "添加";
+    }
+
+    function initTable() {
+        $table.bootstrapTable('destroy').bootstrapTable({
+            locale: 'zh-CN',
+            method: 'post',
+            url: '/configTask_list',
+            contentType: 'application/x-www-form-urlencoded',
+            striped: true, //是否显示行间隔色
+            pageNumber: 1, //初始化加载第一页
+            pagination: true,//是否分页
+            sidePagination: 'server',//server:服务器端分页|client：前端分页
+            pageSize: 5,//单页记录数
+            pageList: [5, 10, 20, 30],//可选择单页记录数
+            queryParams: function (params) {//上传服务器的参数
+                var temp = {//如果是在服务器端实现分页，limit、offset这两个参数是必须的
+                    offset: params.offset + 0,
+                    pageNumber: params.limit,
+                    taskStatus: $("#currentBtnValue").val(),
+                    taskName: $('#search_sc').val()
+                };
+                return temp;
+            },
+            columns: [
+                {
+                    field: 'state',
+                    checkbox: true,
+                    align: 'center',
+                    valign: 'middle'
+                }, {
+                    title: '序号',
+                    field: 'id',
+                    align: 'center',
+                    valign: 'middle',
+                    sortable: true,
+                    formatter: idFormatter
+                }, {
+                    field: 'projectCode',
+                    title: '项目代码',
+                    sortable: true,
+                    align: 'center'
+                }, {
+                    field: 'taskName',
+                    title: '任务名称',
+                    sortable: true,
+                    align: 'center'
+                }, {
+                    field: 'taskStatus',
+                    title: '任务状态',
+                    sortable: false,
+                    align: 'center'
+                }, {
+                    field: 'taskType',
+                    title: '任务类型',
+                    sortable: false,
+                    align: 'center'
+                },{
+                    field: 'taskCode',
+                    title: '任务代码',
+                    sortable: false,
+                    align: 'center'
+                },{
+                    field: 'operate',
+                    title: 'operation',
+                    align: 'center',
+                    clickToSelect: false,
+                    events: window.operateEvents,
+                    formatter: operateFormatter
+                }
+            ]
+        });
+
+        $table.on('check.bs.table uncheck.bs.table ' +
+            'check-all.bs.table uncheck-all.bs.table',
+            function () {
+                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+
+                // save your data, here just save the current page
+                selections = getIdSelections()
+                // push or splice the selections if you want to save all data selections
+            });
+
+        $table.on('all.bs.table', function (e, name, args) {
+            console.log(name, args)
+        });
+
+        $remove.click(function () {
+            var ids = getIdSelections();
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: ids
+            });
+            $remove.prop('disabled', true)
+        })
+    }
+
+    function getIdSelections() {
+        return $.map($table.bootstrapTable('getSelections'), function (row) {
+            return row.id
+        })
+    }
+
+    function idFormatter(value, row, index) {
+        var pageSize = $('#table_s').bootstrapTable('getOptions').pageSize;     //通过table的#id 得到每页多少条
+        var pageNumber = $('#table_s').bootstrapTable('getOptions').pageNumber; //通过table的#id 得到当前第几页
+        return pageSize * (pageNumber - 1) + index + 1;    // 返回每条的序号： 每页条数 *（当前页 - 1 ）+ 序号
+    }
+
+    function detailFormatter(index, row) {
+        var html = [];
+        $.each(row, function (key, value) {
+            html.push('<p><b>' + key + ':</b> ' + value + '</p>')
+        });
+        return html.join('')
+    }
+
+    function operateFormatter(value, row, index) {
+        return [
+            '<a class="edit" data-toggle="modal" data-target="#SingleEditFormModel" title="Edit" style="margin-right: 10px;">',
+            '<i class="glyphicon glyphicon-pencil"></i>',
+            '</a>',
+            '<a class="remove" href="javascript:void(0)" title="Remove" style="margin-right: 10px;">',
+            '<i class="glyphicon glyphicon-trash"></i>',
+            '</a>',
+            '<span  class="text-primary" data-toggle="modal" data-target="#treeModel" title="配置结构树">',
+            '<i class="glyphicon glyphicon-indent-left"></i>',
+            '</span>'
+        ].join('')
+    }
+
+    window.operateEvents = {
+        'click .edit': function (e, value, row, index) {
+            //修改表单提交方式
+            $("#moduleInfoEditFormMethod").attr("value", "put");
+            //采用ajax查询当前对象信息
+            $.ajax({
+                url: "/configTask/" + row.id,
+                type: "post",
+                dataType: "json",
+                success: function (defaultData) {
+                    $("#moduleInfoIdHiddenInput").attr("value", defaultData.id);
+                    $("#projectCode").attr("value", defaultData.projectCode);
+                    $("#taskName").attr("value", defaultData.taskName);
+                    $("#taskStatus").attr("value", defaultData.taskStatus);
+                    $("#taskType").attr("value", defaultData.taskType);
+                    $("#taskCode").attr("value", defaultData.taskCode);
+                    $("#moduleInfoSubmitBtn")[0].innerText = "修改";
+                }, error: function () {
+                    alert("查询失败！");
+                }
+            });
+        },
+        'click .remove': function (e, value, row, index) {
+            $("#deleteBindForm").attr('action', '/configTask/' + row.id).submit();
+        }
+    };
+
+    function initTree() {
+        $.ajax({
+            url: "/configurationTool/moduleTree",
+            type: "post",
+            dataType: "json",
+            success: function (defaultData) {
+                console.log(defaultData);
+                $('#treeview-width').treeview({
+                    data: defaultData,//数据源参数
+                    color: "#428bca",
+                    expandIcon: 'glyphicon glyphicon-chevron-right',
+                    collapseIcon: 'glyphicon glyphicon-chevron-down',
+                    nodeIcon: 'glyphicon glyphicon-bookmark'
+                });
+            }, error: function () {
+                alert("加载树异常！");
+            }
+        });
+    }
+
+    $("#headerCloseBtn").click(function () {
+        initFormContent();
+    });
+
+    $("#footerCloseBtn").click(function () {
+        initFormContent();
+    });
+
+
+</script>
+</body>
+</html>

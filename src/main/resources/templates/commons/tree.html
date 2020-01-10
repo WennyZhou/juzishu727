@@ -50,13 +50,20 @@
     <div class="col-sm-4">
         <!-- 引入电梯型号选择器 -->
         <div th:replace="commons/selector::#elevatorSeletor"></div>
-        <br>
+        <hr>
+        <h4 class="text-primary"><strong>搜索</strong></h4>
+        <div class="form-group">
+            <label for="input-tree-search" class="sr-only">Search Tree:</label>
+            <input type="text" class="form-control" id="input-tree-search-h" placeholder="搜索..." value="">
+        </div>
+        <button type="button" class="btn btn-success" id="btn-tree-search-h">Search</button>
+        <button type="button" class="btn btn-default" id="btn-tree-clear-search-h">Clear</button>
+        <hr>
+        <h4 class="text-primary"><strong>搜索结果</strong></h4>
+        <div id="tree-search-output-h"></div>
+        <hr>
         <div class="form-inline">
             <span style="font-size: x-large;"><strong>电梯结构树</strong></span>
-            <!-- 模态框触发器 详情 -->
-            <span class="btn btn-sm btn-success" id="detailInfoBtn" data-toggle="modal" data-target="#detailInfoTableModel" title="功能结构详情">
-                <i class="glyphicon glyphicon-tasks"></i>
-            </span>
             <!-- 模态框触发器 模块规则-->
             <span class="btn btn-sm btn-success" id="ruleBtn" data-toggle="modal" data-target="#ruleTableModel" title="模块规则详情" style="display:none;">
                 <i class="glyphicon glyphicon-tasks"></i>
@@ -69,49 +76,23 @@
         <br>
         <div id="treeview-searchable-h" class=""></div>
     </div>
-    <div class="col-sm-4">
-        <h3>搜索</h3>
-        <!-- <form> -->
-        <div class="form-group">
-            <label for="input-tree-search" class="sr-only">Search Tree:</label>
-            <input type="text" class="form-control" id="input-tree-search-h" placeholder="搜索..." value="">
-        </div>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" class="checkbox" id="chk-ignore-case-h" value="false">
-                Ignore Case
-            </label>
-        </div>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" class="checkbox" id="chk-exact-match-h" value="false">
-                Exact Match
-            </label>
-        </div>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" class="checkbox" id="chk-reveal-results-h" value="false">
-                Reveal Results
-            </label>
-        </div>
-        <button type="button" class="btn btn-success" id="btn-tree-search-h">Search</button>
-        <button type="button" class="btn btn-default" id="btn-tree-clear-search-h">Clear</button>
-        <!-- </form> -->
-    </div>
-    <div class="col-sm-4">
-        <h3>搜索结果</h3>
-        <div id="tree-search-output-h"></div>
-    </div>
 </div>
 
 <!-- only tree -->
 <div class="col-sm-4" id="onlyTree">
     <!-- 引入电梯型号选择器 -->
     <div th:replace="commons/selector::#elevatorSeletor"></div>
-    <br>
+    <hr>
     <span style="font-size: x-large;"><strong>电梯结构树</strong></span>
     <br>
     <div id="treeview-selected" class=""></div>
+</div>
+
+<!-- only tree without width constraint -->
+<div id="onlyTreeNoWidth">
+    <span class="text-success" style="font-size: x-large;"><strong>配置结果</strong></span>
+    <hr>
+    <div id="treeview-width" class=""></div>
 </div>
 
 </body>

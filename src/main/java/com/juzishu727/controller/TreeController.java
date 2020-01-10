@@ -1,7 +1,9 @@
 package com.juzishu727.controller;
 import com.alibaba.fastjson.JSON;
+import com.juzishu727.bean.ConfigResult;
 import com.juzishu727.bean.Module;
 import com.juzishu727.bean.ModuleCorrelation;
+import com.juzishu727.service.ConfigurationToolResultTreeService;
 import com.juzishu727.service.ModuleCorrelationTreeService;
 import com.juzishu727.service.RuleDefineModuleTreeService;
 import com.juzishu727.service.TemplateToolModuleTreeService;
@@ -25,6 +27,9 @@ public class TreeController {
 
     @Autowired
     private TemplateToolModuleTreeService ttTreeService;
+
+    @Autowired
+    private ConfigurationToolResultTreeService ctTreeService;
 
     /**
      * 测试TreeView控件
@@ -78,6 +83,18 @@ public class TreeController {
     @ResponseBody
     public String getTreeViewAtTemplateToolPage(@RequestBody Module module){
         List<TreeNode> tree = ttTreeService.getTree(module);
+        return JSON.toJSONString(tree).replace("\"nodes\":[],", "");
+    }
+
+    /**
+     * 功能模块配置工具
+     * @return
+     */
+    @RequestMapping("/configurationTool/moduleTree")
+    @ResponseBody
+    public String getTreeViewAtConfigurationToolPage(){
+        ConfigResult result = new ConfigResult();
+        List<TreeNode> tree = ctTreeService.getTree(result);
         return JSON.toJSONString(tree).replace("\"nodes\":[],", "");
     }
 }

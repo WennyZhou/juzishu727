@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juzishu727.dao.ConfigTaskDao">
+
+    <!-- 查询全部/根据condition查询条件 查询-->
+    <select id="selectList" resultType="configTask">
+        SELECT id, projectCode, taskName, taskStatus, taskType, taskCode
+        FROM t_configtask
+        WHERE 1=1
+        <if test="taskStatus != null and taskStatus != ''">
+            AND taskStatus=#{taskStatus}
+        </if>
+        <if test="taskName != null and taskName != ''">
+            AND (projectCode like concat('%', #{taskName}, '%')
+            OR taskName like concat('%', #{taskName}, '%')
+            OR taskType like concat('%', #{taskName}, '%')
+            OR taskCode like concat('%', #{taskName}, '%'))
+        </if>
+        LIMIT #{offset}, #{pageNumber}
+    </select>
+
+    <!-- 查询全部 -->
+    <select id="selectAll" resultType="configTask">
+        SELECT id, projectCode, taskName, taskStatus, taskType, taskCode
+        FROM t_configtask
+    </select>
+
+    <!-- 查询数据库表中数据总条数-->
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_configtask
+    </select>
+
+    <!-- 根据id查询-->
+    <select id="selectById" resultType="configTask">
+        SELECT id, projectCode, taskName, taskStatus, taskType, taskCode
+        FROM t_configtask
+        WHERE id=#{id}
+    </select>
+
+    <!-- 添加 -->
+    <insert id="addConfigTask">
+        INSERT INTO t_configtask
+        (projectCode, taskName, taskStatus, taskType, taskCode)
+        VALUES
+        (#{projectCode}, #{taskName}, #{taskStatus}, #{taskType}, #{taskCode})
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT @@identity
+        </selectKey>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="updateConfigTask">
+        UPDATE t_configtask
+        SET
+        projectCode=#{projectCode}, taskName=#{taskName}, taskStatus=#{taskStatus}, taskType=#{taskType}, taskCode=#{taskCode}
+        WHERE id=#{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="deleteConfigTask">
+        DELETE FROM t_configtask
+        WHERE id=#{id}
+    </delete>
+
+</mapper>

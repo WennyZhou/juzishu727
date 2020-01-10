@@ -32,24 +32,10 @@
                 <!-- 引入 树形控件 -->
                 <div th:replace="commons/tree::#seachableTree-horizontal(ifSearch='yes')"></div>
 
-                <!-- detailInfoTableModel -->
-                <!-- 模态框: 详情表 -->
-                <div class="modal fade" id="detailInfoTableModel" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h2 class="modal-title" style="color: #761c19;">子功能结构信息</h2>
-                            </div>
-                            <div class="modal-body">
-                                <!-- 引入table -->
-                                <div th:replace="commons/table::#tableFragement(tableNumber='multiple-first')"></div>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-danger btn-md" type="button" data-dismiss="modal">关闭</button>
-                            </div>
-                        </div>
-                    </div>
+                <!-- 引入 功能结构表 -->
+                <!-- 引入table -->
+                <div class="col-sm-8">
+                    <div th:replace="commons/table::#tableFragement(tableNumber='multiple-first')"></div>
                 </div>
 
                 <!-- ruleTableModel -->
@@ -241,6 +227,27 @@
 
         //树形控件初始化
         initTree();
+
+        //树搜索控件绑定初始化
+        var search = function(e) {
+            var pattern = $('#input-tree-search-h').val();
+            var results = $("#treeview-searchable-h").treeview('search', [ pattern]);
+
+            var output = '<p>' + results.length + ' matches found</p>';
+            $.each(results, function (index, result) {
+                output += '<p>- ' + result.text + '</p>';
+            });
+            $('#tree-search-output-h').html(output);
+        };
+
+        $('#btn-tree-search-h').on('click', search);
+        $('#input-tree-search-h').on('keyup', search);
+
+        $('#btn-tree-clear-search-h').on('click', function (e) {
+            $('#treeview-searchable-h').treeview('clearSearch');
+            $('#input-tree-search-h').val('');
+            $('#tree-search-output-h').html('');
+        });
 
     });
 
@@ -564,22 +571,10 @@
         initFormContent();
     });
 
-
-
     function initTree() {
-        console.log("树形结构初始化");
-       /* var jsonData = {};
-
-        jsonData["elevType"] = $("#elevatorSeletor").val();
-
-        //将JSON类型对象转换为json字符串
-        var params = JSON.stringify(jsonData);*/
-
         $.ajax({
             url: "/ruleTool/moduleTree",
             type: "post",
-           /* data: params,
-            contentType: "application/json;charset=UTF-8",*/
             dataType: "json",
             success: function (defaultData) {
                 console.log(defaultData);
@@ -603,63 +598,15 @@
             }, error: function () {
                 alert("加载树异常！");
             }
-        });
-
-        var search = function(e) {
-            var pattern = $('#input-tree-search-h').val();
-            var options = {
-                ignoreCase: $('#chk-ignore-case-h').is(':checked'),
-                exactMatch: $('#chk-exact-match-h').is(':checked'),
-                revealResults: $('#chk-reveal-results-h').is(':checked')
-            };
-            var results = $("#treeview-searchable-h").treeview('search', [ pattern, options ]);
-
-            var output = '<p>' + results.length + ' matches found</p>';
-            $.each(results, function (index, result) {
-                output += '<p>- ' + result.text + '</p>';
-            });
-            $('#tree-search-output-h').html(output);
-        }
-
-        $('#btn-tree-search-h').on('click', search);
-        $('#input-tree-search-h').on('keyup', search);
-
-        $('#btn-tree-clear-search-h').on('click', function (e) {
-            $('#treeview-searchable-h').treeview('clearSearch');
-            $('#input-tree-search-h').val('');
-            $('#tree-search-output-h').html('');
         });
     }
 
     //根据电梯型号选择器，实现树形控件更新
     function SelectOnChangeWithElevatorType(){
-        $.ajax({
-            url: "/ruleTool/moduleTree",
-            type: "post",
-            dataType: "json",
-            success: function (defaultData) {
-                console.log(defaultData);
-                $('#treeview-searchable-h').treeview({
-                    data: defaultData,//数据源参数
-                    color: "#428bca",
-                    expandIcon: 'glyphicon glyphicon-chevron-right',
-                    collapseIcon: 'glyphicon glyphicon-chevron-down',
-                    nodeIcon: 'glyphicon glyphicon-bookmark',
-                    onNodeSelected: function(event, node) {
-                        $("#ruleBtn").attr("style", "");
-                        $("#ruleEditBtn").attr("style", "");
-                        $("#moduleSeletor option[value='" + node.text + "']").prop("selected", "selected");
-                        $('#table_ms').bootstrapTable('refresh');
-                    },
-                    onNodeUnselected: function (event, node) {
-                        $("#ruleBtn").attr("style", "display:none;");
-                        $("#ruleEditBtn").attr("style", "display:none;");
-                    }
-                });
-            }, error: function () {
-                alert("加载树异常！");
-            }
-        });
+        // 表格刷新
+        $('#table_mf').bootstrapTable('refresh');
+        //树形结构刷新
+        initTree();
     }
 
 </script>

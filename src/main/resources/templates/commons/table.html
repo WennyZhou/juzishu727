@@ -10,11 +10,29 @@
 <div class="panel panel-default" id="tableFragement">
     <div th:if="${ifHavingHeading} eq 'yes'">
         <div class="panel-heading">
-            <h3>[[${panelHeadingMsg}]]</h3>
+            <h3 class="text-danger">[[${panelHeadingMsg}]]</h3>
             <hr>
         </div>
     </div>
     <div class="panel-body" style="margin-bottom:0;">
+        <div th:if="${ifBtnGroup} eq 'yes'">
+            <!-- 单选按钮组 -->
+            <div class="btn-group btn-group-toggle" data-toggle="buttons-radio">
+                <label class="text-primary" style="margin-right: 30px; font-size: large;">
+                    <input type="radio" name="options" id="toDoBtn" value="可以开始"> 可以开始
+                </label>
+                <label class="text-primary" style="margin-right: 30px; font-size: large;">
+                    <input type="radio" name="options" id="doingBtn" value="正在进行"> 正在进行
+                </label>
+                <label class="text-primary" style="margin-right: 30px; font-size: large;">
+                    <input type="radio" name="options" id="doneBtn" value="已经完成"> 已经完成
+                </label>
+                <label class="text-primary" style="font-size: large;">
+                    <input type="radio" name="options" id="allBtn" value="" checked> 我的所有
+                </label>
+                <input type="hidden" id="currentBtnValue">
+            </div>
+        </div>
         <div class="navbar-form" role="search">
             <span th:switch="${tableNumber}">
                 <!-- 编辑表单模态框触发器 -->
